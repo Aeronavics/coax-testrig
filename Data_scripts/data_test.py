@@ -1,8 +1,9 @@
-# ===============================
+# ===================================================
 # AUTHOR        : Oliver Clements
 # CREATE DATE   : 21/11/22
-# PURPOSE       : Initializing data set
-# ===============================
+# PURPOSE       : Initializing data set from .csv
+#                 Also does some basic error checking
+# ===================================================
 
 import matplotlib.pyplot as pyplot
 import numpy as np
@@ -23,11 +24,8 @@ def file_open(file_name):
     
     return raw_data
    
-def error_check(file_name):
+def error_check(file_name, raw_data):
     """Checks raw data for errors such as non valid floats"""
-    
-    raw_data = file_open(file_name)
-    
     processed_data = []
     row_index = 0
     
@@ -52,7 +50,11 @@ def error_check(file_name):
             
         row_index += 1
     return processed_data        
+def control_func(file_name):
+    """Controls data flow inside file"""
+    raw_data = file_open(file_name)   
+    data = error_check(file_name, raw_data)
+    print(Fore.GREEN + f"{data}")
+    print(Style.RESET_ALL)
     
-data = error_check("proto-0")
-print(Fore.GREEN + f"{data}")
-print(Style.RESET_ALL)
+control_func("PROTO-CALIBRATE-0.csv")

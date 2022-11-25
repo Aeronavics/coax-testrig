@@ -1,8 +1,8 @@
-# ===============================
+# ======================================================================
 # AUTHOR        : Oliver Clements
 # CREATE DATE   : 25/11/22
-# PURPOSE       : Reads data From Serial monitor
-# ===============================
+# PURPOSE       : Reads data From Serial monitor and puts it into csv
+# ======================================================================
 
 import serial
 import csv
@@ -21,7 +21,7 @@ baud = 9600                 # arduino nano every runs at 9600 baud
 
 def file_name(test_type, test_name, run_num):
     """Defines filename"""
-    fileName = test_type + "-" + test_name + "-" + run_num
+    fileName = test_type + "-" + test_name + "-" + run_num + ".csv"
     return fileName
 
 def serialread(fileName, samples, timeout1):
