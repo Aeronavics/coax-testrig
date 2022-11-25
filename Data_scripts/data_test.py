@@ -29,7 +29,7 @@ def error_check(file_name):
     raw_data = file_open(file_name)
     
     processed_data = []
-    row_index = 1
+    row_index = 0
     
     for row in raw_data:
         
@@ -44,10 +44,10 @@ def error_check(file_name):
         
             col_index += 1
         
-        if add_row == True:
+        if add_row == True or row_index == 0:
             processed_data.append(row)
         
-        elif add_row == False and row_index != 1:
+        elif add_row == False and row_index != 0:
             print(Fore.RED + f"\nInvalid value at row {row_index} which is at time {row[0]}s.\nThis row was removed\n")
             
         row_index += 1
