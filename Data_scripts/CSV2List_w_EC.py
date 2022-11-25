@@ -49,7 +49,9 @@ def error_check(file_name, raw_data):
             print(Fore.RED + f"\nInvalid value at row {row_index} which is at time {row[0]}s.\nThis row was removed\n")
             
         row_index += 1
-    return processed_data        
+    return processed_data     
+
+   
 def control_func(file_name):
     """Controls data flow inside file"""
     raw_data = file_open(file_name)   
