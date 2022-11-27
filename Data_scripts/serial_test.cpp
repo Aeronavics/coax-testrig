@@ -1,24 +1,17 @@
-// This is an Arduino file
-
 // Program that simply writes to serial monitor for testing
 String datalabel1 = "Power1";
 String datalabel2 = "Speed1";
 
 void setup() {
   Serial.begin(9600);
-
+  Serial.print(datalabel1 + ",");
+  Serial.println(datalabel1);
 }
 
 bool done = false;
 
 void loop() {
-
-  while(!done) 
-  {
-    Serial.print(datalabel1 + ",");
-    Serial.println(datalabel1);
-    break;
-  }
+  
 
   if(done == false)
   {
