@@ -10,6 +10,9 @@ import numpy as np
 import csv
 from colorama import Fore, Back, Style
 
+EXPECTED_LABEL = "Power1"           # This is the first label you expect to see
+FILE_NAME = "PROTO-CALIBRATE-0.csv" # This is the file you want to convert
+
 def file_open(file_name):
     """Opens the file and puts data into raw list"""
     
@@ -24,7 +27,7 @@ def file_open(file_name):
     
     return raw_data
    
-def error_check(file_name, raw_data):
+def error_check(raw_data):
     """Checks raw data for errors such as non valid floats"""
     processed_data = []
     row_index = 0
@@ -42,11 +45,11 @@ def error_check(file_name, raw_data):
         
             col_index += 1
         
-        if add_row == True or row_index == 0:
+        if add_row == True or row[0] == EXPECTED_LABEL:
             processed_data.append(row)
         
         elif add_row == False and row_index != 0:
-            print(Fore.RED + f"\nInvalid value at row {row_index} which is at time {row[0]}s.\nThis row was removed\n")
+            print(Fore.RED + f"\nInvalid value at row {row_index}.\nThis row was removed\n")
             
         row_index += 1
     return processed_data     
@@ -55,8 +58,8 @@ def error_check(file_name, raw_data):
 def control_func(file_name):
     """Controls data flow inside file"""
     raw_data = file_open(file_name)   
-    data = error_check(file_name, raw_data)
+    data = error_check(raw_data)
     print(Fore.GREEN + f"{data}")
     print(Style.RESET_ALL)
     
-control_func("PROTO-CALIBRATE-0.csv")
+control_func(FILE_NAME)

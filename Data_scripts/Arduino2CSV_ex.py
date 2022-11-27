@@ -9,10 +9,10 @@ import csv
 from colorama import Fore
 
 # CHANGE THESE FOR DIFFERENT FILE NAMES
-SAMPLES = 500
-TIME_OUT = 0.005
 TEST_TYPE = "PROTO"
 TEST_NAME = "CALIBRATE"
+SAMPLES = 50
+TIME_OUT = 0.005
 
 # Arduino related setup
 arduino_port = 'COM3'       # serial port of Arduino
@@ -42,7 +42,7 @@ def serialread(fileName, samples, timeout1):
             readings = data.split(",")
             
             sensor_data.append(readings)
-            print(Fore.WHITE + f"{sensor_data}")
+            print(Fore.WHITE + f"{fileName} data:\n{sensor_data}")
 
             line = line+1
     return sensor_data
