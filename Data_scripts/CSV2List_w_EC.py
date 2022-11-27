@@ -5,13 +5,11 @@
 #                 Also does some basic error checking
 # ===================================================
 
-import matplotlib.pyplot as pyplot
-import numpy as np
 import csv
 from colorama import Fore, Back, Style
 
 EXPECTED_LABEL = "Power1"           # This is the first label you expect to see
-FILE_NAME = "PROTO-CALIBRATE-0.csv" # This is the file you want to convert
+FILE_NAME = "PROTO-CALIBRATE-0.csv" # TEMP: This is the file you want to convert
 
 def file_open(file_name):
     """Opens the file and puts data into raw list"""
@@ -45,7 +43,7 @@ def error_check(raw_data):
         
             col_index += 1
         
-        if add_row == True or row[0] == EXPECTED_LABEL:
+        if add_row == True or row[0] == EXPECTED_LABEL or row[0].startswith("Time:"):
             processed_data.append(row)
         
         elif add_row == False and row_index != 0:

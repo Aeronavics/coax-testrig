@@ -7,6 +7,7 @@
 import serial
 import csv
 from colorama import Fore
+from time import time, ctime
 
 # CHANGE THESE FOR DIFFERENT FILE NAMES
 TEST_TYPE = "PROTO"
@@ -18,10 +19,11 @@ TIME_OUT = 0.005
 arduino_port = 'COM3'       # serial port of Arduino
 baud = 9600                 # arduino nano every runs at 9600 baud          
 
+t = time()
 
 def file_name(test_type, test_name, run_num):
     """Defines filename"""
-    fileName = test_type + "-" + test_name + "-" + run_num + ".csv"
+    fileName = test_type + "-" + test_name + "-" + run_num  + ".csv"
     return fileName
 
 def serialread(fileName, samples, timeout1):
@@ -38,6 +40,9 @@ def serialread(fileName, samples, timeout1):
             getData=ser.readline()
             dataString = getData.decode('utf-8')
             data=dataString[0:][:-2]
+            
+            if data == "Time:":
+                data = data+ctime()
 
             readings = data.split(",")
             
@@ -57,7 +62,7 @@ def csv_make(fileName, sensor_data):
         writer = csv.writer(f)
         writer.writerows(sensor_data)
 
-    print(Fore.GREEN + f"Data collection complete for!{fileName}")
+    print(Fore.GREEN + f"Data collection complete for: {fileName}")
     file.close()
     
 def do_test():
@@ -79,6 +84,6 @@ def control_func():
         run_num += 1
     
     print(Fore.LIGHTGREEN_EX+ f"\nData collection complete!")
-    print(f"A total of {run_num} tests were carried out\n" + Fore.RESET)
+    print(f"A total of {run_num} tests were carried out at {ctime(t)}\n" + Fore.RESET)
 
 control_func()
