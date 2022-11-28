@@ -57,7 +57,8 @@ void setup() {
 }
 
 void printer(int speed) {
-  for(int reps = 0; reps < 1; reps++) {
+  // Prints results into csv friendly format
+  for(int reps = 0; reps < 5; reps++) {
     Serial.print(speed);
     Serial.print(",");
     Serial.print(top_motor.voltage());
@@ -75,12 +76,15 @@ void printer(int speed) {
 bool done = false;
 
 void loop() {
+  // Waits for '1' to be sent from python code
   if (Serial.available() > 0) {
     if (Serial.read() == '1') {
       Serial.println("Turing Power On!");
+      delay(1000)
+
       while(!done) {
         Serial.println("Motor PWM, Top Voltage (V), Bottom Voltage (V), Top Current (A), Bottom Current (A), Thrust (kg)");
-        for (int speed = SPEED_MIN; speed <= SPEED_MAX; speed += SPEED_INC) {
+        for (int speed = SPEED_MIN; speed <= SPEED_MAX; speed += SPEED_INC) { // Toggles ESC PWM
           top_esc.writeMicroseconds(speed);
           bottom_esc.writeMicroseconds(speed);
           delay(1000);
