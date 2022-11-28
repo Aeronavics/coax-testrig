@@ -25,6 +25,8 @@ baud = 9600                # arduino nano every runs at 9600 baud
 
 t = time()
 
+invalid_list = ['Waiting for Authorization', 'Turing Power On!', 'Finished', '']
+
 def file_name(test_type, test_name, RUN_NUM):
     """Defines filename"""
     fileName = test_type + "-" + test_name + "-" + str(RUN_NUM)  + ".csv"
@@ -57,12 +59,12 @@ def serialread(fileName, samples, timeout1):
 
             readings = data.split(",")
             
-            sensor_data.append(readings)
+            if readings[0] not in invalid_list:
+                sensor_data.append(readings)
             print(Fore.WHITE + f"{fileName} data:\n{sensor_data}")
 
-            line = line+1
+            line = line + 1
             
-    ser.flush()
     
     return sensor_data
         
