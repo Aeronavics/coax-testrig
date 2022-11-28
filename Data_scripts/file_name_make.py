@@ -7,8 +7,11 @@
 
 from colorama import Fore
 
+from common_funcs import list_check, print_list
+
 TEST_TYPES = ["TEST", "CALIBRATE", "DATA"]
 PROP_LIST = [15.2, 16.2, 18.2]              # ADD PROP SIZES YOU ARE USING
+KV_LIST = [140, 160, 220, 240]              # ADD MOTOR KVs YOU ARE USING
     
     
 def file_name():
@@ -18,8 +21,8 @@ def file_name():
     top_prop = str(prop_input("top"))
     bottom_prop = str(prop_input("bottom"))
     
-    top_KV = str(input("\nWhat is the top motor KV: "))
-    bottom_KV  = str(input("\nWhat is the bottom motor KV: "))
+    top_KV = str(KV_input("top"))
+    bottom_KV  = str(KV_input("bottom"))
     
     pitch = str(input("\nWhat is the pitch: "))
     
@@ -69,26 +72,22 @@ def prop_input(position):
         
     return prop_input
 
-
-
-def print_list(list):
-    """Prints elements in list"""
+def KV_input(position):
+    """Gets motor KV input form user"""
     
-    for item in list:
-        print(Fore.RESET + f"{item}")
+    print(f"\nEnter {position} motor KV from the following list\n")
+    print_list(KV_LIST)
+    
+    motor_input = input(f"\nEnter {position} motor KV: ")
+    
+    valid = list_check(motor_input, KV_LIST, int)
+    while valid == False:
+        print_list(KV_LIST)    
+        motor_input = input(Fore.RESET + f"\nEnter {position} motor KV: ")
+        valid = list_check(motor_input, KV_LIST, int)
         
+    return motor_input
 
-def list_check(user_input, list_used, data_type):
-    """Returns the prop size in list"""
-    try:
-        if data_type(user_input) in list_used:
-            return True
-        else:
-            print(Fore.RED + f"\nThat is not one of the options")
-            print("Try again\n")
-            return False
-    except:
-        print(Fore.RED + f"\nThat is not a {str(data_type)} data type")
-        print("Try again\n")
-        return False
+
+
    
