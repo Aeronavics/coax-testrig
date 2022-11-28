@@ -57,7 +57,7 @@ def serialread(fileName, samples, timeout1):
             
             if readings[0] not in invalid_list:
                 sensor_data.append(readings)
-            print(Fore.WHITE + f"{fileName} data:\n{sensor_data}")
+            print(Fore.RESET + f"{fileName} data:\n{sensor_data}")
 
             line = line + 1
             
