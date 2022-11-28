@@ -26,12 +26,10 @@ invalid_list = ['Waiting for Authorization', 'Turing Power On!', 'Finished', '']
 
 
 
-
-
-def serialread(fileName, samples, timeout1):
+def serialread(fileName):
     """Reads serial data"""
     
-    with serial.Serial(arduino_port, baud, timeout=timeout1) as ser:
+    with serial.Serial(arduino_port, baud, timeout=TIME_OUT) as ser:
         print(Fore.GREEN + "\nConnected to Arduino port: " + arduino_port)
     
         line = 0 #start at 0 because our header is 0 (not real data)
@@ -40,35 +38,48 @@ def serialread(fileName, samples, timeout1):
         ser.flush()
         send = str(input("Press 1 to start test: "))
         ser.write(bytes(send, 'utf-8'))
-        print("Sending...")
-        sleep(SLEEP_TIME)
-        print("Sent")
         
+        print("Sending...")
+        
+        while True:
+            if ser.readline().decode('utf-8')[0:][:-2] == "Turing Power On!":   
+                print("Sent")
+                print("Connection Established")
+                break
+            else:
+                sleep(0.5)
+                
+        print("Start up sequence initiated")
+            
         # collect the samples
-        while line <= samples:
+        while line <= SAMPLES:
             getData=ser.readline()
             dataString = getData.decode('utf-8')
             data=dataString[0:][:-2]
             
-            if data == "Time:":
-                data = data+ctime()
+            # Filters samples
+            if data.startswith("Time:"):
+                data = data + ctime()
 
             readings = data.split(",")
             
             if readings[0] not in invalid_list:
                 sensor_data.append(readings)
+                
             print(Fore.RESET + f"{fileName} data:\n{sensor_data}")
 
             line = line + 1
             
     
     return sensor_data
+
         
         
 def csv_make(fileName, sensor_data):
     """Creates csv file with data"""
     
     file = open(fileName, "a")
+    
     print(Fore.GREEN + f"\nCreated file")
         
     with open(fileName, 'w', encoding='UTF8', newline='') as f:
@@ -76,6 +87,7 @@ def csv_make(fileName, sensor_data):
         writer.writerows(sensor_data)
 
     print(Fore.GREEN + f"Data collection complete for: {fileName}")
+    
     file.close()
 
 
@@ -83,7 +95,7 @@ def control_func():
     """Function that controls other functions"""
   
     fileName = file_name()
-    data = serialread(fileName, SAMPLES, TIME_OUT)
+    data = serialread(fileName)
     csv_make(fileName, data)
     
     print(Fore.LIGHTGREEN_EX+ f"\nData collection complete!")

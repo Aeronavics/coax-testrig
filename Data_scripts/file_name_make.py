@@ -30,6 +30,7 @@ def file_name():
     
     return fileName
 
+
 def test_type_ask():
     """Asks user for test type"""
     valid_input = False
@@ -56,6 +57,7 @@ def test_type_ask():
             
     return test_type
 
+
 def prop_input(position):
     """Gets prop input form user"""
     
@@ -71,6 +73,7 @@ def prop_input(position):
         valid = list_check(prop_input, PROP_LIST, float)
         
     return prop_input
+
 
 def KV_input(position):
     """Gets motor KV input form user"""
