@@ -8,7 +8,7 @@
 import csv
 from colorama import Fore, Style
 
-EXPECTED_LABEL = "Power1"           # This is the first label you expect to see
+EXPECTED_LABEL = "Motor PWM"           # This is the first label you expect to see
 FILE_NAME = "PROTO-CALIBRATE-0.csv" # TEMP: This is the file you want to convert
 
 def file_open(file_name):

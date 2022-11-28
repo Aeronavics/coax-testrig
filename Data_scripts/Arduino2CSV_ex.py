@@ -7,34 +7,45 @@
 import serial
 import csv
 from colorama import Fore
-from time import time, ctime
+from time import time, ctime, sleep
+
 
 # CHANGE THESE FOR DIFFERENT FILE NAMES
 TEST_TYPE = "PROTO"
 TEST_NAME = "CALIBRATE"
-SAMPLES = 50
-TIME_OUT = 0.005
+RUN_NUM = 0
+
+SAMPLES = 20
+TIME_OUT = 1.1              # This needs to be > 1
+SLEEP_TIME = 3
 
 # Arduino related setup
 arduino_port = 'COM3'       # serial port of Arduino
-baud = 9600                 # arduino nano every runs at 9600 baud          
+baud = 9600                # arduino nano every runs at 9600 baud          
 
 t = time()
 
-def file_name(test_type, test_name, run_num):
+def file_name(test_type, test_name, RUN_NUM):
     """Defines filename"""
-    fileName = test_type + "-" + test_name + "-" + run_num  + ".csv"
+    fileName = test_type + "-" + test_name + "-" + str(RUN_NUM)  + ".csv"
     return fileName
 
 def serialread(fileName, samples, timeout1):
     """Reads serial data"""
-
+    
     with serial.Serial(arduino_port, baud, timeout=timeout1) as ser:
         print(Fore.GREEN + "Connected to Arduino port: " + arduino_port)
-        
+    
         line = 0 #start at 0 because our header is 0 (not real data)
         sensor_data = [] #store data
-
+        
+        ser.flush()
+        send = str(input("Press 1 to start test: "))
+        ser.write(bytes(send, 'utf-8'))
+        print("Sending...")
+        sleep(SLEEP_TIME)
+        print("Sent")
+        
         # collect the samples
         while line <= samples:
             getData=ser.readline()
@@ -50,6 +61,9 @@ def serialread(fileName, samples, timeout1):
             print(Fore.WHITE + f"{fileName} data:\n{sensor_data}")
 
             line = line+1
+            
+    ser.flush()
+    
     return sensor_data
         
         
@@ -64,26 +78,16 @@ def csv_make(fileName, sensor_data):
 
     print(Fore.GREEN + f"Data collection complete for: {fileName}")
     file.close()
-    
-def do_test():
-    """takes user input to do test"""
-    run_test = str(input(Fore.MAGENTA + f"\nPress ENTER to carry out test\nPress any other key to stop:\n"))
-    return True if run_test == "" else False
 
 
 def control_func():
     """Function that controls other functions"""
-    run_test = True
-    run_num = 0
-    
-    while run_num < 100 and run_test == True:
-        fileName = file_name(TEST_TYPE, TEST_NAME, str(run_num))
-        data = serialread(fileName, SAMPLES, TIME_OUT)
-        csv_make(fileName, data)
-        run_test = do_test()
-        run_num += 1
+  
+    fileName = file_name(TEST_TYPE, TEST_NAME, str(RUN_NUM))
+    data = serialread(fileName, SAMPLES, TIME_OUT)
+    csv_make(fileName, data)
     
     print(Fore.LIGHTGREEN_EX+ f"\nData collection complete!")
-    print(f"A total of {run_num} tests were carried out at {ctime(t)}\n" + Fore.RESET)
+    print(f"Test was carried out at {ctime(t)}\n" + Fore.RESET)
 
 control_func()
