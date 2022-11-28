@@ -9,34 +9,30 @@ import csv
 from colorama import Fore
 from time import time, ctime, sleep
 
+from file_name_make import file_name
 
-# CHANGE THESE FOR DIFFERENT FILE NAMES
-TEST_TYPE = "PROTO"
-TEST_NAME = "CALIBRATE"
-RUN_NUM = 0
 
 SAMPLES = 20
-TIME_OUT = 1.1              # This needs to be > 1
+TIME_OUT = 0.8              # This needs to be > 1
 SLEEP_TIME = 3
 
 # Arduino related setup
 arduino_port = 'COM3'       # serial port of Arduino
-baud = 9600                # arduino nano every runs at 9600 baud          
+baud = 9600                 # arduino nano every runs at 9600 baud          
 
 t = time()
 
 invalid_list = ['Waiting for Authorization', 'Turing Power On!', 'Finished', '']
 
-def file_name(test_type, test_name, RUN_NUM):
-    """Defines filename"""
-    fileName = test_type + "-" + test_name + "-" + str(RUN_NUM)  + ".csv"
-    return fileName
+
+
+
 
 def serialread(fileName, samples, timeout1):
     """Reads serial data"""
     
     with serial.Serial(arduino_port, baud, timeout=timeout1) as ser:
-        print(Fore.GREEN + "Connected to Arduino port: " + arduino_port)
+        print(Fore.GREEN + "\nConnected to Arduino port: " + arduino_port)
     
         line = 0 #start at 0 because our header is 0 (not real data)
         sensor_data = [] #store data
@@ -71,8 +67,9 @@ def serialread(fileName, samples, timeout1):
         
 def csv_make(fileName, sensor_data):
     """Creates csv file with data"""
+    
     file = open(fileName, "a")
-    print(Fore.GREEN + f"Created file")
+    print(Fore.GREEN + f"\nCreated file")
         
     with open(fileName, 'w', encoding='UTF8', newline='') as f:
         writer = csv.writer(f)
@@ -85,11 +82,14 @@ def csv_make(fileName, sensor_data):
 def control_func():
     """Function that controls other functions"""
   
-    fileName = file_name(TEST_TYPE, TEST_NAME, str(RUN_NUM))
+    fileName = file_name()
     data = serialread(fileName, SAMPLES, TIME_OUT)
     csv_make(fileName, data)
     
     print(Fore.LIGHTGREEN_EX+ f"\nData collection complete!")
+    # with serial.Serial(arduino_port, baud, timeout=TIME_OUT) as ser:
+    #     ser.write(bytes("0", 'utf-8'))
+    
     print(f"Test was carried out at {ctime(t)}\n" + Fore.RESET)
 
 control_func()
