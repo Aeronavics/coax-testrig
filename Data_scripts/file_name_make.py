@@ -9,10 +9,10 @@ from colorama import Fore
 
 from common_funcs import list_check, print_list
 
+# Lists of parameters
 TEST_TYPES = ["TEST", "CALIBRATE", "DATA"]
 PROP_LIST = [15.2, 16.2, 18.2]              # ADD PROP SIZES YOU ARE USING
 KV_LIST = [140, 160, 220, 240]              # ADD MOTOR KVs YOU ARE USING
-
     
     
 def file_name():
@@ -39,12 +39,12 @@ def test_type_ask():
     print(f"\nWhat is the type of test being performed\n")
     
     while valid_input == False:
-        i = 0
+        index = 0
         
         for test in TEST_TYPES:
             
-            print(f"{i}: {test}")
-            i += 1
+            print(f"{index}: {test}")
+            index += 1
         
         test_input = input(Fore.RESET + f"\nPress one with the corresponding number: ")
         
@@ -52,7 +52,7 @@ def test_type_ask():
         try:
            test_type = TEST_TYPES[int(test_input)]
         except:
-            print(Fore.RED + f"\nPlease enter a valid input.\nIt Should be of type int in the range of 0 to {i - 1}\n" + Fore.RESET)
+            print(Fore.RED + f"\nPlease enter a valid input.\nIt Should be of type int in the range of 0 to {index - 1}\n" + Fore.RESET)
         else:
             valid_input = True
             

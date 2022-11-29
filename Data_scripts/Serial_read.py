@@ -31,13 +31,13 @@ invalid_list = ['Waiting for Authorization', 'Turing Power On!', 'Finished', '']
 def serialread(fileName):
     """Reads serial data"""
     with serial.Serial(arduino_port, baud, timeout=TIME_OUT) as ser:
-        print(Fore.GREEN + "\nConnected to Arduino port: " + arduino_port)
+        print(Fore.GREEN + "\nConnected to port: " + arduino_port)
     
         line = 0 #start at 0 because our header is 0 (not real data)
         sensor_data = [] #store data
         
         ser.flush()
-        send = str(input("Press 1 to start test: "))
+        send = str(input("Press 1 to attempt to connect to arduino and start test: "))
         ser.write(bytes(send, 'utf-8'))
         
         print("Sending...")
