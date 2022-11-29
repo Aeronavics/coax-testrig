@@ -24,7 +24,7 @@
 #define LOADCELL_SCALE 90900
 
 //Motor presets
-#define SPEED_MIN 1000
+#define SPEED_MIN 1100
 #define SPEED_MAX 1700
 #define SPEED_INC 100
 
@@ -96,7 +96,7 @@ void loop() {
         for (int speed = SPEED_MIN; speed <= SPEED_MAX; speed += SPEED_INC) { // Toggles ESC PWM
           top_esc.writeMicroseconds(speed);
           bottom_esc.writeMicroseconds(speed);
-          delay(1000);
+          delay(400);
           printer(speed);
         }
         top_esc.writeMicroseconds(1000);
