@@ -21,7 +21,7 @@
 #define CIN_BOTTOM A2
 
 //Load cell presets
-#define LOADCELL_SCALE 99000
+#define LOADCELL_SCALE 90900
 
 //Motor presets
 #define SPEED_MIN 1000
