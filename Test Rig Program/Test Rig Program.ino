@@ -33,9 +33,11 @@
 #define CURRENT_RATIO_TOP 18.91505
 #define VOLTAGE_RATIO_BOTTOM 18.95842
 #define CURRENT_RATIO_BOTTOM 19.33637
+#define CURRENT_OFFSET_TOP 0.165
+#define CURRENT_OFFSET_BOTTOM 0
 
-ACS758 top_motor(CIN_TOP, VIN_TOP, CURRENT_RATIO_TOP, VOLTAGE_RATIO_TOP);
-ACS758 bottom_motor(CIN_BOTTOM, VIN_BOTTOM, CURRENT_RATIO_BOTTOM, VOLTAGE_RATIO_BOTTOM);
+ACS758 top_motor(CIN_TOP, VIN_TOP, CURRENT_RATIO_TOP, VOLTAGE_RATIO_TOP, CURRENT_OFFSET_TOP);
+ACS758 bottom_motor(CIN_BOTTOM, VIN_BOTTOM, CURRENT_RATIO_BOTTOM, VOLTAGE_RATIO_BOTTOM, CURRENT_OFFSET_BOTTOM);
 Servo top_esc;
 Servo bottom_esc;
 HX711 loadcell;
@@ -108,7 +110,7 @@ void loop() {
       Serial.flush();
     }
   }
-  else {  // Wait time so python can commicate w Arduino
+  else {  // Wait time so python can communicate w Arduino
     delay(1000);
     Serial.println("Waiting...");
   }

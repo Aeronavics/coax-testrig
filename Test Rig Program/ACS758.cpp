@@ -2,10 +2,11 @@
 
 #define ADC_SCALE 5.0 / 1023.0
 
-ACS758::ACS758(int cin, int vin, float current_ratio, float voltage_ratio) {
+ACS758::ACS758(int cin, int vin, float current_ratio, float voltage_ratio, float current_offset) {
   CIN = cin;
   VIN = vin;
   CURRENT_RATIO = current_ratio;
+  CURRENT_OFFSET = current_offset;
   VOLTAGE_RATIO = voltage_ratio;
   pinMode(CIN, INPUT);
   pinMode(VIN, INPUT);
@@ -28,5 +29,5 @@ float ACS758::current(int times = 100) {
     delay(3);
   }
   float avg = sum / times;
-  return (avg * ADC_SCALE) * CURRENT_RATIO;
+  return ((avg * ADC_SCALE) * CURRENT_RATIO) - CURRENT_OFFSET;
 }
