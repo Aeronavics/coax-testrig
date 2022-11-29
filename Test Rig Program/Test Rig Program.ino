@@ -25,7 +25,7 @@
 
 //Motor presets
 #define SPEED_MIN 1000
-#define SPEED_MAX 2000
+#define SPEED_MAX 1700
 #define SPEED_INC 100
 
 //Power presets
@@ -41,6 +41,12 @@ Servo bottom_esc;
 HX711 loadcell;
 
 void setup() {
+
+  if(SPEED_MAX > 2000) {
+    Serial.println("MAX SPEED IS TOO HIGH");
+    Serial.println("Aborting");
+    abort();
+  }
   //Initialise load cell
   loadcell.begin(LOADCELL_DOUT, LOADCELL_SCK);
   loadcell.set_scale(LOADCELL_SCALE);
@@ -54,6 +60,8 @@ void setup() {
 
   Serial.begin(9600);
   Serial.println("Time:");
+
+  
 }
 
 void printer(int speed) {
@@ -78,9 +86,10 @@ bool done = false;
 void loop() {
   // Waits for '1' to be sent from python code
   if (Serial.available() > 0) {
+    delay(1000);
     if (Serial.read() == '1') {
       Serial.println("Turing Power On!");
-      delay(1000)
+      delay(3000);
 
       while(!done) {
         Serial.println("Motor PWM, Top Voltage (V), Bottom Voltage (V), Top Current (A), Bottom Current (A), Thrust (kg)");
@@ -99,7 +108,9 @@ void loop() {
       Serial.flush();
     }
   }
+  else {  // Wait time so python can commicate w Arduino
+    delay(1000);
+    Serial.println("Waiting...");
+  }
 
-  delay(2000);
-  Serial.println("Waiting for Authorization");
 }
