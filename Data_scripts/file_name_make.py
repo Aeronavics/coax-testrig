@@ -12,6 +12,7 @@ from common_funcs import list_check, print_list
 TEST_TYPES = ["TEST", "CALIBRATE", "DATA"]
 PROP_LIST = [15.2, 16.2, 18.2]              # ADD PROP SIZES YOU ARE USING
 KV_LIST = [140, 160, 220, 240]              # ADD MOTOR KVs YOU ARE USING
+
     
     
 def file_name():
@@ -26,7 +27,7 @@ def file_name():
     
     pitch = str(input("\nWhat is the pitch: "))
     
-    fileName = test_type + "-" + top_prop + "-" + bottom_prop + "-" + top_KV + "-" + bottom_KV + "-" + pitch + ".csv"
+    fileName = test_type + "-" + top_prop + "-" + bottom_prop + "-" + top_KV + "-" + bottom_KV + "-" + pitch
     
     return fileName
 

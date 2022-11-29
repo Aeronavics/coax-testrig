@@ -15,6 +15,9 @@ from file_name_make import file_name
 SAMPLES = 20
 TIME_OUT = 0.8              # This needs to be > 1
 SLEEP_TIME = 3
+SHORT_SLEEP = 0.5
+
+CSV = ".csv"
 
 # Arduino related setup
 arduino_port = 'COM3'       # serial port of Arduino
@@ -25,10 +28,8 @@ t = time()
 invalid_list = ['Waiting for Authorization', 'Turing Power On!', 'Finished', '']
 
 
-
 def serialread(fileName):
     """Reads serial data"""
-    
     with serial.Serial(arduino_port, baud, timeout=TIME_OUT) as ser:
         print(Fore.GREEN + "\nConnected to Arduino port: " + arduino_port)
     
@@ -47,9 +48,10 @@ def serialread(fileName):
                 print("Connection Established")
                 break
             else:
-                sleep(0.5)
+                sleep(SHORT_SLEEP)
                 
         print("Start up sequence initiated")
+        sleep(SHORT_SLEEP)
             
         # collect the samples
         while line <= SAMPLES:
@@ -73,6 +75,8 @@ def serialread(fileName):
     
     return sensor_data
 
+
+
         
         
 def csv_make(fileName, sensor_data):
@@ -89,19 +93,49 @@ def csv_make(fileName, sensor_data):
     print(Fore.GREEN + f"Data collection complete for: {fileName}")
     
     file.close()
+    
+def serial_error():
+    """Error loop that gives user chance to fix error with serial port"""
+    print(Fore.RED + f"\nERROR")
+    print(f"Access to serial port {arduino_port} has been denied.")
+    print("This is likely due to another program using the serial monitor.")
+    print("Ex: Arduino serial monitor is open.\n" + Fore.RESET)
+    input("Press ENTER to try again: ")
+
+    
+def repeat():
+    """Allows user to repeat test"""
+    do_test = str(input("Press 1 to repeat test: "))
+    
+    if do_test == "1":
+        return True
+    else:
+        return False
 
 
 def control_func():
     """Function that controls other functions"""
-  
+    it_num = 0
+    it_tag = "-#" +  str(it_num)
     fileName = file_name()
-    data = serialread(fileName)
-    csv_make(fileName, data)
+    do_test = True
     
-    print(Fore.LIGHTGREEN_EX+ f"\nData collection complete!")
-    # with serial.Serial(arduino_port, baud, timeout=TIME_OUT) as ser:
-    #     ser.write(bytes("0", 'utf-8'))
+    while do_test == True:
     
-    print(f"Test was carried out at {ctime(t)}\n" + Fore.RESET)
+        it_tag = "-#" +  str(it_num)
+        
+        try:
+            data = serialread(fileName)
+            
+        except serial.serialutil.SerialException:
+            serial_error()
+            
+        else:    
+            csv_make(fileName + it_tag + CSV, data)
+            print(Fore.LIGHTGREEN_EX+ f"\nData collection complete!")
+            print(f"Test was carried out at {ctime(t)}\n" + Fore.RESET)
+            do_test = repeat()
+            it_num += 1
+            
 
 control_func()
