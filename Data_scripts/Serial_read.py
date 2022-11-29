@@ -12,8 +12,8 @@ from time import time, ctime, sleep
 from file_name_make import file_name
 
 
-SAMPLES = 100
-TIME_OUT = 1.2              # This needs to be > 1
+SAMPLES = 30
+TIME_OUT = 1.3              # This needs to be > 1
 SLEEP_TIME = 3
 SHORT_SLEEP = 0.5
 
@@ -25,7 +25,7 @@ baud = 9600                 # arduino nano every runs at 9600 baud
 
 t = time()
 
-invalid_list = ['Waiting for Authorization', 'Turing Power On!', 'Finished', '']
+invalid_list = ['Waiting for Authorization', 'Turing Power On!', 'Finished', '', 'Waiting...']
 
 
 def serialread(fileName):
