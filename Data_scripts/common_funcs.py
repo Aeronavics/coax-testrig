@@ -28,3 +28,13 @@ def list_check(user_input, list_used, data_type):
         print(Fore.RED + f"\nThat is not a {str(data_type)} data type")
         print("Try again\n")
         return False
+    
+def ask_user(question):
+    """Asks a user a question and returns bool"""
+    print(question)
+    user_input = str(input("Type yes or no: "))
+    
+    if user_input.lower() == "yes":
+        return True
+    else:
+        return False

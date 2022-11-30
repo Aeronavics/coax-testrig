@@ -12,7 +12,7 @@ from time import time, ctime, sleep
 from file_name_make import file_name
 
 
-SAMPLES = 40
+SAMPLES = 45
 TIME_OUT = 2              # This needs to be > 1
 SLEEP_TIME = 3
 SHORT_SLEEP = 0.5

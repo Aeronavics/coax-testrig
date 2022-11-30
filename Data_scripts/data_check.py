@@ -9,8 +9,6 @@
 from colorama import Fore
 import os
 
-from csv_to_list import control_func
-
 
 EXPECTED_HEADER = ['Motor PWM', ' Top Voltage (V)', ' Bottom Voltage (V)', ' Top Current (A)', ' Bottom Current (A)', ' Thrust (kg)']
 EXPECTED_ROW_SIZE = 6

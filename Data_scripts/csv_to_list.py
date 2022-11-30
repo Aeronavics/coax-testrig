@@ -27,7 +27,8 @@ def file_open(file_name):
    
    
 def error_check(raw_data):
-    """Checks raw data for errors such as non valid floats"""
+    """Checks raw data for errors such as non valid floats
+        This pretty much deletes any rows that are not of type int or float"""
     processed_data = []
     row_index = 0
     

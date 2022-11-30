@@ -1,7 +1,7 @@
 # ===================================================
 # AUTHOR        : Oliver Clements
 # CREATE DATE   : 1/12/22
-# PURPOSE       : Data analysis
+# PURPOSE       : Averages the
 #               
 # ===================================================
 
@@ -15,8 +15,6 @@ PWM_INDEX = 0
 TOP_V_INDEX, BOTTOM_V_INDEX = 1, 2
 TOP_I_INDEX, BOTTOM_I_INDEX = 3, 4,
 LOAD_INDEX = 5
-
-INDEX_LIST = [TOP_V_INDEX, BOTTOM_V_INDEX, TOP_I_INDEX, BOTTOM_I_INDEX, LOAD_INDEX]
 
 FILE_NAME = "TEST-0-0-0-0-1-#0.csv"     # TEMP: will be automated from outside func     
 
@@ -82,9 +80,8 @@ def avg_data_func(combined_data, occurrence_list):
         
     
 
-def main_func(file_name):
+def give_average_data(data):
     """Function that directs all others in this module"""
-    data =  control_func(file_name) 
     
     # Format checks
     header_check(data)
@@ -92,9 +89,6 @@ def main_func(file_name):
     combined_data, occurrence_list = combing_data(data)
     avg_data = avg_data_func(combined_data, occurrence_list)
     
-    print(avg_data)
-    
-    
-main_func(FILE_NAME)
+    return avg_data
 
 
