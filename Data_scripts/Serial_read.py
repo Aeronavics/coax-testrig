@@ -13,7 +13,7 @@ from file_name_make import file_name
 
 
 SAMPLES = 30
-TIME_OUT = 1.3              # This needs to be > 1
+TIME_OUT = 2              # This needs to be > 1
 SLEEP_TIME = 3
 SHORT_SLEEP = 0.5
 
@@ -43,6 +43,7 @@ def serialread(fileName):
         print("Sending...")
         
         while True:
+            
             if ser.readline().decode('utf-8')[0:][:-2] == "Turing Power On!":   
                 print("Sent")
                 print("Connection Established")
