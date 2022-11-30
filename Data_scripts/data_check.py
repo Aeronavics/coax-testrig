@@ -1,7 +1,7 @@
 # ===================================================
 # AUTHOR        : Oliver Clements
 # CREATE DATE   : 30/11/22
-# PURPOSE       : Data analysis of data
+# PURPOSE       : Checks the data is in expected format
 #               
 # ===================================================
 
@@ -14,10 +14,6 @@ from csv_to_list import control_func
 
 EXPECTED_HEADER = ['Motor PWM', ' Top Voltage (V)', ' Bottom Voltage (V)', ' Top Current (A)', ' Bottom Current (A)', ' Thrust (kg)']
 EXPECTED_ROW_SIZE = 6
-
-FILE_NAME = "TEST-0-0-0-0-1-#0.csv"     # TEMP: will be automated from outside func
-
-DATA = control_func(FILE_NAME)          # TEMP
 
 
 def header_check(data):
@@ -46,12 +42,6 @@ def row_check(data):
             os.abort()
           
 
-def leader_func():
-    """Function that directs others in this module"""
-    data = DATA
-    header_check(data)
-    row_check(data)
+
     
-    
-leader_func()
     

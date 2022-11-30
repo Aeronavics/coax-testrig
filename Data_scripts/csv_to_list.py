@@ -6,10 +6,9 @@
 # ===================================================
 
 import csv
-from colorama import Fore, Style
+from colorama import Fore
 
-EXPECTED_LABEL = "Motor PWM"            #This is the first label you expect to see
-FILE_NAME = "TEST-0-0-0-0-1-#0.csv"     # TEMP: This is the file you want to convert
+EXPECTED_LABEL = "Motor PWM"            # This is the first label you expect to see
                                         # This will be automated from an outside function
 
 def file_open(file_name):
