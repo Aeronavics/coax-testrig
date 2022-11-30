@@ -25,7 +25,7 @@
 
 //Motor presets
 #define SPEED_MIN 1100
-#define SPEED_MAX 1800
+#define SPEED_MAX 1900
 #define SPEED_INC 100
 
 //Power presets
@@ -102,6 +102,7 @@ void motor_speeds(int speed) {
 
 bool done = false;
 bool SAFE = true;
+int speed = 0;
 
 void loop() {
   // The main function
@@ -114,8 +115,7 @@ void loop() {
 
       while(!done) {
         header_setup();
-        int speed = 0;
-
+        
         for (speed = SPEED_MIN; speed <= SPEED_MAX - SPEED_INC; speed += SPEED_INC) { // Toggles ESC PWM
           motor_speeds(speed);
           delay(400);
@@ -123,13 +123,13 @@ void loop() {
         }
 
         // Test finished. Set ESC's to low
-      for(speed = SPEED_MAX; speed >= ONE_THOUSAND; speed -= SLOW_DOWN) {
-        motor_speeds(speed);
-        delay(60);
-      }
         motor_speeds(ONE_THOUSAND);
         Serial.println("Finished");
         done = true;
+      }
+      for(speed = SPEED_MAX; speed >= ONE_THOUSAND; speed -= SLOW_DOWN) {
+        motor_speeds(speed);
+        delay(60);
       }
 
       // remove items in serial for next test
