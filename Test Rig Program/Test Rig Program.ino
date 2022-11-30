@@ -25,7 +25,7 @@
 
 //Motor presets
 #define SPEED_MIN 1100
-#define SPEED_MAX 1700
+#define SPEED_MAX 1800
 #define SPEED_INC 100
 
 //Power presets
@@ -38,6 +38,7 @@
 
 #define ONE_THOUSAND 1000
 #define START_UP_WAIT 3000
+#define SLOW_DOWN 50
 
 ACS758 top_motor(CIN_TOP, VIN_TOP, CURRENT_RATIO_TOP, VOLTAGE_RATIO_TOP, CURRENT_OFFSET_TOP);
 ACS758 bottom_motor(CIN_BOTTOM, VIN_BOTTOM, CURRENT_RATIO_BOTTOM, VOLTAGE_RATIO_BOTTOM, CURRENT_OFFSET_BOTTOM);
@@ -113,14 +114,19 @@ void loop() {
 
       while(!done) {
         header_setup();
+        int speed = 0;
 
-        for (int speed = SPEED_MIN; speed <= SPEED_MAX - SPEED_INC; speed += SPEED_INC) { // Toggles ESC PWM
+        for (speed = SPEED_MIN; speed <= SPEED_MAX - SPEED_INC; speed += SPEED_INC) { // Toggles ESC PWM
           motor_speeds(speed);
           delay(400);
           printer(speed);
         }
 
         // Test finished. Set ESC's to low
+      for(speed = SPEED_MAX; speed >= ONE_THOUSAND; speed -= SLOW_DOWN) {
+        motor_speeds(speed);
+        delay(60);
+      }
         motor_speeds(ONE_THOUSAND);
         Serial.println("Finished");
         done = true;
