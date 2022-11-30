@@ -77,8 +77,6 @@ def serialread(fileName):
     return sensor_data
 
 
-
-        
         
 def csv_make(fileName, sensor_data):
     """Creates csv file with data"""
@@ -94,6 +92,7 @@ def csv_make(fileName, sensor_data):
     print(Fore.GREEN + f"Data collection complete for: {fileName}")
     
     file.close()
+    
     
 def serial_error():
     """Error loop that gives user chance to fix error with serial port"""
