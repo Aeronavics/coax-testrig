@@ -36,6 +36,9 @@
 #define CURRENT_OFFSET_TOP 0.165
 #define CURRENT_OFFSET_BOTTOM 0
 
+#define ONE_THOUSAND 1000
+#define START_UP_WAIT 3000
+
 ACS758 top_motor(CIN_TOP, VIN_TOP, CURRENT_RATIO_TOP, VOLTAGE_RATIO_TOP, CURRENT_OFFSET_TOP);
 ACS758 bottom_motor(CIN_BOTTOM, VIN_BOTTOM, CURRENT_RATIO_BOTTOM, VOLTAGE_RATIO_BOTTOM, CURRENT_OFFSET_BOTTOM);
 Servo top_esc;
@@ -83,26 +86,33 @@ void printer(int speed) {
   }
 }
 
+
+void motor_speeds(int speed) {
+  top_esc.writeMicroseconds(speed);
+  bottom_esc.writeMicroseconds(speed);
+}
+
 bool done = false;
+bool SAFE = true;
 
 void loop() {
   // Waits for '1' to be sent from python code
   if (Serial.available() > 0) {
-    delay(1000);
+    delay(ONE_THOUSAND);
     if (Serial.read() == '1') {
       Serial.println("Turing Power On!");
-      delay(3000);
+      delay(START_UP_WAIT);
 
       while(!done) {
         Serial.println("Motor PWM, Top Voltage (V), Bottom Voltage (V), Top Current (A), Bottom Current (A), Thrust (kg)");
-        for (int speed = SPEED_MIN; speed <= SPEED_MAX; speed += SPEED_INC) { // Toggles ESC PWM
-          top_esc.writeMicroseconds(speed);
-          bottom_esc.writeMicroseconds(speed);
-          delay(1000);
+
+        for (int speed = SPEED_MIN; speed <= SPEED_MAX - SPEED_INC; speed += SPEED_INC) { // Toggles ESC PWM
+          motor_speeds(speed);
+          delay(400);
           printer(speed);
         }
-        top_esc.writeMicroseconds(1000);
-        bottom_esc.writeMicroseconds(1000);
+
+        motor_speeds(ONE_THOUSAND);
         Serial.println("Finished");
         done = true;
       }
@@ -111,8 +121,8 @@ void loop() {
     }
   }
 
-  else {  // Wait time so python can commicate w Arduino
-    delay(1000);
+  else {  // Wait time so python can communicate w Arduino
+    delay(ONE_THOUSAND);
     Serial.println("Waiting...");
   }
 
