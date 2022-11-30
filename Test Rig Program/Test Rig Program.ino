@@ -108,10 +108,11 @@ void loop() {
       while(!done) {
         Serial.println("Motor PWM, Top Voltage (V), Bottom Voltage (V), Top Current (A), Bottom Current (A), Thrust (kg)");
         for (int speed = SPEED_MIN; speed <= SPEED_MAX; speed += SPEED_INC) { // Toggles ESC PWM
-          if(speed < SPEED_MAX) {
+          if(speed <= SPEED_MAX) {
             motor_speed(speed);
           } else {
             motor_speed(ONE_THOUSAND);
+            done = true;
           }
           
         } 
@@ -120,7 +121,6 @@ void loop() {
         done = true;
       }
 
-      Serial.flush();
     }
   }
   else {  // Wait time so python can communicate w Arduino
