@@ -47,11 +47,12 @@ HX711 loadcell;
 
 void setup() {
 
-  if(SPEED_MAX > 2000) {
+  if(SPEED_MAX > 2000) {  // Safetey feature so motors speed range cannot go above a pre set limit
     Serial.println("MAX SPEED IS TOO HIGH");
     Serial.println("Aborting");
     abort();
   }
+
   //Initialise load cell
   loadcell.begin(LOADCELL_DOUT, LOADCELL_SCK);
   loadcell.set_scale(LOADCELL_SCALE);
@@ -63,10 +64,15 @@ void setup() {
   top_esc.writeMicroseconds(1000);
   bottom_esc.writeMicroseconds(1000);
 
+  // baud rate init
   Serial.begin(9600);
-  Serial.println("Time:");
 
-  
+}
+
+void header_setup(void) {
+  //  Writes headers to serial
+  Serial.println("Time: ");
+  Serial.println("Motor PWM, Top Voltage (V), Bottom Voltage (V), Top Current (A), Bottom Current (A), Thrust (kg)");
 }
 
 void printer(int speed) {
@@ -88,6 +94,7 @@ void printer(int speed) {
 
 
 void motor_speeds(int speed) {
+  // changes speeds of motor by chnaging PWM to ESCs
   top_esc.writeMicroseconds(speed);
   bottom_esc.writeMicroseconds(speed);
 }
@@ -96,15 +103,16 @@ bool done = false;
 bool SAFE = true;
 
 void loop() {
-  // Waits for '1' to be sent from python code
-  if (Serial.available() > 0) {
-    delay(ONE_THOUSAND);
-    if (Serial.read() == '1') {
+  // The main function
+  if (Serial.available() > 0) {       // 
+    delay(ONE_THOUSAND);              // Allow time to for python to send '1'
+
+    if (Serial.read() == '1') {       // When recieved 1 start up sequance will begin
       Serial.println("Turing Power On!");
-      delay(START_UP_WAIT);
+      delay(START_UP_WAIT);           // Delay before start up
 
       while(!done) {
-        Serial.println("Motor PWM, Top Voltage (V), Bottom Voltage (V), Top Current (A), Bottom Current (A), Thrust (kg)");
+        header_setup();
 
         for (int speed = SPEED_MIN; speed <= SPEED_MAX - SPEED_INC; speed += SPEED_INC) { // Toggles ESC PWM
           motor_speeds(speed);
@@ -112,16 +120,18 @@ void loop() {
           printer(speed);
         }
 
+        // Test finished. Set ESC's to low
         motor_speeds(ONE_THOUSAND);
         Serial.println("Finished");
         done = true;
       }
 
+      // remove items in serial for next test
       Serial.flush();
     }
   }
 
-  else {  // Wait time so python can communicate w Arduino
+  else {  // Wait time so python can commicate w Arduino
     delay(ONE_THOUSAND);
     Serial.println("Waiting...");
   }
