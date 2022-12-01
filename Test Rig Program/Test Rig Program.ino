@@ -38,7 +38,7 @@
 
 #define ONE_THOUSAND 1000
 #define START_UP_WAIT 3000
-#define SLOW_DOWN 50
+#define SLOW_DOWN 30
 #define RUN_NUM 5
 
 ACS758 top_motor(CIN_TOP, VIN_TOP, CURRENT_RATIO_TOP, VOLTAGE_RATIO_TOP, CURRENT_OFFSET_TOP);
@@ -130,7 +130,7 @@ void loop() {
       }
       for(speed = SPEED_MAX; speed >= ONE_THOUSAND; speed -= SLOW_DOWN) {
         motor_speeds(speed);
-        delay(100);
+        delay(50);
       }
 
       // remove items in serial for next test
