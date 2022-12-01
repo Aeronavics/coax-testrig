@@ -6,6 +6,7 @@
 # ===================================================
 
 import matplotlib.pyplot as plt
+
 NEAT_OFFSET = 0.2
 
 
@@ -18,6 +19,7 @@ def efficiency_to_thrust_plot(total_thrust_list, total_efficiency_list, file_lis
         ax.set_xlim(0, lim_thrust + NEAT_OFFSET)
         ax.set_ylim(min(total_efficiency_list[i]) - NEAT_OFFSET, 1)
         ax.plot(total_thrust_list[i], total_efficiency_list[i], marker="o")
+        
         i+=1
     
     ax.legend(file_list)

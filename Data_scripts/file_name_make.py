@@ -17,7 +17,7 @@ KV_LIST = [0, 140, 160, 220, 240]              # ADD MOTOR KVs YOU ARE USING
     
 def file_name():
     """Defines filename with naming scheme"""
-    test_type = str(test_type_ask())
+    test_type = str(input("Whats some useful info about test.\nEg brand of prop?\nInput here: "))
     
     top_prop = str(prop_input("top"))
     top_KV = str(KV_input("top"))
@@ -30,33 +30,6 @@ def file_name():
     fileName = test_type + "-" + top_prop + "-" +  top_KV + "-" + top_pitch + "-" + bottom_prop + "-" + bottom_KV + "-" + bottom_pitch
     
     return fileName
-
-
-def test_type_ask():
-    """Asks user for test type"""
-    valid_input = False
-    
-    print(f"\nWhat is the type of test being performed\n")
-    
-    while valid_input == False:
-        index = 0
-        
-        for test in TEST_TYPES:
-            
-            print(f"{index}: {test}")
-            index += 1
-        
-        test_input = input(Fore.RESET + f"\nPress one with the corresponding number: ")
-        
-        # Tests user input
-        try:
-           test_type = TEST_TYPES[int(test_input)]
-        except:
-            print(Fore.RED + f"\nPlease enter a valid input.\nIt Should be of type int in the range of 0 to {index - 1}\n" + Fore.RESET)
-        else:
-            valid_input = True
-            
-    return test_type
 
 
 def prop_input(position):
