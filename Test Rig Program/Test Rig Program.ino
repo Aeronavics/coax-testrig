@@ -124,7 +124,6 @@ void loop() {
         }
 
         // Test finished. Set ESC's to low
-        motor_speeds(ONE_THOUSAND);
         Serial.println("Finished");
         done = true;
       }
