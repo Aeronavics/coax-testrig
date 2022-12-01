@@ -39,6 +39,7 @@
 #define ONE_THOUSAND 1000
 #define START_UP_WAIT 3000
 #define SLOW_DOWN 50
+#define RUN_NUM 5
 
 ACS758 top_motor(CIN_TOP, VIN_TOP, CURRENT_RATIO_TOP, VOLTAGE_RATIO_TOP, CURRENT_OFFSET_TOP);
 ACS758 bottom_motor(CIN_BOTTOM, VIN_BOTTOM, CURRENT_RATIO_BOTTOM, VOLTAGE_RATIO_BOTTOM, CURRENT_OFFSET_BOTTOM);
@@ -48,7 +49,7 @@ HX711 loadcell;
 
 void setup() {
 
-  if(SPEED_MAX > 2000) {  // Safetey feature so motors speed range cannot go above a pre set limit
+  if(SPEED_MAX > 2000) {  // Safety feature so motors speed range cannot go above a pre set limit
     Serial.println("MAX SPEED IS TOO HIGH");
     Serial.println("Aborting");
     abort();
@@ -78,7 +79,7 @@ void header_setup(void) {
 
 void printer(int speed) {
   // Prints results into csv friendly format
-  for(int reps = 0; reps < 5; reps++) {
+  for(int reps = 0; reps < RUN_NUM; reps++) {
     Serial.print(speed);
     Serial.print(",");
     Serial.print(top_motor.voltage());
@@ -95,7 +96,7 @@ void printer(int speed) {
 
 
 void motor_speeds(int speed) {
-  // changes speeds of motor by chnaging PWM to ESCs
+  // changes speeds of motor by changing PWM to ESCs
   top_esc.writeMicroseconds(speed);
   bottom_esc.writeMicroseconds(speed);
 }
@@ -109,7 +110,7 @@ void loop() {
   if (Serial.available() > 0) {       // 
     delay(ONE_THOUSAND);              // Allow time to for python to send '1'
 
-    if (Serial.read() == '1') {       // When recieved 1 start up sequance will begin
+    if (Serial.read() == '1') {       // When received 1 start up sequence will begin
       Serial.println("Turing Power On!");
       delay(START_UP_WAIT);           // Delay before start up
 
@@ -118,7 +119,7 @@ void loop() {
         
         for (speed = SPEED_MIN; speed <= SPEED_MAX - SPEED_INC; speed += SPEED_INC) { // Toggles ESC PWM
           motor_speeds(speed);
-          delay(400);
+          delay(300);
           printer(speed);
         }
 
@@ -129,7 +130,7 @@ void loop() {
       }
       for(speed = SPEED_MAX; speed >= ONE_THOUSAND; speed -= SLOW_DOWN) {
         motor_speeds(speed);
-        delay(60);
+        delay(100);
       }
 
       // remove items in serial for next test
@@ -137,7 +138,7 @@ void loop() {
     }
   }
 
-  else {  // Wait time so python can commicate w Arduino
+  else {  // Wait time so python can communicate w Arduino
     delay(ONE_THOUSAND);
     Serial.println("Waiting...");
   }
