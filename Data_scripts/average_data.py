@@ -5,9 +5,7 @@
 #               
 # ===================================================
 
-from colorama import Fore
 
-from csv_to_list import control_func
 from data_check import header_check, row_check
 
 #  Index's
@@ -16,9 +14,8 @@ TOP_V_INDEX, BOTTOM_V_INDEX = 1, 2
 TOP_I_INDEX, BOTTOM_I_INDEX = 3, 4,
 LOAD_INDEX = 5
 
-FILE_NAME = "TEST-0-0-0-0-1-#0.csv"     # TEMP: will be automated from outside func     
 
-def combing_data(data):
+def summing_data(data):
     """Averages data"""
     combined_data = list()
     last_PWM = 0
@@ -27,7 +24,7 @@ def combing_data(data):
     occurrence_list = list()
     
     
-    for row in data[2:]:
+    for row in data:
         temp_data = [0,0,0,0,0,0]
         if row[PWM_INDEX] == last_PWM:
             combined_data[pwm_num][TOP_V_INDEX] += row[TOP_V_INDEX]
@@ -82,11 +79,7 @@ def avg_data_func(combined_data, occurrence_list):
 
 def give_average_data(data):
     """Function that directs all others in this module"""
-    
-    # Format checks
-    header_check(data)
-    row_check(data)
-    combined_data, occurrence_list = combing_data(data)
+    combined_data, occurrence_list = summing_data(data)
     avg_data = avg_data_func(combined_data, occurrence_list)
     
     return avg_data

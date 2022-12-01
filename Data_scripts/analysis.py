@@ -5,6 +5,8 @@
 #               
 # ===================================================
 
+import os
+from colorama import Fore
 
 from common_funcs import ask_user
 from average_data import give_average_data
@@ -17,7 +19,34 @@ TOP_V_INDEX, BOTTOM_V_INDEX = 1, 2
 TOP_I_INDEX, BOTTOM_I_INDEX = 3, 4,
 LOAD_INDEX = 5
 
-FILE_NAME_LIST = ["Falcon-15-160-5.5-0-0-0-#1.csv","Xoar-15-160-5-0-0-0-#0.csv", "TMOTOR-18.2-0-160-0-6.1-#0.csv", "Xoar-14-160-5-0-0-0-#0.csv"]
+SCALE_FACTOR = 100
+EFFICIENCY_CUTOFF = 0.1
+
+def get_file_list():
+    """Gets all the files from the directory"""
+    file_list = list()
+
+    with os.scandir() as entries:
+        for entry in entries:
+            if entry.name.endswith(".csv"):
+                file_list.append(entry.name)
+                print(entry.name)
+            
+    return file_list
+        
+# def file_list_split(file_list):
+#     """"""
+
+def get_data(filename):
+    """Gets data and gets it error checked"""
+    data =  control_func(filename)          
+    # Format checks
+    header_check(data)
+    row_check(data)
+    
+    good_data = give_average_data(data[2:])
+    return good_data
+
 
 def efficiency_and_thrust_find(data):
     """Finds efficiency to thrust provides"""
@@ -30,29 +59,19 @@ def efficiency_and_thrust_find(data):
         bottom_motor_power = row[BOTTOM_V_INDEX] * row[BOTTOM_I_INDEX] 
         total_power = top_motor_power #+ bottom_motor_power * 0
         
-        efficiency = 100 * thrust / total_power
+        efficiency = SCALE_FACTOR * thrust / total_power
         
-        if efficiency < 0.1:
+        if efficiency < EFFICIENCY_CUTOFF:
             continue
         
         thrust_list.append(thrust)
         efficiency_list.append(efficiency)
         
     return efficiency_list, thrust_list
-        
 
-def get_data(filename):
-    """Gets data and gets it error checked"""
-    data =  control_func(filename)          
-    # Format checks
-    header_check(data)
-    row_check(data)
-    
-    good_data = give_average_data(data)
-    return good_data
 
 def do_plot_TvsE(file_list):
-    """Sets up data to be plotted"""
+    """Sets up data to be plotted for thrust against efficiency"""
     total_thrust_list = list()
     total_efficiency_list = list()
     
@@ -60,6 +79,7 @@ def do_plot_TvsE(file_list):
     
     for filename in file_list:
         data = get_data(filename)
+        
         efficiency_list, thrust_list = efficiency_and_thrust_find(data)
         total_thrust_list.append(thrust_list)
         total_efficiency_list.append(efficiency_list)
@@ -68,11 +88,14 @@ def do_plot_TvsE(file_list):
     
 
 
-def analysis_main(file_list):
+def analysis_main():
     """main func that will direct all others in analysis"""
+    # \splitted_files = file_list_split(file_list)
+    file_list = get_file_list()
+  
     plot_E = ask_user("\nDo you want to plot efficiency against thrust?")
     if plot_E == True:
         do_plot_TvsE(file_list)
     
     
-analysis_main(FILE_NAME_LIST)
+analysis_main()
