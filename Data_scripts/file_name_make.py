@@ -11,7 +11,7 @@ from common_funcs import list_check, print_list
 
 # Lists of parameters
 TEST_TYPES = ["TEST", "CALIBRATE", "DATA"]
-PROP_LIST = [0, 15.2, 16.2, 18.2]              # ADD PROP SIZES YOU ARE USING
+PROP_LIST = [0, 15, 15.2, 16.2, 17, 18.2]              # ADD PROP SIZES YOU ARE USING
 KV_LIST = [0, 140, 160, 220, 240]              # ADD MOTOR KVs YOU ARE USING
     
     
@@ -20,14 +20,14 @@ def file_name():
     test_type = str(test_type_ask())
     
     top_prop = str(prop_input("top"))
-    bottom_prop = str(prop_input("bottom"))
-    
     top_KV = str(KV_input("top"))
+    top_pitch = str(input("\nWhat is the pitch of top: "))
+    
+    bottom_prop = str(prop_input("bottom"))
     bottom_KV  = str(KV_input("bottom"))
+    bottom_pitch = str(input("\nWhat is the pitch of bottom: "))
     
-    pitch = str(input("\nWhat is the pitch: "))
-    
-    fileName = test_type + "-" + top_prop + "-" + bottom_prop + "-" + top_KV + "-" + bottom_KV + "-" + pitch
+    fileName = test_type + "-" + top_prop + "-" +  top_KV + "-" + top_pitch + "-" + bottom_prop + "-" + bottom_KV + "-" + bottom_pitch
     
     return fileName
 
