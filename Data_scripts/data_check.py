@@ -17,7 +17,7 @@ EXPECTED_ROW_SIZE = 6
 def header_check(data):
     """Checks to ensure headers are in the expected format"""
     # header_row = 
-    header_row = data[0]
+    header_row = data[1]
     
     try:
         assert(header_row == EXPECTED_HEADER)
@@ -30,7 +30,7 @@ def header_check(data):
           
 def row_check(data):
     """Checks to see rows are correct size in case data has 'slipped' in serial transmission"""
-    for row in data[1:]:
+    for row in data[2:]:
         try:
             assert(len(row) == EXPECTED_ROW_SIZE)
         except:

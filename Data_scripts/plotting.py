@@ -6,19 +6,26 @@
 # ===================================================
 
 import matplotlib.pyplot as plt
+NEAT_OFFSET = 0.2
 
 
-def efficiency_to_thrust_single(thrust_list, efficiency_list):
-    """"Plots the efficiency to thrust"""
+def efficiency_to_thrust_plot(total_thrust_list, total_efficiency_list, file_list, title):
+    """"Plots the efficiency to thrust multiple file"""
+    i = 0
     fig, ax = plt.subplots()
-    ax.set_xlim(0, max(thrust_list) + 0.5)
-    ax.set_ylim(min(efficiency_list) - 0.2, 1)
-    ax.plot(thrust_list, efficiency_list, marker="o")
+    lim_thrust = max(max(total_thrust_list))
+    while i in range(0, len(file_list)):
+        ax.set_xlim(0, lim_thrust + NEAT_OFFSET)
+        ax.set_ylim(min(total_efficiency_list[i]) - NEAT_OFFSET, 1)
+        ax.plot(total_thrust_list[i], total_efficiency_list[i], marker="o")
+        i+=1
     
-    ax.set_title("Test")
+    ax.legend(file_list)
+    ax.set_title(title)
     ax.set_xlabel("Thrust (kg)")
     ax.set_ylabel("Efficiency")
     ax.grid()
     
     plt.show()
+
     

@@ -43,7 +43,7 @@ def serialread(fileName):
         print("Sending...")
         
         while True:
-            
+            ser.write(bytes(send, 'utf-8'))
             if ser.readline().decode('utf-8')[0:][:-2] == "Turing Power On!":   
                 print("Sent")
                 print("Connection Established")

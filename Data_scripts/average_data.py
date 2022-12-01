@@ -27,7 +27,7 @@ def combing_data(data):
     occurrence_list = list()
     
     
-    for row in data[1:]:
+    for row in data[2:]:
         temp_data = [0,0,0,0,0,0]
         if row[PWM_INDEX] == last_PWM:
             combined_data[pwm_num][TOP_V_INDEX] += row[TOP_V_INDEX]
