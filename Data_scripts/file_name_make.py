@@ -17,7 +17,7 @@ KV_LIST = [0, 140, 160, 220, 240]              # ADD MOTOR KVs YOU ARE USING
     
 def file_name():
     """Defines filename with naming scheme"""
-    test_type = str(input("Whats some useful info about test.\nEg brand of prop?\nInput here: "))
+    test_type = str(input("Whats some useful info about test.\nEg brand of prop?\nEnsure it is similar for same test.\nInput here: "))
     
     top_prop = str(prop_input("top"))
     top_KV = str(KV_input("top"))

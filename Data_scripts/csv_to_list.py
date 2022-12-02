@@ -8,15 +8,17 @@
 import csv
 from colorama import Fore
 
+PATH = '..\\Data_scripts\\put_data_here\\' 
+
 EXPECTED_LABEL = "Motor PWM"            # This is the first label you expect to see
-                                        # This will be automated from an outside function
+                                       
 
 def file_open(file_name):
     """Opens the file and puts data into raw list"""
     
     raw_data = []
     
-    with open(file_name, 'r') as file:
+    with open(PATH + file_name, 'r') as file:
         reader = csv.reader(file)
         for row in reader:
             raw_data.append(row)

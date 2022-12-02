@@ -25,7 +25,7 @@ def efficiency_to_thrust_plot(total_thrust_list, total_efficiency_list, file_lis
     ax.legend(file_list)
     ax.set_title(title)
     ax.set_xlabel("Thrust (kg)")
-    ax.set_ylabel("Efficiency")
+    ax.set_ylabel("Relative Efficiency (Thrust / Power)")
     ax.grid()
     
     plt.show()
