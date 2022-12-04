@@ -51,15 +51,18 @@ def get_data(filename):
 
 
 def efficiency_and_thrust_find(data):
-    """Finds efficiency to thrust provides"""
+    """Finds relative efficiency and thrust"""
     thrust_list = list()
     efficiency_list = list()
     for row in data:
         thrust = row[LOAD_INDEX]
         
         top_motor_power = row[TOP_V_INDEX] * row[TOP_I_INDEX] 
-        bottom_motor_power = row[BOTTOM_V_INDEX] * row[BOTTOM_I_INDEX] 
+        # bottom_motor_power = row[BOTTOM_V_INDEX] * row[BOTTOM_I_INDEX] 
         total_power = top_motor_power #+ bottom_motor_power * 0
+        
+        if total_power == 0:
+            continue
         
         efficiency = SCALE_FACTOR * thrust / total_power
         
@@ -93,7 +96,7 @@ def data_combine(file_list):
         else:
             all_the_data[filename] = data
             previous_data = data
-        previous_file = filename
+            previous_file = filename
             
             
     return all_the_data

@@ -23,7 +23,6 @@ def summing_data(data):
     num_occurrences = 0
     occurrence_list = list()
     
-    
     for row in data:
         temp_data = [0,0,0,0,0,0]
         if row[PWM_INDEX] == last_PWM:

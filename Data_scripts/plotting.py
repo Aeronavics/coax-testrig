@@ -15,9 +15,11 @@ def efficiency_to_thrust_plot(total_thrust_list, total_efficiency_list, file_lis
     i = 0
     fig, ax = plt.subplots()
     lim_thrust = max(max(total_thrust_list))
+    lim_E = max(max(total_efficiency_list))
+    
     while i in range(0, len(file_list)):
         ax.set_xlim(0, lim_thrust + NEAT_OFFSET)
-        ax.set_ylim(min(total_efficiency_list[i]) - NEAT_OFFSET, 1)
+        ax.set_ylim(min(total_efficiency_list[i]) - NEAT_OFFSET, lim_E  + NEAT_OFFSET)
         ax.plot(total_thrust_list[i], total_efficiency_list[i], marker="o")
         
         i+=1
