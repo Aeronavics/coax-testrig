@@ -25,7 +25,7 @@
 
 //Motor presets
 #define SPEED_MIN 1100
-#define SPEED_MAX 2000
+#define SPEED_MAX 1900
 #define SPEED_INC 100
 
 //Power presets
@@ -117,7 +117,7 @@ void loop() {
       while(!done) {
         header_setup();
         
-        for (speed = SPEED_MIN; speed <= SPEED_MAX - SPEED_INC; speed += SPEED_INC) { // Toggles ESC PWM
+        for (speed = SPEED_MIN; speed <= SPEED_MAX; speed += SPEED_INC) { // Toggles ESC PWM
           motor_speeds(speed);
           delay(300);
           printer(speed);
