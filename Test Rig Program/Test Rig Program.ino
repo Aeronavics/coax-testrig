@@ -110,7 +110,8 @@ void loop() {
   if (Serial.available() > 0) {       // 
     delay(ONE_THOUSAND);              // Allow time to for python to send '1'
 
-    if (Serial.read() == '1') {       // When received 1 start up sequence will begin
+    if (Serial.read() == '1') {  
+      done = false;     // When received 1 start up sequence will begin
       Serial.println("Turing Power On!");
       delay(START_UP_WAIT);           // Delay before start up
 
@@ -126,10 +127,13 @@ void loop() {
         // Test finished. Set ESC's to low
         Serial.println("Finished");
         done = true;
-      }
-      for(speed = SPEED_MAX; speed >= ONE_THOUSAND; speed -= SLOW_DOWN) {
-        motor_speeds(speed);
-        delay(50);
+
+
+        // Turn off 
+        for(speed = SPEED_MAX; speed >= ONE_THOUSAND; speed -= SLOW_DOWN) {
+          motor_speeds(speed);
+          delay(50);
+        }
       }
 
       // remove items in serial for next test
