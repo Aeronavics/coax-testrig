@@ -12,7 +12,7 @@ from time import time, ctime, sleep
 from file_name_make import file_name
 
 
-SAMPLES = 45
+SAMPLES = 10
 TIME_OUT = 2              # This needs to be > 1
 SLEEP_TIME = 3
 SHORT_SLEEP = 0.5
@@ -103,7 +103,7 @@ def serial_error():
     input("Press ENTER to try again: ")
 
     
-def repeat():
+def repeat():   # NOT IS USE CURRENTLY
     """Allows user to repeat test"""
     do_test = str(input("Press 1 to repeat test: "))
     
@@ -116,26 +116,25 @@ def repeat():
 def control_func():
     """Function that controls other functions"""
     it_num = 0
-    it_tag = "-#" +  str(it_num)
+    # it_tag = "-#" +  str(it_num)
     fileName = file_name()
-    do_test = True
+    # do_test = True
     
-    while do_test == True:
+    # while do_test == True:
     
-        it_tag = "-#" +  str(it_num)
+    
+    try:
+        data = serialread(fileName)
         
-        try:
-            data = serialread(fileName)
-            
-        except serial.serialutil.SerialException:
-            serial_error()
-            
-        else:    
-            csv_make(fileName + it_tag + CSV, data)
-            print(Fore.LIGHTGREEN_EX+ f"\nData collection complete!")
-            print(f"Test was carried out at {ctime(t)}\n" + Fore.RESET)
-            do_test = repeat()
-            it_num += 1
+    except serial.serialutil.SerialException:
+        serial_error()
+        
+    else:    
+        csv_make(fileName + CSV, data)
+        print(Fore.LIGHTGREEN_EX+ f"\nData collection complete!")
+        print(f"Test was carried out at {ctime(t)}\n" + Fore.RESET)
+        # do_test = repeat()
+        # it_num += 1
             
 
 control_func()

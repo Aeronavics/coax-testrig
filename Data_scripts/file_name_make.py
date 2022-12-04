@@ -27,7 +27,9 @@ def file_name():
     bottom_KV  = str(KV_input("bottom"))
     bottom_pitch = str(input("\nWhat is the pitch of bottom: "))
     
-    fileName = test_type + "-" + top_prop + "-" +  top_KV + "-" + top_pitch + "-" + bottom_prop + "-" + bottom_KV + "-" + bottom_pitch
+    test_num = str(input("\nWhat is the test num: "))
+    
+    fileName = test_type + "-" + top_prop + "-" +  top_KV + "-" + top_pitch + "-" + bottom_prop + "-" + bottom_KV + "-" + bottom_pitch + "-#" + test_num
     
     return fileName
 
@@ -41,6 +43,7 @@ def prop_input(position):
     prop_input = input("\nEnter Propeller size: ")
     
     valid = list_check(prop_input, PROP_LIST, float)
+    
     while valid == False:
         print_list(PROP_LIST)    
         prop_input = input(Fore.RESET + f"\nEnter {position} Propeller size: ")
