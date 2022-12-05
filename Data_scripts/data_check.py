@@ -6,6 +6,7 @@
 # ===================================================
 
 
+# Library Imports
 from colorama import Fore
 import os
 
@@ -21,6 +22,7 @@ def header_check(data):
     
     try:
         assert(header_row == EXPECTED_HEADER)
+        
     except:
         print(Fore.RED + f"\nERROR")
         print("Header is not in the correct format")
@@ -30,16 +32,14 @@ def header_check(data):
           
 def row_check(data):
     """Checks to see rows are correct size in case data has 'slipped' in serial transmission"""
-    for row in data[2:]:
+    for row in data[2:]: # Skips header rows
+        
         try:
             assert(len(row) == EXPECTED_ROW_SIZE)
+            
         except:
             print(Fore.RED + f"\nERROR")
             print("Rows are not the correct size")
             print(f"Expected: {EXPECTED_ROW_SIZE}\nGot: {len(row)}\n" + Fore.RESET)
             os.abort()
           
-
-
-    
-    

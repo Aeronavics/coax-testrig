@@ -1,17 +1,20 @@
-# ===================================================
+# =========================================================
 # AUTHOR        : Oliver Clements
 # CREATE DATE   : 1/12/22
-# PURPOSE       : Data Analysis
-#               
-# ===================================================
+# PURPOSE       : This module pulls from all other modules
+#                 to do some data analysis such as finding
+#                 thrust to relative efficiency
+# =========================================================
 
+
+# Library Imports
 import os
 from colorama import Fore
 
-# Modules in repo
+# Module Imports
 from common_funcs import ask_user
 from average_data import give_average_data
-from csv_to_list import control_func
+from csv_to_list import control_func, FOLDER
 from data_check import header_check, row_check
 from plotting import efficiency_to_thrust_plot
 from file_combine import same_file_test, get_file_list
@@ -28,7 +31,7 @@ def get_file_list():
     """Gets all the files from the directory"""
     file_list = list()
 
-    with os.scandir(".\put_data_here\\") as entries:
+    with os.scandir("." + FOLDER) as entries:
         print("\nFiles found:\n")
         
         for entry in entries:
@@ -74,6 +77,7 @@ def efficiency_and_thrust_find(data):
         
     return efficiency_list, thrust_list
 
+
 def data_combine(file_list):
     """"""
     all_the_data = dict()
@@ -118,7 +122,6 @@ def do_plot_TvsE(file_dict):
         
     efficiency_to_thrust_plot(total_thrust_list, total_efficiency_list, file_dict, title)
     
-
 
 def analysis_main():
     """main func that will direct all others in analysis"""

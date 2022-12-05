@@ -4,6 +4,8 @@
 # PURPOSE       : File with common functions
 # ======================================================================
 
+
+# Library Imports
 from colorama import Fore
 
 def print_list(list):
@@ -29,6 +31,7 @@ def list_check(user_input, list_used, data_type):
         print("Try again\n")
         return False
     
+    
 def ask_user(question):
     """Asks a user a question and returns bool"""
     print(question)
@@ -38,3 +41,4 @@ def ask_user(question):
         return True
     else:
         return False
+    

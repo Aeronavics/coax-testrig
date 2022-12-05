@@ -5,8 +5,9 @@
 #                 
 # ===================================================
 
-import os
 
+# Library Imports
+import os
 
 def same_file_test(file_list, previous_file):
     """"""

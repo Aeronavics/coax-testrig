@@ -1,14 +1,19 @@
-# ===================================================
+# ================================================================
 # AUTHOR        : Oliver Clements
 # CREATE DATE   : 21/11/22
-# PURPOSE       : Initializing data set from .csv
-#                 Also does some basic error checking
-# ===================================================
+# PURPOSE       : Initializing data set from .csv into list format
+#                 Also does some basic error checking such as
+#                 Checks if elements are floats
+# ================================================================
 
+# Library Imports
 import csv
 from colorama import Fore
 
-PATH = '..\\Data_scripts\\put_data_here\\' 
+# SET UP FOR WINDOWS
+# PATH = '..\\Data_scripts\\put_data_here\\' 
+FOLDER = '\\\put_data_here\\'           # Folder with data to analyze
+PATH = '..\\Data_scripts' + FOLDER
 
 EXPECTED_LABEL = "Motor PWM"            # This is the first label you expect to see
                                        
@@ -29,8 +34,9 @@ def file_open(file_name):
    
    
 def error_check(raw_data):
-    """Checks raw data for errors such as non valid floats
-        This pretty much deletes any rows that are not of type int or float"""
+    """ Checks raw data for errors such as non valid floats
+        This pretty much deletes any rows that are not of type int or float
+        with the exception of the header with time and info"""
     processed_data = []
     row_index = 0
     
@@ -39,6 +45,7 @@ def error_check(raw_data):
         add_row = True
         col_index = 0
         
+        # Tests for float
         while col_index < len(row) and add_row == True:
             try:
                 row[col_index] = float(row[col_index])
@@ -58,7 +65,8 @@ def error_check(raw_data):
 
    
 def control_func(file_name):
-    """Controls data flow inside file"""
+    """ LINKER FUNCTION
+        Links functions inside this module"""
     raw_data = file_open(file_name)   
     data = error_check(raw_data)
     return data

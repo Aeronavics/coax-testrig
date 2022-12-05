@@ -4,19 +4,19 @@
 # PURPOSE       : File name set up with naming Scheme
 # ======================================================================
 
-
+# Library Imports
 from colorama import Fore
 
+# Module Imports
 from common_funcs import list_check, print_list
 
-# Lists of parameters
-TEST_TYPES = ["TEST", "CALIBRATE", "DATA"]
-PROP_LIST = [0, 14, 15, 15.2, 16.2, 17, 18.2]              # ADD PROP SIZES YOU ARE USING
-KV_LIST = [0, 140, 160, 220, 240]              # ADD MOTOR KVs YOU ARE USING
+# Lists of set parameters
+PROP_LIST = [0, 14, 15, 15.2, 16.2, 17, 18, 18.2]   # ADD PROP SIZES YOU ARE USING
+KV_LIST = [0, 140, 160, 220, 240]                   # ADD MOTOR KVs YOU ARE USING
     
     
 def file_name():
-    """Defines filename with naming scheme"""
+    """ Asks user to select the different parameters"""
     test_type = str(input("Whats some useful info about test.\nEg brand of prop?\nEnsure it is similar for same test.\nInput here: "))
     
     top_prop = str(prop_input("top"))
@@ -35,7 +35,7 @@ def file_name():
 
 
 def prop_input(position):
-    """Gets prop input form user"""
+    """ Gets prop input from user"""
     
     print(f"\nEnter {position} propeller size (inch) from the following list\n")
     print_list(PROP_LIST)
@@ -44,6 +44,7 @@ def prop_input(position):
     
     valid = list_check(prop_input, PROP_LIST, float)
     
+    # Checks to see if user input is one in predefined list
     while valid == False:
         print_list(PROP_LIST)    
         prop_input = input(Fore.RESET + f"\nEnter {position} Propeller size: ")
@@ -53,13 +54,14 @@ def prop_input(position):
 
 
 def KV_input(position):
-    """Gets motor KV input form user"""
+    """Gets motor KV input from user"""
     
     print(f"\nEnter {position} motor KV from the following list\n")
     print_list(KV_LIST)
     
     motor_input = input(f"\nEnter {position} motor KV: ")
     
+    # Checks to see if user input is one in predefined list
     valid = list_check(motor_input, KV_LIST, int)
     while valid == False:
         print_list(KV_LIST)    

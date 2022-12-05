@@ -5,6 +5,8 @@
 #               
 # ===================================================
 
+
+# Library Imports
 import matplotlib.pyplot as plt
 
 NEAT_OFFSET = 0.2
