@@ -9,6 +9,8 @@
 #include "HX711.h"
 #include "ACS758.h"
 
+
+// Arduino ports
 #define LOADCELL_SCK 2
 #define LOADCELL_DOUT 3
 
@@ -25,7 +27,7 @@
 
 //Motor presets
 #define SPEED_MIN 1100
-#define SPEED_MAX 1900
+#define SPEED_MAX 1800
 #define SPEED_INC 100
 
 //Power presets
@@ -107,7 +109,7 @@ int speed = 0;
 
 void loop() {
   // The main function
-  if (Serial.available() > 0) {       // 
+  if (Serial.available() > 0 && done == false) {       // 
     delay(ONE_THOUSAND);              // Allow time to for python to send '1'
 
     if (Serial.read() == '1') {  
