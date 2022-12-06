@@ -11,19 +11,18 @@ import csv
 from colorama import Fore
 
 # SET UP FOR WINDOWS
-# PATH = '..\\Data_scripts\\put_data_here\\' 
-FOLDER = '\\\put_data_here\\'           # Folder with data to analyze
-PATH = '..\\Data_scripts' + FOLDER
+# PATH = '..\\Data_scripts\\put_data_here\\'            
+PATH = '..\\Data_scripts'
 
 EXPECTED_LABEL = "Motor PWM"            # This is the first label you expect to see
                                        
 
-def file_open(file_name):
+def file_open(file_name, folder):
     """Opens the file and puts data into raw list"""
     
     raw_data = []
     
-    with open(PATH + file_name, 'r') as file:
+    with open(PATH + folder +  file_name, 'r') as file:
         reader = csv.reader(file)
         for row in reader:
             raw_data.append(row)
@@ -64,10 +63,10 @@ def error_check(raw_data):
     return processed_data     
 
    
-def control_func(file_name):
+def control_func(file_name, folder):
     """ LINKER FUNCTION
         Links functions inside this module"""
-    raw_data = file_open(file_name)   
+    raw_data = file_open(file_name, folder)   
     data = error_check(raw_data)
     return data
     

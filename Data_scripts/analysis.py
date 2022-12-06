@@ -14,10 +14,12 @@ from colorama import Fore
 # Module Imports
 from common_funcs import ask_user
 from average_data import give_average_data
-from csv_to_list import control_func, FOLDER
+from csv_to_list import control_func
 from data_check import header_check, row_check
 from plotting import efficiency_to_thrust_plot
 from file_combine import same_file_test, get_file_list
+
+FOLDER = '\\\Motors\\' 
 
 PWM_INDEX = 0
 TOP_V_INDEX, BOTTOM_V_INDEX = 1, 2
@@ -26,6 +28,9 @@ LOAD_INDEX = 5
 
 SCALE_FACTOR = 100
 EFFICIENCY_CUTOFF = 0.1
+
+TOP_I_OFFSET = 0
+BOTTOM_I_OFFSET = 0
 
 def get_file_list():
     """Gets all the files from the directory"""
@@ -44,7 +49,7 @@ def get_file_list():
 
 def get_data(filename):
     """Gets data and gets it error checked"""
-    data =  control_func(filename)          
+    data =  control_func(filename, FOLDER)          
     # Format checks
     header_check(data)
     row_check(data)
@@ -60,8 +65,8 @@ def efficiency_and_thrust_find(data):
     for row in data:
         thrust = row[LOAD_INDEX]
         
-        top_motor_power = row[TOP_V_INDEX] * row[TOP_I_INDEX] 
-        # bottom_motor_power = row[BOTTOM_V_INDEX] * row[BOTTOM_I_INDEX] 
+        top_motor_power = row[TOP_V_INDEX] * (row[TOP_I_INDEX] - TOP_I_OFFSET)
+        # bottom_motor_power = row[BOTTOM_V_INDEX] * (row[BOTTOM_I_INDEX] - BOTTOM_I_OFFSET) 
         total_power = top_motor_power #+ bottom_motor_power * 0
         
         if total_power == 0:
