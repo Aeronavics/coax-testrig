@@ -40,7 +40,7 @@
 
 #define ONE_THOUSAND 1000
 #define START_UP_WAIT 3000
-#define SLOW_DOWN 30
+#define SLOW_DOWN 20
 #define RUN_NUM 4
 
 ACS758 top_motor(CIN_TOP, VIN_TOP, CURRENT_RATIO_TOP, VOLTAGE_RATIO_TOP, CURRENT_OFFSET_TOP);
@@ -56,6 +56,8 @@ void setup() {
     Serial.println("Aborting");
     abort();
   }
+
+  analogReference(EXTERNAL);  // 3.25V
 
   //Initialise load cell
   loadcell.begin(LOADCELL_DOUT, LOADCELL_SCK);
