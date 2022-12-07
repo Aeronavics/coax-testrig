@@ -1,6 +1,6 @@
 #include "ACS758.h"
 
-#define ADC_SCALE 3.25 / 1023.0
+#define ADC_SCALE 2.76 / 1023.0
 
 ACS758::ACS758(int cin, int vin, float current_ratio, float voltage_ratio, float current_offset) {
   CIN = cin;
