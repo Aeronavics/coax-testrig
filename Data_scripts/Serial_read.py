@@ -119,12 +119,15 @@ def control_func():
         In a try loop until data is successfully collected"""
     fileName = file_name()
 
-    while True:
+    attempt = 0
+    
+    while attempt < 10:
         try:
             data = serialread(fileName)
             
         except serial.serialutil.SerialException:
             serial_error()
+            attempt += 1
             
         else:    
             csv_make(fileName + CSV, data)

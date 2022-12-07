@@ -29,8 +29,8 @@ LOAD_INDEX = 5
 SCALE_FACTOR = 100
 EFFICIENCY_CUTOFF = 0.1
 
-TOP_I_OFFSET = 0
-BOTTOM_I_OFFSET = 0
+TOP_I_OFFSET = 0.11
+BOTTOM_I_OFFSET = 0.18
 
 def get_file_list():
     """Gets all the files from the directory"""
