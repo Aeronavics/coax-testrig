@@ -19,7 +19,7 @@ from data_check import header_check, row_check
 from plotting import efficiency_to_thrust_plot
 from file_combine import same_file_test, get_file_list
 
-FOLDER = '\\\Motors\\' 
+FOLDER = '\\\Coax_pre\\' 
 
 PWM_INDEX = 0
 TOP_V_INDEX, BOTTOM_V_INDEX = 1, 2
@@ -66,8 +66,8 @@ def efficiency_and_thrust_find(data):
         thrust = row[LOAD_INDEX]
         
         top_motor_power = row[TOP_V_INDEX] * (row[TOP_I_INDEX] - TOP_I_OFFSET)
-        # bottom_motor_power = row[BOTTOM_V_INDEX] * (row[BOTTOM_I_INDEX] - BOTTOM_I_OFFSET) 
-        total_power = top_motor_power #+ bottom_motor_power * 0
+        bottom_motor_power = row[BOTTOM_V_INDEX] * (row[BOTTOM_I_INDEX] - BOTTOM_I_OFFSET) 
+        total_power = top_motor_power + bottom_motor_power 
         
         if total_power == 0:
             continue

@@ -119,15 +119,17 @@ def control_func():
         In a try loop until data is successfully collected"""
     fileName = file_name()
 
-    try:
-        data = serialread(fileName)
-        
-    except serial.serialutil.SerialException:
-        serial_error()
-        
-    else:    
-        csv_make(fileName + CSV, data)
-        print(Fore.LIGHTGREEN_EX+ f"\nData collection complete!")
-        print(f"Test was carried out at {ctime(t)}\n" + Fore.RESET)
+    while True:
+        try:
+            data = serialread(fileName)
+            
+        except serial.serialutil.SerialException:
+            serial_error()
+            
+        else:    
+            csv_make(fileName + CSV, data)
+            print(Fore.LIGHTGREEN_EX+ f"\nData collection complete!")
+            print(f"Test was carried out at {ctime(t)}\n" + Fore.RESET)
+            break
             
 control_func()
