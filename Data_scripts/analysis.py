@@ -19,7 +19,7 @@ from data_check import header_check, row_check
 from plotting import efficiency_to_thrust_plot
 from file_combine import same_file_test, get_file_list
 
-FOLDER = '\\\Coax_pre\\' 
+FOLDER = '\\\Motors\\' 
 
 PWM_INDEX = 0
 TOP_V_INDEX, BOTTOM_V_INDEX = 1, 2
@@ -62,12 +62,13 @@ def efficiency_and_thrust_find(data):
     """Finds relative efficiency and thrust"""
     thrust_list = list()
     efficiency_list = list()
+    
     for row in data:
         thrust = row[LOAD_INDEX]
         
         top_motor_power = row[TOP_V_INDEX] * (row[TOP_I_INDEX] - TOP_I_OFFSET)
-        bottom_motor_power = row[BOTTOM_V_INDEX] * (row[BOTTOM_I_INDEX] - BOTTOM_I_OFFSET) 
-        total_power = top_motor_power + bottom_motor_power 
+        # bottom_motor_power = row[BOTTOM_V_INDEX] * (row[BOTTOM_I_INDEX] - BOTTOM_I_OFFSET) 
+        total_power = top_motor_power# + bottom_motor_power 
         
         if total_power == 0:
             continue
@@ -83,7 +84,7 @@ def efficiency_and_thrust_find(data):
     return efficiency_list, thrust_list
 
 
-def data_combine(file_list):
+def raw_data_dict(file_list):
     """"""
     all_the_data = dict()
     previous_file = ""
@@ -107,31 +108,28 @@ def data_combine(file_list):
             previous_data = data
             previous_file = filename
             
-            
     return all_the_data
         
-
+        
 def do_plot_TvsE(file_dict):
     """Sets up data to be plotted for thrust against efficiency"""
-    total_thrust_list = list()
-    total_efficiency_list = list()
+    plotting_dict = dict()
     
     title = str(input("\nWhat should the title for this graph be: "))
     
-    
-    for test in file_dict.items():
+    for file_name, data in file_dict.items():
+        efficiency_list, thrust_list = efficiency_and_thrust_find(data)
+        plotting_dict[file_name] = [thrust_list, efficiency_list]
         
-        efficiency_list, thrust_list = efficiency_and_thrust_find(test[1])
-        total_thrust_list.append(thrust_list)
-        total_efficiency_list.append(efficiency_list)
+    print(f"\n{plotting_dict}\n")
         
-    efficiency_to_thrust_plot(total_thrust_list, total_efficiency_list, file_dict, title)
+    efficiency_to_thrust_plot(plotting_dict, title)
     
 
 def analysis_main():
     """main func that will direct all others in analysis"""
     file_list = get_file_list()
-    combined_data_dict = data_combine(file_list)
+    combined_data_dict = raw_data_dict(file_list)
     print(f"\n\n{combined_data_dict.keys()}\n\n")
   
     plot_E = ask_user("\nDo you want to plot efficiency against thrust?")
