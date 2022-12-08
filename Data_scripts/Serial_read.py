@@ -55,10 +55,12 @@ def serialread(fileName):
         
         while counter < MAX_SERIAL_SEND_ATTEMPTS:
             ser.write(bytes(send, 'utf-8'))
+            
             if ser.readline().decode('utf-8')[0:][:-2] == "Turing Power On!":   # Ignores the last 2 bits as they are stop bits
                 print("Sent")
                 print("Connection Established")
                 break
+            
             else:
                 sleep(SHORT_SLEEP)
                 counter += 1
@@ -74,13 +76,11 @@ def serialread(fileName):
             
             # Filters samples
             
-            if data.startswith("Time:"):            # Puts time to csv
-                data = data + ctime()
+            if data.startswith("Time:"): data = data + ctime()
 
             readings = data.split(",")
             
-            if readings[0] not in invalid_list:
-                sensor_data.append(readings)
+            if readings[0] not in invalid_list: sensor_data.append(readings)
             
             print(Fore.RESET + f"{fileName} data:\n{sensor_data}")  # prints data as ots collected
 

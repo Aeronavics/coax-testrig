@@ -36,9 +36,15 @@ def ask_user(question):
     """Asks a user a question and returns bool"""
     print(question)
     user_input = str(input("Type yes or no: "))
-    
-    if user_input.lower() == "yes":
-        return True
-    else:
-        return False
-    
+    while True:
+        try:
+            if user_input.lower() == "yes":
+                return True
+            else:
+                return False
+            
+        except:
+                print("That was not a valid input.\n")
+                print("Type yes or no: ")
+        
+        

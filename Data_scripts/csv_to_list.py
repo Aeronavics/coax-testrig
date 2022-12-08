@@ -12,7 +12,7 @@ from colorama import Fore
 
 # SET UP FOR WINDOWS
 # PATH = '..\\Data_scripts\\put_data_here\\'            
-PATH = '..\\Data_scripts'
+PATH = '..\\Data_scripts\\'
 
 EXPECTED_LABEL = "Motor PWM"            # This is the first label you expect to see
                                        

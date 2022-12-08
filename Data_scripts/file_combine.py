@@ -8,18 +8,63 @@
 
 # Library Imports
 import os
+import pandas as pd
+from csv_to_list import PATH
+import csv
 
-def same_file_test(file_list, previous_file):
+PATH = '..\\Data_scripts\\'
+
+def splited_files_list(file_list):
+    """ Returns a list of files that have been split by '-' char"""
+    
+    split_file_list = list()
+    
+    for file in file_list:
+        split_file_list.append(file.split("-"))
+    
+    return split_file_list
+
+def two_d_list_init(file_list):
+    rows, cols = (len(file_list), 0)
+    arr = [[0 for i in range(cols)] for j in range(rows)]
+    return arr
+
+
+def same_files(file_list):
     """"""
-    file_list = file_list.split("-")
-    previous_file = previous_file.split("-")
+    split_file_list = splited_files_list(file_list)
+    same_file_list = two_d_list_init(file_list)
     
-    if file_list[1:7] == previous_file[1:7]:
-        return True
-    else:
-        return False
+    special_index = 0
     
+    for index, sfile in enumerate(split_file_list):
+        i = index
+        
+        if file_list[i] not in same_file_list[special_index]:
+            same_file_list[special_index].append(file_list[i])
+        
+        try:   
+            if split_file_list[i][1:7] != split_file_list[i + 1][1:7]:
+                special_index += 1
+                
+        except IndexError:
+            continue
+        
+        while i < len(file_list):
+            
+            if sfile[1:7] == split_file_list[i][1:7] and sfile != split_file_list[i] and file_list[i] not in same_file_list[special_index]:
+                same_file_list[special_index].append(file_list[i])
+                
+            i += 1
     
+    print(f"This is the sorted file list:\n{same_file_list}")
+    return same_file_list
+    
+def file_merge(file_list):
+    """"""
+    same_file_list = same_files(file_list)
+    
+        
 def get_file_list():
     """Gets all the files from the directory"""
     file_list = list()
