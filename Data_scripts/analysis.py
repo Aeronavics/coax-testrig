@@ -19,7 +19,8 @@ from data_check import header_check, row_check
 from plotting import efficiency_to_thrust_plot
 from file_combine import get_file_list, same_files
 
-FOLDER = 'put_data_here\\' 
+PATH = '..\\Data_scripts\\'     # Change to what path your folder is in
+FOLDER = 'Coax_pre\\'           # Change to what folder your data is in
 
 PWM_INDEX = 0
 TOP_V_INDEX, BOTTOM_V_INDEX = 1, 2
@@ -35,7 +36,7 @@ BOTTOM_I_OFFSET = 0
 
 def get_data(filename):
     """Gets data and gets it error checked"""
-    data =  control_func(filename, FOLDER)          
+    data =  control_func(filename, PATH, FOLDER)          
     
     # Format checks
     header_check(data)
@@ -50,14 +51,12 @@ def efficiency_and_thrust_find(data):
     thrust_list = list()
     efficiency_list = list()
     
-
-    
     for row in data:
         thrust = row[LOAD_INDEX]
         
         top_motor_power = row[TOP_V_INDEX] * (row[TOP_I_INDEX] - TOP_I_OFFSET)
-        # bottom_motor_power = row[BOTTOM_V_INDEX] * (row[BOTTOM_I_INDEX] - BOTTOM_I_OFFSET) # edit for single prop
-        total_power = top_motor_power #+ bottom_motor_power 
+        bottom_motor_power = row[BOTTOM_V_INDEX] * (row[BOTTOM_I_INDEX] - BOTTOM_I_OFFSET) # edit out for single prop
+        total_power = top_motor_power + bottom_motor_power 
         
         if total_power == 0:
             continue
@@ -96,45 +95,41 @@ def raw_data_dict(same_file_list):
                     
         print(Fore.CYAN + f"{data}" + Fore.RESET)
         data = give_average_data(data)
-        
-        print(filename)
-        print(f"{data}\n")
-        
             
         all_the_data[filename] = data
             
     return all_the_data
-        
+
+
+def ask_plot_TvsE(combined_data_dict):
+    """Asks the user to plot Thrust vs Efficiency"""
+    plot_E = ask_user("\nDo you want to plot efficiency against thrust?")
+    
+    if plot_E == True:
+        LoBF = ask_user("\nDo you want to plot the lines of best fit too?")
+        do_plot_TvsE(combined_data_dict, LoBF)  
+              
         
 def do_plot_TvsE(file_dict, LoBF):
     """Sets up data to be plotted for thrust against efficiency"""
+    print(Fore.RED + f"{file_dict}" + Fore.RESET)
     plotting_dict = dict()
-    
-    title = str(input("\nWhat should the title for this graph be: "))
     
     for file_name, data in file_dict.items():
         efficiency_list, thrust_list = efficiency_and_thrust_find(data)
         plotting_dict[file_name] = [thrust_list, efficiency_list]
-        print(data)
         
-    print(f"\n{plotting_dict}\n")
-        
-    efficiency_to_thrust_plot(plotting_dict, title, LoBF)
+    efficiency_to_thrust_plot(plotting_dict, LoBF)
     
 
 def analysis_main():
     """main func that will direct all others in analysis"""
-    file_list = get_file_list()
+    file_list = get_file_list(FOLDER)
     same_file_list = same_files(file_list)
 
     combined_data_dict = raw_data_dict(same_file_list)
     print(f"\n\n{combined_data_dict.keys()}\n\n")
   
-    plot_E = ask_user("\nDo you want to plot efficiency against thrust?")
-    
-    if plot_E == True:
-        LoBF = ask_user("\nDo you want to plot the lines of best fit too?")
-        do_plot_TvsE(combined_data_dict, LoBF)
-    
+    ask_plot_TvsE(combined_data_dict)
     
 analysis_main()

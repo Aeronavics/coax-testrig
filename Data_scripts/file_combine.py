@@ -9,10 +9,8 @@
 # Library Imports
 import os
 import pandas as pd
-from csv_to_list import PATH
 import csv
 
-PATH = '..\\Data_scripts\\'
 
 def splited_files_list(file_list):
     """ Returns a list of files that have been split by '-' char"""
@@ -65,11 +63,11 @@ def same_files(file_list):
     return same_file_list
 
         
-def get_file_list():
+def get_file_list(FOLDER):
     """Gets all the files from the directory"""
     file_list = list()
 
-    with os.scandir(".\put_data_here\\") as entries:
+    with os.scandir(".\\" + FOLDER + "\\") as entries:
         print("\nFiles found:\n")
         
         for entry in entries:
