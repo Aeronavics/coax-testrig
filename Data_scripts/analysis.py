@@ -19,7 +19,7 @@ from data_check import header_check, row_check
 from plotting import efficiency_to_thrust_plot
 from file_combine import get_file_list, same_files
 
-PATH = '..\\Data_scripts\\'     # Change to what path your folder is in
+PATH = '..\\Data_scripts\\'     # Change to what path your folder is in (MACS use '/')
 FOLDER = 'Coax_pre\\'           # Change to what folder your data is in
 
 PWM_INDEX = 0
@@ -107,18 +107,70 @@ def ask_plot_TvsE(combined_data_dict):
     
     if plot_E == True:
         do_plot_TvsE(combined_data_dict)  
-              
         
+
 def do_plot_TvsE(file_dict):
     """Sets up data to be plotted for thrust against efficiency"""
-    print(Fore.RED + f"{file_dict}" + Fore.RESET)
     plotting_dict = dict()
+    print(Fore.RED + f"{file_dict}" + Fore.RESET)
     
     for file_name, data in file_dict.items():
         efficiency_list, thrust_list = efficiency_and_thrust_find(data)
         plotting_dict[file_name] = [thrust_list, efficiency_list]
+      
+    efficiency_to_thrust_plot(plotting_dict, "Thrust (kg)", "Relative Efficiency (Thrust / Power)", 0, 0, 1)
+
         
-    efficiency_to_thrust_plot(plotting_dict)
+def ask_plot_PWMvsE(combined_data_dict):
+    """Asks the user to plot Thrust vs Efficiency"""
+    plot_E = ask_user("\nDo you want to plot efficiency against PWM?")
+    
+    if plot_E == True:
+        do_plot_PWMvsE(combined_data_dict)        
+              
+
+def do_plot_PWMvsE(file_dict):
+    """ Sets up data to be plotted for PWM against E""" 
+    plotting_dict = dict()
+    
+    
+    for file_name, data in file_dict.items():
+        efficiency_list, dw = efficiency_and_thrust_find(data)
+        PWM_list = []
+        for row in data:
+            PWM_list.append(row[0])
+        plotting_dict[file_name] = [PWM_list, efficiency_list]
+        PWM_list.pop(0)
+    
+    
+        
+    efficiency_to_thrust_plot(plotting_dict, "PWM", "Relative Efficiency (Thrust / Power)", 1000, 1000, 50)  
+    
+def ask_plot_PWMvsT(combined_data_dict):
+    """Asks the user to plot Thrust vs PWM"""
+    plot_E = ask_user("\nDo you want to plot Thrust against PWM?")
+    
+    if plot_E == True:
+        do_plot_PWMvsT(combined_data_dict)        
+              
+
+def do_plot_PWMvsT(file_dict):
+    """ Sets up data to be plotted for PWM against Thrust""" 
+    plotting_dict = dict()
+    
+    
+    for file_name, data in file_dict.items():
+        efficiency_list, thrust_list = efficiency_and_thrust_find(data)
+        PWM_list = []
+        for row in data:
+            PWM_list.append(row[0])
+        plotting_dict[file_name] = [PWM_list, thrust_list]
+        PWM_list.pop(0)
+    
+    
+        
+    efficiency_to_thrust_plot(plotting_dict, "PWM", "Thrust (kg)", 1000, 1000, 50)  
+
     
 
 def analysis_main():
@@ -130,5 +182,7 @@ def analysis_main():
     print(f"\n\n{combined_data_dict.keys()}\n\n")
   
     ask_plot_TvsE(combined_data_dict)
+    ask_plot_PWMvsE(combined_data_dict)
+    ask_plot_PWMvsT(combined_data_dict)
     
 analysis_main()
