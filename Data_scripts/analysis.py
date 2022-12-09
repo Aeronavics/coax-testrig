@@ -30,9 +30,6 @@ LOAD_INDEX = 5
 SCALE_FACTOR = 100
 EFFICIENCY_CUTOFF = 0.1
 
-TOP_I_OFFSET = 0
-BOTTOM_I_OFFSET = 0
-
 
 def get_data(filename):
     """Gets data and gets it error checked"""
@@ -48,14 +45,18 @@ def get_data(filename):
 
 def efficiency_and_thrust_find(data):
     """Finds relative efficiency and thrust"""
+    print(Fore.GREEN + f"{data}" + Fore.RESET)
     thrust_list = list()
     efficiency_list = list()
+    
+    top_I_offset = data[0][TOP_I_INDEX]
+    bottom_I_offset = data[0][BOTTOM_I_INDEX]
     
     for row in data:
         thrust = row[LOAD_INDEX]
         
-        top_motor_power = row[TOP_V_INDEX] * (row[TOP_I_INDEX] - TOP_I_OFFSET)
-        bottom_motor_power = row[BOTTOM_V_INDEX] * (row[BOTTOM_I_INDEX] - BOTTOM_I_OFFSET) # edit out for single prop
+        top_motor_power = row[TOP_V_INDEX] * (row[TOP_I_INDEX] - top_I_offset)
+        bottom_motor_power = row[BOTTOM_V_INDEX] * (row[BOTTOM_I_INDEX] - bottom_I_offset) # edit out for single prop
         total_power = top_motor_power + bottom_motor_power 
         
         if total_power == 0:
@@ -75,7 +76,6 @@ def efficiency_and_thrust_find(data):
 
 def raw_data_dict(same_file_list):
     """"""
-    print(same_file_list)
     all_the_data = dict()
     
     for test_types in same_file_list:
@@ -106,11 +106,10 @@ def ask_plot_TvsE(combined_data_dict):
     plot_E = ask_user("\nDo you want to plot efficiency against thrust?")
     
     if plot_E == True:
-        LoBF = ask_user("\nDo you want to plot the lines of best fit too?")
-        do_plot_TvsE(combined_data_dict, LoBF)  
+        do_plot_TvsE(combined_data_dict)  
               
         
-def do_plot_TvsE(file_dict, LoBF):
+def do_plot_TvsE(file_dict):
     """Sets up data to be plotted for thrust against efficiency"""
     print(Fore.RED + f"{file_dict}" + Fore.RESET)
     plotting_dict = dict()
@@ -119,7 +118,7 @@ def do_plot_TvsE(file_dict, LoBF):
         efficiency_list, thrust_list = efficiency_and_thrust_find(data)
         plotting_dict[file_name] = [thrust_list, efficiency_list]
         
-    efficiency_to_thrust_plot(plotting_dict, LoBF)
+    efficiency_to_thrust_plot(plotting_dict)
     
 
 def analysis_main():

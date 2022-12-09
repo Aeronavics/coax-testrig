@@ -12,15 +12,17 @@ import matplotlib.pyplot as plt
 
 # Module Imports
 from plotter_helper import *
+from common_funcs import ask_user
 
 NEAT_OFFSET = 0.3
 
     
-def efficiency_to_thrust_plot(plotting_dict, LoBF):
+def efficiency_to_thrust_plot(plotting_dict):
     """"Plots the efficiency to thrust multiple file"""
     fig, ax = plt.subplots()
     lim_thrust = 0
     lim_E = 0
+    LoBF = ask_user("Would you like to plot the line of best fit?")
     
     for TvsE_data in plotting_dict.values():
         coefficients = least_squares_estimate(TvsE_data)
