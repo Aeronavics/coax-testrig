@@ -17,7 +17,7 @@ from average_data import give_average_data
 from csv_to_list import control_func
 from data_check import header_check, row_check
 from plotting import efficiency_to_thrust_plot
-from file_combine import get_file_list, file_merge
+from file_combine import get_file_list, same_files
 
 FOLDER = 'put_data_here\\' 
 
@@ -36,6 +36,7 @@ BOTTOM_I_OFFSET = 0
 def get_data(filename):
     """Gets data and gets it error checked"""
     data =  control_func(filename, FOLDER)          
+    
     # Format checks
     header_check(data)
     row_check(data)
@@ -48,6 +49,8 @@ def efficiency_and_thrust_find(data):
     """Finds relative efficiency and thrust"""
     thrust_list = list()
     efficiency_list = list()
+    
+
     
     for row in data:
         thrust = row[LOAD_INDEX]
@@ -62,31 +65,48 @@ def efficiency_and_thrust_find(data):
         # efficiency = total_power
         efficiency = SCALE_FACTOR * thrust / total_power
         
-        if efficiency < EFFICIENCY_CUTOFF:
+        if efficiency < EFFICIENCY_CUTOFF or efficiency > 2.5:
             continue
         
         thrust_list.append(thrust)
         efficiency_list.append(efficiency)
-        
+          
     return efficiency_list, thrust_list
 
 
-def raw_data_dict(file_list):
+def raw_data_dict(same_file_list):
     """"""
+    print(same_file_list)
     all_the_data = dict()
-    previous_file = ""
-    previous_data = list()
     
-    for filename in file_list:
-        data = get_data(filename)
+    for test_types in same_file_list:
+        data = None
         
+        for filename in test_types:
+            
+            if data == None:
+                data = get_data(filename)
+                continue
+            else:
+                next_data = get_data(filename)
+                
+                for row in next_data:
+                    data.append(row)
+                    
+                    
+        print(Fore.CYAN + f"{data}" + Fore.RESET)
+        data = give_average_data(data)
+        
+        print(filename)
+        print(f"{data}\n")
+        
+            
         all_the_data[filename] = data
             
     return all_the_data
         
         
 def do_plot_TvsE(file_dict, LoBF):
-    print(Fore.GREEN + f"{file_dict}\n\n +" + Fore.RESET )
     """Sets up data to be plotted for thrust against efficiency"""
     plotting_dict = dict()
     
@@ -105,12 +125,13 @@ def do_plot_TvsE(file_dict, LoBF):
 def analysis_main():
     """main func that will direct all others in analysis"""
     file_list = get_file_list()
-    file_merge(file_list)
+    same_file_list = same_files(file_list)
 
-    combined_data_dict = raw_data_dict(file_list)
+    combined_data_dict = raw_data_dict(same_file_list)
     print(f"\n\n{combined_data_dict.keys()}\n\n")
   
     plot_E = ask_user("\nDo you want to plot efficiency against thrust?")
+    
     if plot_E == True:
         LoBF = ask_user("\nDo you want to plot the lines of best fit too?")
         do_plot_TvsE(combined_data_dict, LoBF)

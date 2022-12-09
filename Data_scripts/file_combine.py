@@ -25,13 +25,14 @@ def splited_files_list(file_list):
     return split_file_list
 
 def two_d_list_init(file_list):
+    """ Inits a 2d list of the size of the the len(files)"""
     rows, cols = (len(file_list), 0)
     arr = [[0 for i in range(cols)] for j in range(rows)]
     return arr
 
 
 def same_files(file_list):
-    """"""
+    """ Returns a 2d list that contains lists of files that are of the same test"""
     split_file_list = splited_files_list(file_list)
     same_file_list = two_d_list_init(file_list)
     
@@ -57,13 +58,12 @@ def same_files(file_list):
                 
             i += 1
     
+    # removes empty lists elements 
+    same_file_list = [x for x in same_file_list if x != []]
+        
     print(f"This is the sorted file list:\n{same_file_list}")
     return same_file_list
-    
-def file_merge(file_list):
-    """"""
-    same_file_list = same_files(file_list)
-    
+
         
 def get_file_list():
     """Gets all the files from the directory"""
