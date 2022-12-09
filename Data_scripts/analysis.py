@@ -45,7 +45,6 @@ def get_data(filename):
 
 def efficiency_and_thrust_find(data):
     """Finds relative efficiency and thrust"""
-    print(Fore.GREEN + f"{data}" + Fore.RESET)
     thrust_list = list()
     efficiency_list = list()
     
@@ -74,11 +73,11 @@ def efficiency_and_thrust_find(data):
     return efficiency_list, thrust_list
 
 
-def raw_data_dict(same_file_list):
+def raw_data_dict(file_list):
     """"""
     all_the_data = dict()
     
-    for test_types in same_file_list:
+    for test_types in file_list:
         data = None
         
         for filename in test_types:
@@ -92,8 +91,6 @@ def raw_data_dict(same_file_list):
                 for row in next_data:
                     data.append(row)
                     
-                    
-        print(Fore.CYAN + f"{data}" + Fore.RESET)
         data = give_average_data(data)
             
         all_the_data[filename] = data
@@ -112,7 +109,6 @@ def ask_plot_TvsE(combined_data_dict):
 def do_plot_TvsE(file_dict):
     """Sets up data to be plotted for thrust against efficiency"""
     plotting_dict = dict()
-    print(Fore.RED + f"{file_dict}" + Fore.RESET)
     
     for file_name, data in file_dict.items():
         efficiency_list, thrust_list = efficiency_and_thrust_find(data)
@@ -133,18 +129,17 @@ def do_plot_PWMvsE(file_dict):
     """ Sets up data to be plotted for PWM against E""" 
     plotting_dict = dict()
     
-    
     for file_name, data in file_dict.items():
         efficiency_list, dw = efficiency_and_thrust_find(data)
         PWM_list = []
+        
         for row in data:
             PWM_list.append(row[0])
         plotting_dict[file_name] = [PWM_list, efficiency_list]
         PWM_list.pop(0)
-    
-    
-        
+
     efficiency_to_thrust_plot(plotting_dict, "PWM", "Relative Efficiency (Thrust / Power)", 1000, 1000, 50)  
+    
     
 def ask_plot_PWMvsT(combined_data_dict):
     """Asks the user to plot Thrust vs PWM"""
@@ -158,31 +153,50 @@ def do_plot_PWMvsT(file_dict):
     """ Sets up data to be plotted for PWM against Thrust""" 
     plotting_dict = dict()
     
-    
     for file_name, data in file_dict.items():
         efficiency_list, thrust_list = efficiency_and_thrust_find(data)
         PWM_list = []
+        
         for row in data:
             PWM_list.append(row[0])
         plotting_dict[file_name] = [PWM_list, thrust_list]
         PWM_list.pop(0)
-    
-    
         
     efficiency_to_thrust_plot(plotting_dict, "PWM", "Thrust (kg)", 1000, 1000, 50)  
 
-    
 
+def raw_data_dict_check(file_list):
+    """"""
+    print(file_list)
+    data_to_check = dict()
+    
+    for test_types in file_list:
+        for filename in test_types:
+            data = get_data(filename)
+            data_to_check[filename] = data
+            
+    return data_to_check
+
+
+def data_check(same_file_list):
+    """ Controls data flow for data check between same tests"""
+    print(same_file_list)
+    data_dict = raw_data_dict(same_file_list)
+    # print(data_dict)
+    
+    
 def analysis_main():
     """main func that will direct all others in analysis"""
     file_list = get_file_list(FOLDER)
     same_file_list = same_files(file_list)
+    
+    data_check(same_file_list)  # Remove if confident in data
 
-    combined_data_dict = raw_data_dict(same_file_list)
-    print(f"\n\n{combined_data_dict.keys()}\n\n")
+    # combined_data_dict = raw_data_dict(same_file_list)
+    # print(f"\n\n{combined_data_dict.keys()}\n\n")
   
-    ask_plot_TvsE(combined_data_dict)
-    ask_plot_PWMvsE(combined_data_dict)
-    ask_plot_PWMvsT(combined_data_dict)
+    # ask_plot_TvsE(combined_data_dict)
+    # ask_plot_PWMvsE(combined_data_dict)
+    # ask_plot_PWMvsT(combined_data_dict)
     
 analysis_main()

@@ -59,7 +59,7 @@ def same_files(file_list):
     # removes empty lists elements 
     same_file_list = [x for x in same_file_list if x != []]
         
-    print(f"This is the sorted file list:\n{same_file_list}")
+    # print(f"This is the sorted file list:\n{same_file_list}")
     return same_file_list
 
         
