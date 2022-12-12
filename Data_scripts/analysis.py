@@ -116,14 +116,6 @@ def do_plot_PWMvsE(file_dict):
 
     general_plotter(plotting_dict, "PWM", "Relative Efficiency (Thrust / Power)", 1000, 1000, 50)  
     
-    
-def ask_plot_PWMvsT(combined_data_dict):
-    """Asks the user to plot Thrust vs PWM"""
-    plot_E = ask_user("\nDo you want to plot Thrust against PWM?")
-    
-    if plot_E == True:
-        do_plot_PWMvsT(combined_data_dict)        
-              
 
 def do_plot_PWMvsT(file_dict):
     """ Sets up data to be plotted for PWM against Thrust""" 
@@ -139,6 +131,18 @@ def do_plot_PWMvsT(file_dict):
         PWM_list.pop(0) # DANGER LINE
         
     general_plotter(plotting_dict, "PWM", "Thrust (kg)", 1000, 1000, 50)  
+ 
+    
+def do_plot_TvsE(file_dict):
+    """Sets up data to be plotted for thrust against efficiency"""
+    plotting_dict = dict()
+    print(Fore.RED + f"{file_dict}" + Fore.RESET)
+
+    for file_name, data in file_dict.items():
+        efficiency_list, thrust_list = efficiency_and_thrust_find(data)
+        plotting_dict[file_name] = [thrust_list, efficiency_list]
+      
+    general_plotter(plotting_dict, "Thrust (kg)", "Relative Efficiency (Thrust / Power)", 0, 0, 1)
 
 
 def raw_data_dict_check(file_list):
