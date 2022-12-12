@@ -2,7 +2,7 @@
 
 #define ADC_SCALE 2.76 / 1023.0
 
-ACS758::ACS758(int cin, int vin, float current_ratio, float voltage_ratio, float current_offset) {
+ACS758::ACS758(int cin, int vin, float current_ratio, float voltage_ratio) {
   CIN = cin;
   VIN = vin;
   CURRENT_RATIO = current_ratio;
