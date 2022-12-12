@@ -8,8 +8,6 @@
 
 # Library Imports
 import os
-import pandas as pd
-import csv
 
 
 def splited_files_list(file_list):
@@ -30,7 +28,8 @@ def two_d_list_init(file_list):
 
 
 def same_files(file_list):
-    """ Returns a 2d list that contains lists of files that are of the same test"""
+    """ Returns a 2d list that contains lists of files that are of the same test
+        FILE MUST BE ORDERED"""
     split_file_list = splited_files_list(file_list)
     same_file_list = two_d_list_init(file_list)
     
@@ -68,7 +67,7 @@ def get_file_list(FOLDER):
     file_list = list()
 
     with os.scandir(".\\" + FOLDER + "\\") as entries:
-        print("\nFiles found:\n")
+        print("\nFiles found:")
         
         for entry in entries:
             if entry.name.endswith(".csv"):

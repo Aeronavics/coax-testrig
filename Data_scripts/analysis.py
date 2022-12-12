@@ -183,7 +183,6 @@ def raw_data_dict_check(file_list):
     
         data_list.append(dictcpy)
             
-    print(Fore.GREEN + f"{data_list}" + Fore.RESET)
     
     return data_list
 
@@ -192,7 +191,7 @@ def plot_data_check(file_dict):
     """ Plots the data from teh same test type"""
     plotting_dict = dict()
     
-    print(file_dict)
+
     for file_name, data in file_dict.items():
         efficiency_list, thrust_list = efficiency_and_thrust_find(data)
         plotting_dict[file_name] = [thrust_list, efficiency_list]
@@ -211,6 +210,8 @@ def analysis_main():
     """main func that will direct all others in analysis"""
     file_list = get_file_list(FOLDER)
     same_file_list = same_files(file_list)
+    
+    print(Fore.CYAN + f"{same_file_list}" + Fore.RESET)
     
     data_check(same_file_list)  # Remove if confident in data
 
