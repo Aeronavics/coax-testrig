@@ -8,7 +8,6 @@
 
 
 # Library Imports
-import os
 from colorama import Fore
 import copy
 
@@ -75,7 +74,10 @@ def efficiency_and_thrust_find(data):
 
 
 def raw_data_dict(file_list):
-    """"""
+    """ Takes each file and if of same test type will call functions to average it
+        and will append it to a dict where the key is the file name and data is
+        a 2D list where each list element is the averaged result ata specific PWM"""
+        
     all_the_data = dict()
     
     for test_types in file_list:
@@ -96,34 +98,7 @@ def raw_data_dict(file_list):
             
         all_the_data[filename] = data
             
-    return all_the_data
-
-
-def ask_plot_TvsE(combined_data_dict):
-    """Asks the user to plot Thrust vs Efficiency"""
-    plot_E = ask_user("\nDo you want to plot efficiency against thrust?")
-    
-    if plot_E == True:
-        do_plot_TvsE(combined_data_dict)  
-        
-
-def do_plot_TvsE(file_dict):
-    """Sets up data to be plotted for thrust against efficiency"""
-    plotting_dict = dict()
-    
-    for file_name, data in file_dict.items():
-        efficiency_list, thrust_list = efficiency_and_thrust_find(data)
-        plotting_dict[file_name] = [thrust_list, efficiency_list]
-      
-    general_plotter(plotting_dict, "Thrust (kg)", "Relative Efficiency (Thrust / Power)", 0, 0, 1)
-
-        
-def ask_plot_PWMvsE(combined_data_dict):
-    """Asks the user to plot Thrust vs Efficiency"""
-    plot_E = ask_user("\nDo you want to plot efficiency against PWM?")
-    
-    if plot_E == True:
-        do_plot_PWMvsE(combined_data_dict)        
+    return all_the_data      
               
 
 def do_plot_PWMvsE(file_dict):
@@ -167,7 +142,7 @@ def do_plot_PWMvsT(file_dict):
 
 
 def raw_data_dict_check(file_list):
-    """"""
+    """ Plots all files of same test type against each other so it can be easily checked for errors"""
     data_list = []
     
     print(Fore.RED + f"{file_list}" + Fore.RESET)
@@ -211,7 +186,7 @@ def analysis_main():
     file_list = get_file_list(FOLDER)
     same_file_list = same_files(file_list)
     
-    print(Fore.CYAN + f"{same_file_list}" + Fore.RESET)
+    # print(Fore.CYAN + f"{same_file_list}" + Fore.RESET)
     
     data_check(same_file_list)  # Remove if confident in data
 
