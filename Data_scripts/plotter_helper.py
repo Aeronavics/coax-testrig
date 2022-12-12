@@ -13,7 +13,7 @@ def ask_title():
     title = str(input("\nWhat should the title for this graph be: "))
     return title
 
-
+   
 def give_file_list(plotting_dict, LoBF):
     """Gives file list based onb dict passed to plotting function"""
     file_list = list()
