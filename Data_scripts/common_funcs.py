@@ -33,7 +33,7 @@ def list_check(user_input: str, list_used: list, data_type: type) -> bool:
     
     
 def ask_user(question: str) -> bool:
-    """Asks a user a question and returns bool"""
+    """Asks a user a question and returns bool dependant on answer"""
     print(question)
     user_input = str(input("Type yes or no: "))
     while True:
@@ -46,5 +46,4 @@ def ask_user(question: str) -> bool:
         except:
                 print("That was not a valid input.\n")
                 print("Type yes or no: ")
-        
         

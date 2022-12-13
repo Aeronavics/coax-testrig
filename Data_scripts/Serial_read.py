@@ -15,6 +15,8 @@ from time import time, ctime, sleep
 # Module Imports
 from file_name_make import file_name
 
+LF = list[float]
+
 
 SAMPLES = 45
 TIME_OUT = 2                # This needs to be > 1 for good readings

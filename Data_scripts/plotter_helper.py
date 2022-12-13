@@ -7,6 +7,8 @@
 # Library Imports
 import numpy as np
 
+LF = list[float]
+
 
 def ask_title():
     """ Asks user for a title to their graph"""
@@ -14,7 +16,7 @@ def ask_title():
     return title
 
    
-def give_file_list(plotting_dict, LoBF):
+def give_file_list(plotting_dict: dict[str, list[LF]], LoBF: bool) -> list[str]:
     """Gives file list based onb dict passed to plotting function"""
     file_list = list()
     
@@ -29,7 +31,7 @@ def give_file_list(plotting_dict, LoBF):
     return file_list
 
 
-def least_squares_estimate(data):
+def least_squares_estimate(data: list) -> np.ndarray:
     """ Returns the coefficients for the polynomial that fits the function""" 
     x = data[0]
     y = data[1]
@@ -39,7 +41,7 @@ def least_squares_estimate(data):
     return np.flip(coefficients)
 
 
-def function_sub(coefficients, x):
+def function_sub(coefficients: np.ndarray, x: float) -> float:
     """subs coefficients into equation"""
     size = len(coefficients)
     y = 0

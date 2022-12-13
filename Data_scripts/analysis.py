@@ -65,7 +65,6 @@ def efficiency_and_thrust_find(data: list[LF]) -> tuple[LF, LF]:
         if total_power == 0:
             continue
         
-        # efficiency = total_power
         efficiency = SCALE_FACTOR * thrust / total_power
         
         if efficiency < EFFICIENCY_CUTOFF or efficiency > 2.5:
@@ -146,7 +145,7 @@ def do_plot_TvsE(file_dict: dict[str, list[LF]]) -> None:
         efficiency_list, thrust_list = efficiency_and_thrust_find(data)
         plotting_dict[file_name] = [thrust_list, efficiency_list]
       
-    general_plotter(plotting_dict, "Thrust (kg)", "Relative Efficiency (Thrust / Power)", 0, 0, 1, False)
+    general_plotter(plotting_dict, "Thrust (kg)", "Relative Efficiency (Thrust / Power)", 0, 0, 1, True)
 
 
 def raw_data_dict_check(file_list: list[str]) -> dict[str,list[LF]]:
@@ -182,7 +181,7 @@ def plot_data_check(file_dict: dict[str, list[LF]]) -> None:
 def data_check(same_file_list: list) -> None:
     """ Controls data flow for data check between same tests"""
     file_dict = raw_data_dict_check(same_file_list)
-    print(type(same_file_list))
+
     for file in file_dict:
         plot_data_check(file)
     
