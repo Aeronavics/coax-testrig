@@ -8,14 +8,14 @@
 # Library Imports
 from colorama import Fore
 
-def print_list(list):
+def print_list(list: list) -> None:
     """Prints elements in list"""
     
     for item in list:
         print(Fore.RESET + f"{item}")
         
 
-def list_check(user_input, list_used, data_type):
+def list_check(user_input, list_used: list, data_type):
     """Returns bool if element is in list"""
     try:
         if data_type(user_input) in list_used:

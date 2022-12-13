@@ -34,7 +34,7 @@ def least_squares_estimate(data):
     x = data[0]
     y = data[1]
     
-    coefficients = np.polyfit(x, y, 3)
+    coefficients = np.polyfit(x, y, 4)
     
     return np.flip(coefficients)
 

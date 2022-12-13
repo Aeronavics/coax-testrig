@@ -20,7 +20,8 @@ from plotting import general_plotter, test_plotter
 from file_combine import get_file_list, same_files
 
 PATH = '..\\Data_scripts\\'     # Change to what path your folder is in (MACS use '/')
-FOLDER = 'Coax_pre\\'           # Change to what folder your data is in
+# FOLDER = 'Data\\Single prop\\140\\'           # Change to what folder your data is in
+FOLDER = 'Data\\Single prop\\140\\'
 
 PWM_INDEX = 0
 TOP_V_INDEX, BOTTOM_V_INDEX = 1, 2
@@ -54,9 +55,10 @@ def efficiency_and_thrust_find(data):
     for row in data:
         thrust = row[LOAD_INDEX]
         
-        top_motor_power = row[TOP_V_INDEX] * (row[TOP_I_INDEX] - top_I_offset)
+        # top_motor_power = row[TOP_V_INDEX] * (row[TOP_I_INDEX] - top_I_offset)
         bottom_motor_power = row[BOTTOM_V_INDEX] * (row[BOTTOM_I_INDEX] - bottom_I_offset) # edit out for single prop
-        total_power = top_motor_power + bottom_motor_power 
+        # total_power = top_motor_power #+ bottom_motor_power 
+        total_power = bottom_motor_power
         
         if total_power == 0:
             continue
@@ -114,7 +116,7 @@ def do_plot_PWMvsE(file_dict):
         plotting_dict[file_name] = [PWM_list, efficiency_list]
         PWM_list.pop(0) # DANGER LINE
 
-    general_plotter(plotting_dict, "PWM", "Relative Efficiency (Thrust / Power)", 1000, 1000, 50)  
+    general_plotter(plotting_dict, "PWM", "Relative Efficiency (Thrust / Power)", 1000, 1000, 50, True)  
     
 
 def do_plot_PWMvsT(file_dict):
@@ -127,29 +129,27 @@ def do_plot_PWMvsT(file_dict):
         
         for row in data:
             PWM_list.append(row[0])
+            
         plotting_dict[file_name] = [PWM_list, thrust_list]
         PWM_list.pop(0) # DANGER LINE
         
-    general_plotter(plotting_dict, "PWM", "Thrust (kg)", 1000, 1000, 50)  
+    general_plotter(plotting_dict, "PWM", "Thrust (kg)", 1000, 1000, 50, True)  
  
     
 def do_plot_TvsE(file_dict):
     """Sets up data to be plotted for thrust against efficiency"""
     plotting_dict = dict()
-    print(Fore.RED + f"{file_dict}" + Fore.RESET)
 
     for file_name, data in file_dict.items():
         efficiency_list, thrust_list = efficiency_and_thrust_find(data)
         plotting_dict[file_name] = [thrust_list, efficiency_list]
       
-    general_plotter(plotting_dict, "Thrust (kg)", "Relative Efficiency (Thrust / Power)", 0, 0, 1)
+    general_plotter(plotting_dict, "Thrust (kg)", "Relative Efficiency (Thrust / Power)", 0, 0, 1, False)
 
 
 def raw_data_dict_check(file_list):
     """ Plots all files of same test type against each other so it can be easily checked for errors"""
     data_list = []
-    
-    print(Fore.RED + f"{file_list}" + Fore.RESET)
     
     for test_types in file_list:
         data_to_check = dict()
@@ -170,7 +170,6 @@ def plot_data_check(file_dict):
     """ Plots the data from teh same test type"""
     plotting_dict = dict()
     
-
     for file_name, data in file_dict.items():
         efficiency_list, thrust_list = efficiency_and_thrust_find(data)
         plotting_dict[file_name] = [thrust_list, efficiency_list]
@@ -190,13 +189,10 @@ def analysis_main():
     file_list = get_file_list(FOLDER)
     same_file_list = same_files(file_list)
     
-    # print(Fore.CYAN + f"{same_file_list}" + Fore.RESET)
+    combined_data_dict = raw_data_dict(same_file_list)
     
     data_check(same_file_list)  # Remove if confident in data
 
-    combined_data_dict = raw_data_dict(same_file_list)
-    # print(f"\n\n{combined_data_dict.keys()}\n\n")
-  
     do_plot_PWMvsE(combined_data_dict)
     do_plot_PWMvsT(combined_data_dict)
     do_plot_TvsE(combined_data_dict)

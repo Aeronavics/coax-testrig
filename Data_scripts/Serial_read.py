@@ -33,7 +33,7 @@ t = time()
 invalid_list = ['Waiting for Authorization', 'Turing Power On!', 'Finished', '', 'Waiting...']
 
 
-def serialread(fileName):
+def serialread(fileName: str) -> list:
     """ This function sends a 1 to the serial port specified by 'arduino_port'.
         The Arduino should send a message back that when read by this function will
         begin reading the serial output from the Arduino"""
@@ -89,7 +89,7 @@ def serialread(fileName):
     return sensor_data
 
 
-def csv_make(fileName, sensor_data):
+def csv_make(fileName: str, sensor_data: list) -> None:
     """Creates csv file with data from the serialread function"""
     
     file = open(fileName, "a")
@@ -105,7 +105,7 @@ def csv_make(fileName, sensor_data):
     file.close()
     
     
-def serial_error():
+def serial_error() -> None:
     """ If serial error occurs then prints message and halts program until ENTER is pressed"""
     print(Fore.RED + f"\nERROR")
     print(f"Access to serial port {arduino_port} has been denied.")
@@ -114,7 +114,7 @@ def serial_error():
     input("Press ENTER to try again: ")     
 
 
-def control_func():
+def control_func() -> None:
     """ LINKER FUNCTION
         In a try loop until data is successfully collected"""
     fileName = file_name()

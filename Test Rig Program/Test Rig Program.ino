@@ -55,7 +55,7 @@ void setup() {
     abort();
   }
 
-  analogReference(EXTERNAL);  // 3.25V
+  analogReference(EXTERNAL);  // 2.76V
 
   //Initialise load cell
   loadcell.begin(LOADCELL_DOUT, LOADCELL_SCK);
