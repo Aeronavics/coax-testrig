@@ -31,8 +31,10 @@ LOAD_INDEX = 5
 SCALE_FACTOR = 100
 EFFICIENCY_CUTOFF = 0.1
 
+LF = list[float]
 
-def get_data(filename):
+
+def get_data(filename: str) -> list:
     """Gets data and gets it error checked"""
     data =  control_func(filename, PATH, FOLDER)          
     
@@ -44,7 +46,7 @@ def get_data(filename):
     return good_data
 
 
-def efficiency_and_thrust_find(data):
+def efficiency_and_thrust_find(data: list[LF]) -> tuple[LF, LF]:
     """Finds relative efficiency and thrust"""
     thrust_list = list()
     efficiency_list = list()
@@ -75,7 +77,7 @@ def efficiency_and_thrust_find(data):
     return efficiency_list, thrust_list
 
 
-def raw_data_dict(file_list):
+def raw_data_dict(file_list: list[str]) -> dict[str, list[LF]]:
     """ Takes each file and if of same test type will call functions to average it
         and will append it to a dict where the key is the file name and data is
         a 2D list where each list element is the averaged result ata specific PWM"""
@@ -99,11 +101,11 @@ def raw_data_dict(file_list):
         data = give_average_data(data)
             
         all_the_data[filename] = data
-            
+ 
     return all_the_data      
               
 
-def do_plot_PWMvsE(file_dict):
+def do_plot_PWMvsE(file_dict: dict[str, list[LF]]) -> None:
     """ Sets up data to be plotted for PWM against E""" 
     plotting_dict = dict()
     
@@ -119,7 +121,7 @@ def do_plot_PWMvsE(file_dict):
     general_plotter(plotting_dict, "PWM", "Relative Efficiency (Thrust / Power)", 1000, 1000, 50, True)  
     
 
-def do_plot_PWMvsT(file_dict):
+def do_plot_PWMvsT(file_dict: dict[str, list[LF]]) -> None:
     """ Sets up data to be plotted for PWM against Thrust""" 
     plotting_dict = dict()
     
@@ -136,7 +138,7 @@ def do_plot_PWMvsT(file_dict):
     general_plotter(plotting_dict, "PWM", "Thrust (kg)", 1000, 1000, 50, True)  
  
     
-def do_plot_TvsE(file_dict):
+def do_plot_TvsE(file_dict: dict[str, list[LF]]) -> None:
     """Sets up data to be plotted for thrust against efficiency"""
     plotting_dict = dict()
 
@@ -147,7 +149,7 @@ def do_plot_TvsE(file_dict):
     general_plotter(plotting_dict, "Thrust (kg)", "Relative Efficiency (Thrust / Power)", 0, 0, 1, False)
 
 
-def raw_data_dict_check(file_list):
+def raw_data_dict_check(file_list: list[str]) -> dict[str,list[LF]]:
     """ Plots all files of same test type against each other so it can be easily checked for errors"""
     data_list = []
     
@@ -161,12 +163,12 @@ def raw_data_dict_check(file_list):
         dictcpy = copy.deepcopy(data_to_check)
     
         data_list.append(dictcpy)
-            
+
     
     return data_list
 
 
-def plot_data_check(file_dict):
+def plot_data_check(file_dict: dict[str, list[LF]]) -> None:
     """ Plots the data from teh same test type"""
     plotting_dict = dict()
     
@@ -177,14 +179,15 @@ def plot_data_check(file_dict):
     test_plotter(plotting_dict, "Thrust (kg)", "Relative Efficiency (Thrust / Power)", 0, 0, 1)
     
 
-def data_check(same_file_list):
+def data_check(same_file_list: list) -> None:
     """ Controls data flow for data check between same tests"""
     file_dict = raw_data_dict_check(same_file_list)
+    print(type(same_file_list))
     for file in file_dict:
         plot_data_check(file)
     
     
-def analysis_main():
+def analysis_main() -> None:
     """main func that will direct all others in analysis"""
     file_list = get_file_list(FOLDER)
     same_file_list = same_files(file_list)

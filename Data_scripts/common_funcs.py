@@ -15,7 +15,7 @@ def print_list(list: list) -> None:
         print(Fore.RESET + f"{item}")
         
 
-def list_check(user_input, list_used: list, data_type):
+def list_check(user_input: str, list_used: list, data_type: type) -> bool:
     """Returns bool if element is in list"""
     try:
         if data_type(user_input) in list_used:
@@ -32,7 +32,7 @@ def list_check(user_input, list_used: list, data_type):
         return False
     
     
-def ask_user(question):
+def ask_user(question: str) -> bool:
     """Asks a user a question and returns bool"""
     print(question)
     user_input = str(input("Type yes or no: "))
