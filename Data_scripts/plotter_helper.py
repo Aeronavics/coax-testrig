@@ -7,8 +7,35 @@
 # Library Imports
 import numpy as np
 
+
 LF = list[float]
 
+
+class Graph_Labels:
+    """ Class that has all the labels and values for graphing"""
+    
+    def __init__(self, xlabel: str, ylabel: str, xstart: int, offset_multiply: float, LoBF: bool, Mxticks: float, mxticks: float, Myticks: float, myticks: float):
+        self.xlabel = xlabel
+        self.ylabel = ylabel
+        self.xstart = xstart
+        self.offset_multiply = offset_multiply
+        self.LoBF = LoBF
+        self.Mxticks = Mxticks
+        self.mxticks = mxticks
+        self.Myticks = Myticks
+        self.myticks = myticks
+        
+        
+    def max_xtick(self, lim_x: int, NEAT_OFFSET: float):
+        """ Returns the maximum x value that should be displayed of the graph"""
+        return lim_x + NEAT_OFFSET * self.offset_multiply
+    
+    def max_ytick(self, lim_y: int, NEAT_OFFSET: float):
+        """ Returns the maximum y value that should be displayed of the graph"""
+        return lim_y + NEAT_OFFSET
+        
+
+    
 
 def ask_title():
     """ Asks user for a title to their graph"""
