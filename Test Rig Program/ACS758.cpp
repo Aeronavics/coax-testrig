@@ -22,7 +22,7 @@ float ACS758::voltage(int times = 10) {
   return (avg * ADC_SCALE) * VOLTAGE_RATIO;
 }
 
-float ACS758::current(int times = 50) {
+float ACS758::current(int times = 100) {
   float sum = 0.0;
   for (int i = 0; i < times; i++) {
     sum += analogRead(CIN);

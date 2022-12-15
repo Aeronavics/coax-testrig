@@ -1,6 +1,6 @@
 /*
   Code that runs the test and puts data into csv format for python to read
-  // Automatically changes motor speeds
+  Automatically changes motor speeds
 
 */
 
@@ -26,7 +26,7 @@
 #define LOADCELL_SCALE 60000
 
 //Motor presets
-#define SPEED_MIN 1100
+#define SPEED_MIN 1000
 #define SPEED_MAX 1800
 #define SPEED_INC 100
 
@@ -41,6 +41,12 @@
 #define SLOW_DOWN 20
 #define RUN_NUM 5
 
+// Interrupt for emergency stop
+const int SWITCH_PIN = 9;
+const int POWER_PIN = 10;
+unsigned long switch_time = 0;  
+unsigned long last_switch_time = 0; 
+
 ACS758 top_motor(CIN_TOP, VIN_TOP, CURRENT_RATIO_TOP, VOLTAGE_RATIO_TOP);
 ACS758 bottom_motor(CIN_BOTTOM, VIN_BOTTOM, CURRENT_RATIO_BOTTOM, VOLTAGE_RATIO_BOTTOM);
 Servo top_esc;
@@ -54,6 +60,12 @@ void setup() {
     Serial.println("Aborting");
     abort();
   }
+
+  // Pin set up for switch
+  pinMode(POWER_PIN, OUTPUT);
+  pinMode(SWITCH_PIN, INPUT_PULLDOWN);
+  digitalWrite(POWER_PIN, HIGH);
+  attachInterrupt(digitalPinToInterrupt(SWITCH_PIN), emergency_SIR, CHANGE);
 
   analogReference(EXTERNAL);  // 2.76V
 
@@ -70,14 +82,15 @@ void setup() {
 
   // baud rate init
   Serial.begin(9600);
-
 }
+
 
 void header_setup(void) {
   //  Writes headers to serial
   Serial.println("Time: ");
   Serial.println("Motor PWM, Top Voltage (V), Bottom Voltage (V), Top Current (A), Bottom Current (A), Thrust (kg)");
 }
+
 
 void printer(int speed) {
   // Prints results into csv friendly format
@@ -120,9 +133,9 @@ void loop() {
       while(!done) {
         header_setup();
         
-        for (speed = SPEED_MIN; speed <= SPEED_MAX; speed += SPEED_INC) { // Toggles ESC PWM
+        for (speed = SPEED_MIN; speed <= SPEED_MAX; speed += SPEED_INC) {  // Toggles ESC PWM
           motor_speeds(speed);
-          delay(300);
+          delayMicroseconds(300 * ONE_THOUSAND);  // Using interrupt so delay will not work
           printer(speed);
         }
 
@@ -148,4 +161,17 @@ void loop() {
     Serial.println("Waiting...");
   }
 
+}
+
+void emergency_SIR()
+{
+  switch_time = millis();
+  if(switch_time - last_switch_time > 500) {
+    motor_speeds(1000);
+    delayMicroseconds(1000);
+    abort();
+
+    last_switch_time = switch_time;
+    done = true;
+  }
 }
