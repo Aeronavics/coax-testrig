@@ -1,8 +1,7 @@
 # ===================================================
 # AUTHOR        : Oliver Clements
 # CREATE DATE   : 2/12/22
-# PURPOSE       : Combines csv files of same test
-#                 
+# PURPOSE       : Combines csv files of same test     
 # ===================================================
 
 

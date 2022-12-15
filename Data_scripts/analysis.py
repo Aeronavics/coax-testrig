@@ -22,7 +22,7 @@ from file_combine import get_file_list, same_files
 
 PATH = '..\\Data_scripts\\'     # Change to what path your folder is in (MACS use '/')
 # FOLDER = 'Data\\Single prop\\140\\'           # Change to what folder your data is in
-FOLDER = 'Data\\Navi\\'
+FOLDER = 'Data\\Single prop\\160\\'
 
 PWM_INDEX = 0
 TOP_V_INDEX, BOTTOM_V_INDEX = 1, 2
@@ -40,9 +40,10 @@ T_vs_E_Labels =  Graph_Labels("Thrust (kg)", "Relative Efficiency (Thrust / Powe
 LF = list[float]
 
 
-def get_data(filename: str) -> list:
+def get_data(filename: str) -> LF:
     """Gets data and gets it error checked"""
-    data =  control_func(filename, PATH, FOLDER)          
+    data =  control_func(filename, PATH, FOLDER)     
+    print(data)     
     
     # Format checks
     header_check(data)
@@ -66,7 +67,7 @@ def efficiency_and_thrust_find(data: list[LF]) -> tuple[LF, LF]:
         
         top_motor_power = row[TOP_V_INDEX] * (row[TOP_I_INDEX] - top_I_offset)
         # bottom_motor_power = row[BOTTOM_V_INDEX] * (row[BOTTOM_I_INDEX] - bottom_I_offset) # edit out for single prop
-        total_power = top_motor_power #+ bottom_motor_power 
+        total_power = top_motor_power #+ bottom_motor_power    
         
         # total_power = bottom_motor_power
         
@@ -115,7 +116,6 @@ def raw_data_dict(file_list: list[str]) -> dict[str, list[LF]]:
 def do_plot_PWMvsE(file_dict: dict[str, list[LF]]) -> None:
     """ Sets up data to be plotted for PWM against E""" 
     plotting_dict = dict()
-    print(file_dict)
     
     for file_name, data in file_dict.items():
         efficiency_list, dw = efficiency_and_thrust_find(data)
@@ -133,7 +133,6 @@ def do_plot_PWMvsT(file_dict: dict[str, list[LF]]) -> None:
     """ Sets up data to be plotted for PWM against Thrust""" 
     plotting_dict = dict()
     
-    print(file_dict)
     
     for file_name, data in file_dict.items():
         efficiency_list, thrust_list = efficiency_and_thrust_find(data)
@@ -142,8 +141,8 @@ def do_plot_PWMvsT(file_dict: dict[str, list[LF]]) -> None:
         for row in data:
             PWM_list.append(row[0])
             
-            print(f"{row[0]}, V: {row[TOP_V_INDEX] + row[BOTTOM_V_INDEX]} ")
-            print(f"{row[0]}, I: {row[TOP_I_INDEX] + row[BOTTOM_I_INDEX]} \n")
+            # print(f"{row[0]}, V: {row[TOP_V_INDEX] + row[BOTTOM_V_INDEX]} ")
+            # print(f"{row[0]}, I: {row[TOP_I_INDEX] + row[BOTTOM_I_INDEX]} \n")
             
         plotting_dict[file_name] = [PWM_list, thrust_list]
         PWM_list.pop(0) # DANGER LINE
@@ -163,14 +162,15 @@ def do_plot_TvsE(file_dict: dict[str, list[LF]]) -> None:
     general_plotter(plotting_dict, T_vs_E_Labels)
 
 
-def raw_data_dict_check(file_list: list[str]) -> dict[str,list[LF]]:
+def raw_data_dict_check(file_list: list[list[str]]) -> list[dict[str,list[LF]]]:
     """ Plots all files of same test type against each other so it can be easily checked for errors"""
     data_list = []
+    print(file_list)
     
     for test_types in file_list:
         data_to_check = dict()
         
-        for filename in test_types:
+        for filename in test_types:  
             data = get_data(filename)
             data_to_check[filename] = data
         

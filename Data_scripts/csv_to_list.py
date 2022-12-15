@@ -9,12 +9,14 @@
 # Library Imports
 import csv
 from colorama import Fore
+from typing import Union
 
 EXPECTED_LABEL = "Motor PWM"            # This is the first label you expect to see
                                        
+LF = list[float]
 
-def file_open(file_name, path, folder):
-    """Opens the file and puts data into raw list"""
+def file_open(file_name: str, path: str, folder: str) -> list[Union[LF, list[str], str]]:
+    """ Opens the file and puts data into raw list"""
     
     raw_data = []
     
@@ -28,7 +30,7 @@ def file_open(file_name, path, folder):
     return raw_data
    
    
-def error_check(raw_data):
+def error_check(raw_data: list[Union[LF, list[str], str]]) -> list[Union[LF, list[str], str]]:
     """ Checks raw data for errors such as non valid floats
         This pretty much deletes any rows that are not of type int or float
         with the exception of the header with time and info"""
@@ -59,8 +61,8 @@ def error_check(raw_data):
     return processed_data     
 
    
-def control_func(file_name, path, folder):
-    """ LINKER FUNCTION
+def control_func(file_name: str, path: str, folder: str) -> list[Union[LF, list[str], str]]:
+    """ LINKER FUNCTION 
         Links functions inside this module"""
     raw_data = file_open(file_name, path, folder)   
     data = error_check(raw_data)

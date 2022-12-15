@@ -33,9 +33,7 @@ class Graph_Labels:
     def max_ytick(self, lim_y: int, NEAT_OFFSET: float):
         """ Returns the maximum y value that should be displayed of the graph"""
         return lim_y + NEAT_OFFSET
-        
-
-    
+           
 
 def ask_title():
     """ Asks user for a title to their graph"""

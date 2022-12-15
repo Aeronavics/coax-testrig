@@ -14,8 +14,10 @@ import os
 EXPECTED_HEADER = ['Motor PWM', ' Top Voltage (V)', ' Bottom Voltage (V)', ' Top Current (A)', ' Bottom Current (A)', ' Thrust (kg)']
 EXPECTED_ROW_SIZE = 6
 
+LF = list[float]
 
-def header_check(data):
+
+def header_check(data: list[LF]) -> None:
     """Checks to ensure headers are in the expected format"""
     # header_row = 
     header_row = data[1]
@@ -30,7 +32,7 @@ def header_check(data):
         os.abort()
         
           
-def row_check(data):
+def row_check(data: list[LF]) -> None:
     """Checks to see rows are correct size in case data has 'slipped' in serial transmission"""
     for row in data[2:]: # Skips header rows
         

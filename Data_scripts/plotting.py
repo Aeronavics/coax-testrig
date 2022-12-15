@@ -23,7 +23,6 @@ def general_plotter(plotting_dict: dict, labels: Graph_Labels) -> None:
     fig, ax = plt.subplots()
     lim_x = 0
     lim_y = 0
-    # LoBF = ask_user("Would you like to plot the line of best fit?")
     
     for TvsE_data in plotting_dict.values():
         coefficients = least_squares_estimate(TvsE_data)
@@ -80,14 +79,12 @@ def test_plotter(plotting_dict: dict, labels: Graph_Labels) -> None:
     for TvsE_data in plotting_dict.values():
         coefficients = least_squares_estimate(TvsE_data)
         
-        # co = exp_estimate(TvsE_data)
         lim_x = max(max(TvsE_data[0]), lim_x)
         lim_y = max(max(TvsE_data[1]), lim_y)
         
         plt.scatter(TvsE_data[0],TvsE_data[1], marker='o')
         
         x = np.linspace(labels.xstart, max(TvsE_data[0]) , 100)
-        # ax.plot(x, exp_calc(co, x))
         
         ax.plot(x, function_sub(coefficients, x))
     
@@ -101,7 +98,7 @@ def test_plotter(plotting_dict: dict, labels: Graph_Labels) -> None:
     ax.legend(file_list)
     
     # Sets titles and labels
-    ax.set_title("lol")
+    ax.set_title("CHECK THE DATA")
     ax.set_xlabel(labels.xlabel)
     ax.set_ylabel(labels.ylabel)
     
