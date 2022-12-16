@@ -18,7 +18,7 @@ from file_name_make import file_name
 LF = list[float]
 
 
-SAMPLES = 45
+SAMPLES = 55
 TIME_OUT = 2                # This needs to be > 1 for good readings
 SLEEP_TIME = 3
 SHORT_SLEEP = 0.5

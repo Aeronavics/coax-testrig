@@ -134,6 +134,9 @@ void loop() {
         header_setup();
         
         for (speed = SPEED_MIN; speed <= SPEED_MAX; speed += SPEED_INC) {  // Toggles ESC PWM
+          if(done == true) {
+            break;
+          }
           motor_speeds(speed);
           delayMicroseconds(300 * ONE_THOUSAND);  // Using interrupt so delay will not work
           printer(speed);
@@ -141,14 +144,18 @@ void loop() {
 
         // Test finished. Set ESC's to low
         Serial.println("Finished");
-        done = true;
+        
 
 
         // Turn off 
-        for(speed = SPEED_MAX; speed >= ONE_THOUSAND; speed -= SLOW_DOWN) {
-          motor_speeds(speed);
-          delay(50);
+        if(done != true) {
+          for(speed = SPEED_MAX; speed >= ONE_THOUSAND; speed -= SLOW_DOWN) {
+            motor_speeds(speed);
+            delay(50);
+          }
         }
+
+        done = true;
       }
 
       // remove items in serial for next test
@@ -167,11 +174,9 @@ void emergency_SIR()
 {
   switch_time = millis();
   if(switch_time - last_switch_time > 500) {
-    motor_speeds(1000);
-    delayMicroseconds(1000);
-    abort();
+    done = true;
+    motor_speeds(SPEED_MIN);
 
     last_switch_time = switch_time;
-    done = true;
   }
 }
