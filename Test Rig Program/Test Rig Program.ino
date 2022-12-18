@@ -4,7 +4,6 @@
 
 */
 
-
 #include <Servo.h>
 #include "HX711.h"
 #include "ACS758.h"
@@ -40,6 +39,7 @@
 #define START_UP_WAIT 3000
 #define SLOW_DOWN 20
 #define RUN_NUM 5
+#define MAX_CURRENT 17.5
 
 // Interrupt for emergency stop
 const int SWITCH_PIN = 9;
@@ -47,11 +47,13 @@ const int POWER_PIN = 10;
 unsigned long switch_time = 0;  
 unsigned long last_switch_time = 0; 
 
+
 ACS758 top_motor(CIN_TOP, VIN_TOP, CURRENT_RATIO_TOP, VOLTAGE_RATIO_TOP);
 ACS758 bottom_motor(CIN_BOTTOM, VIN_BOTTOM, CURRENT_RATIO_BOTTOM, VOLTAGE_RATIO_BOTTOM);
 Servo top_esc;
 Servo bottom_esc;
 HX711 loadcell;
+
 
 void setup() {
 
@@ -85,14 +87,16 @@ void setup() {
 }
 
 
-void header_setup(void) {
+void header_setup(void) 
+{
   //  Writes headers to serial
   Serial.println("Time: ");
   Serial.println("Motor PWM, Top Voltage (V), Bottom Voltage (V), Top Current (A), Bottom Current (A), Thrust (kg)");
 }
 
 
-void printer(int speed) {
+void printer(int speed) 
+{
   // Prints results into csv friendly format
   for(int reps = 0; reps < RUN_NUM; reps++) {
     Serial.print(speed);
@@ -110,15 +114,43 @@ void printer(int speed) {
 }
 
 
-void motor_speeds(int speed) {
+void motor_speeds(int speed) 
+{
   // changes speeds of motor by changing PWM to ESCs
   top_esc.writeMicroseconds(speed);
   bottom_esc.writeMicroseconds(speed);
 }
 
 bool done = false;
-bool SAFE = true;
+
+void check_current() 
+{
+  float top_current = top_motor.current();
+  float bottom_current = bottom_motor.current();
+
+  if(top_current > MAX_CURRENT || bottom_current > MAX_CURRENT) {
+    Serial.println("MAX CURRENT");
+    Serial.println("Shutting down");
+
+    return true;
+  } else {
+    return false;
+  }
+
+}
+
 int speed = 0;
+
+void turn_off_sequence(int speed)
+{
+  // Turn off sequence
+  if(done != true) {
+    for(int ispeed = speed; ispeed >= SPEED_MIN; ispeed -= SLOW_DOWN) {
+      motor_speeds(ispeed);
+      delay(50);
+    }
+  }
+}
 
 void loop() {
   // The main function
@@ -130,33 +162,25 @@ void loop() {
       Serial.println("Turing Power On!");
       delay(START_UP_WAIT);           // Delay before start up
 
-      while(!done) {
-        header_setup();
-        
-        for (speed = SPEED_MIN; speed <= SPEED_MAX; speed += SPEED_INC) {  // Toggles ESC PWM
-          if(done == true) {
-            break;
-          }
-          motor_speeds(speed);
-          delayMicroseconds(300 * ONE_THOUSAND);  // Using interrupt so delay will not work
-          printer(speed);
+      header_setup();
+      
+      for (speed = SPEED_MIN; speed <= SPEED_MAX; speed += SPEED_INC) {  // Toggles ESC PWM
+
+        if(done == true) {
+          break;
         }
 
-        // Test finished. Set ESC's to low
-        Serial.println("Finished");
-        
-
-
-        // Turn off 
-        if(done != true) {
-          for(speed = SPEED_MAX; speed >= ONE_THOUSAND; speed -= SLOW_DOWN) {
-            motor_speeds(speed);
-            delay(50);
-          }
-        }
-
-        done = true;
+        motor_speeds(speed);
+        delay(300);  
+        printer(speed);
+        done = check_current();
       }
+
+      turn_off_sequence(speed);
+      // Test finished. Set ESC's to low
+      Serial.println("Finished");
+
+      // Turn off sequence
 
       // remove items in serial for next test
       Serial.flush();
@@ -170,7 +194,9 @@ void loop() {
 
 }
 
+
 void emergency_SIR()
+// Interrupt that stops program if switch has been pressed
 {
   switch_time = millis();
   if(switch_time - last_switch_time > 500) {
