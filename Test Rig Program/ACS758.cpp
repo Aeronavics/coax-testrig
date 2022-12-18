@@ -7,7 +7,6 @@ ACS758::ACS758(int cin, int vin, float current_ratio, float voltage_ratio) {
   VIN = vin;
   CURRENT_RATIO = current_ratio;
   VOLTAGE_RATIO = voltage_ratio;
-  CURRENT_OFFSET;
   pinMode(CIN, INPUT);
   pinMode(VIN, INPUT);
 }

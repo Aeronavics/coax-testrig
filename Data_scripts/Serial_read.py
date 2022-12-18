@@ -79,10 +79,15 @@ def serialread(fileName: str) -> list:
             # Filters samples
             
             if data.startswith("Time:"): data = data + ctime()
+            
+            if data.startswith("MAX CURRENT"):
+                current_overload()
+                break
 
             readings = data.split(",")
             
             if readings[0] not in invalid_list: sensor_data.append(readings)
+            
             
             print(Fore.RESET + f"{fileName} data:\n{sensor_data}")  # prints data as ots collected
 
@@ -91,6 +96,12 @@ def serialread(fileName: str) -> list:
     return sensor_data
 
 
+def current_overload():
+    """Prints message if current has exceeded the max limit"""
+    print(Fore.RED + f"\nCurrent has exceeded the max limit!!!")
+    print(f"Shutting down" + Fore. RESET)
+    
+    
 def csv_make(fileName: str, sensor_data: list) -> None:
     """Creates csv file with data from the serialread function"""
     

@@ -37,13 +37,13 @@
 
 #define ONE_THOUSAND 1000
 #define START_UP_WAIT 3000
-#define SLOW_DOWN 20
+#define SLOW_DOWN 15
 #define RUN_NUM 5
-#define MAX_CURRENT 17.5
+#define MAX_CURRENT 17
 
 // Interrupt for emergency stop
 #define SWITCH_PIN 9
-#define POWER_PIN 10
+#define POWER_PIN 11  
 unsigned long switch_time = 0;  
 unsigned long last_switch_time = 0; 
 
@@ -54,6 +54,7 @@ Servo top_esc;
 Servo bottom_esc;
 HX711 loadcell;
 
+bool do_test;
 
 void setup() {
 
@@ -84,6 +85,8 @@ void setup() {
 
   // baud rate init
   Serial.begin(9600);
+
+  do_test = true;
 }
 
 
@@ -123,7 +126,7 @@ void motor_speeds(int speed)
 
 bool done = false;
 
-void check_current() 
+bool check_current() 
 {
   float top_current = top_motor.current();
   float bottom_current = bottom_motor.current();
@@ -150,6 +153,9 @@ void turn_off_sequence(int speed)
       delay(50);
     }
   }
+
+  done = true;
+  do_test = false;
 }
 
 void loop() {
@@ -157,23 +163,21 @@ void loop() {
   if (Serial.available() > 0 && done == false) {       // 
     delay(ONE_THOUSAND);              // Allow time to for python to send '1'
 
-    if (Serial.read() == '1') {  
-      done = false;     // When received 1 start up sequence will begin
+    if (Serial.read() == '1') {     // When received 1 start up sequence will begin
       Serial.println("Turing Power On!");
       delay(START_UP_WAIT);           // Delay before start up
 
       header_setup();
       
       for (speed = SPEED_MIN; speed <= SPEED_MAX; speed += SPEED_INC) {  // Toggles ESC PWM
-
+        motor_speeds(speed);
+        done = check_current();
         if(done == true) {
           break;
         }
 
-        motor_speeds(speed);
         delay(300);  
         printer(speed);
-        done = check_current();
       }
 
       turn_off_sequence(speed);
@@ -205,4 +209,6 @@ void emergency_SIR()
 
     last_switch_time = switch_time;
   }
+
+  abort(); // Ensures there is no way the motors can start back up as no PWM will be sent
 }
