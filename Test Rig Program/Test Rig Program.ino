@@ -42,8 +42,8 @@
 #define MAX_CURRENT 17.5
 
 // Interrupt for emergency stop
-const int SWITCH_PIN = 9;
-const int POWER_PIN = 10;
+#define SWITCH_PIN 9
+#define POWER_PIN 10
 unsigned long switch_time = 0;  
 unsigned long last_switch_time = 0; 
 
