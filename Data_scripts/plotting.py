@@ -12,7 +12,6 @@ import matplotlib.pyplot as plt
 
 # Module Imports
 from plotter_helper import *
-from common_funcs import ask_user
 
 NEAT_OFFSET = 0.3
 LINE_WIDTH = 0.7

@@ -12,7 +12,6 @@ from colorama import Fore
 import copy
 
 # Module Imports
-from common_funcs import ask_user
 from average_data import give_average_data
 from csv_to_list import control_func
 from data_check import header_check, row_check
