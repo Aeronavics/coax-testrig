@@ -5,6 +5,9 @@
 #                 sent to ESC
 # ===================================================
 
+# Library Imports
+    
+from colorama import Fore
 
 #  Data Index's
 PWM_INDEX = 0
@@ -82,7 +85,14 @@ def avg_data_func(combined_data, occurrence_list):
 def give_average_data(data):
     """ LINKER FUNCTION
         Function that directs all others in this module"""
-    combined_data, occurrence_list = summing_data(data)
-    avg_data = avg_data_func(combined_data, occurrence_list)
+        
+    try:
+        combined_data, occurrence_list = summing_data(data)
+        avg_data = avg_data_func(combined_data, occurrence_list)
+        return avg_data
     
-    return avg_data
+    except:
+        print(Fore.RED + f"ERROR\nSomething went wrong inside of average_data.py")
+        print(f"This doesn't usually happen")
+    
+    input(f"Press ENTER to view error message: " + Fore.RESET)

@@ -54,7 +54,6 @@ Servo top_esc;
 Servo bottom_esc;
 HX711 loadcell;
 
-bool do_test;
 
 void setup() {
 
@@ -85,8 +84,6 @@ void setup() {
 
   // baud rate init
   Serial.begin(9600);
-
-  do_test = true;
 }
 
 
@@ -155,7 +152,6 @@ void turn_off_sequence(int speed)
   }
 
   done = true;
-  do_test = false;
 }
 
 void loop() {

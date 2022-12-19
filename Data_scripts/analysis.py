@@ -21,8 +21,7 @@ from plotter_helper import Graph_Labels
 from file_combine import get_file_list, same_files
 
 PATH = '..\\Data_scripts\\'     # Change to what path your folder is in (MACS use '/')
-# FOLDER = 'Data\\Single prop\\140\\'           # Change to what folder your data is in
-FOLDER = 'Data\\Single prop\\240\\'
+FOLDER = 'Data\\Single prop\\cross\\'
 
 PWM_INDEX = 0
 TOP_V_INDEX, BOTTOM_V_INDEX = 1, 2
@@ -46,8 +45,8 @@ def get_data(filename: str) -> LF:
     print(data)     
     
     # Format checks
-    header_check(data)
-    row_check(data)
+    header_check(data, filename)
+    row_check(data, filename)
     
     good_data = give_average_data(data[2:])
     return good_data
@@ -67,9 +66,9 @@ def efficiency_and_thrust_find(data: list[LF]) -> tuple[LF, LF]:
         
         top_motor_power = row[TOP_V_INDEX] * (row[TOP_I_INDEX] - top_I_offset)
         bottom_motor_power = row[BOTTOM_V_INDEX] * (row[BOTTOM_I_INDEX] - bottom_I_offset) # edit out for single prop
-        # total_power = top_motor_power #+ bottom_motor_power    
+        total_power = top_motor_power #+ bottom_motor_power    
         
-        total_power = bottom_motor_power
+        # total_power = bottom_motor_power
         
         if total_power == 0:
             continue
@@ -141,8 +140,6 @@ def do_plot_PWMvsT(file_dict: dict[str, list[LF]]) -> None:
         for row in data:
             PWM_list.append(row[0])
             
-            # print(f"{row[0]}, V: {row[TOP_V_INDEX] + row[BOTTOM_V_INDEX]} ")
-            # print(f"{row[0]}, I: {row[TOP_I_INDEX] + row[BOTTOM_I_INDEX]} \n")
             
         plotting_dict[file_name] = [PWM_list, thrust_list]
         PWM_list.pop(0) # DANGER LINE

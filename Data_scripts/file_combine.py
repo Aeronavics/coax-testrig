@@ -19,6 +19,7 @@ def splited_files_list(file_list):
     
     return split_file_list
 
+
 def two_d_list_init(file_list):
     """ Inits a 2d list of the size of the the len(files)"""
     rows, cols = (len(file_list), 0)

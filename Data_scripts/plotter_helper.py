@@ -7,7 +7,6 @@
 # Library Imports
 import numpy as np
 
-
 LF = list[float]
 
 

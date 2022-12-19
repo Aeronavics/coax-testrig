@@ -10,6 +10,7 @@
 import csv
 from colorama import Fore
 from typing import Union
+from os import abort
 
 EXPECTED_LABEL = "Motor PWM"            # This is the first label you expect to see
                                        
@@ -64,7 +65,22 @@ def error_check(raw_data: list[Union[LF, list[str], str]]) -> list[Union[LF, lis
 def control_func(file_name: str, path: str, folder: str) -> list[Union[LF, list[str], str]]:
     """ LINKER FUNCTION 
         Links functions inside this module"""
+    try:
+        raw_data = file_open(file_name, path, folder)   
+        data = error_check(raw_data)
+        return data
+    except FileNotFoundError:
+        print(Fore.RED + f"\nERROR\nSomething went wrong when trying to convert {file_name} to a list.")
+        print(f"Got FileNotFoundError\nCheck 'PATH' and 'FOLDER' on line 23 and 24 in analysis.py")
+        print(f"FOLDER = {folder}\nPATH = {path}\n" + Fore.RESET)
+    
+    except:
+        print(Fore.RED + f"\nERROR\nSomething went wrong when trying to convert {file_name} to a list.")
+    
+    # Same code as above but will show error message
+    input("Press ENTER to see error message: ")
     raw_data = file_open(file_name, path, folder)   
     data = error_check(raw_data)
-    return data
+   
+    
     

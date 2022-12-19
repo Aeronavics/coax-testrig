@@ -8,6 +8,7 @@
 
 # Library Imports
 import serial
+import os
 import csv
 from colorama import Fore
 from time import time, ctime, sleep
@@ -48,6 +49,11 @@ def serialread(fileName: str) -> list:
         
         ser.flush()             # clear serial 
         send = str(input("Press 1 to attempt to connect to arduino and start test: "))
+        
+        if send != '1':
+            print(Fore.RED + f"\n1 was not pressed\nExiting program" + Fore.RESET)
+            os.abort()
+            
         ser.write(bytes(send, 'utf-8'))
         
         print("Sending...")
