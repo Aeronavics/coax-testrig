@@ -4,6 +4,7 @@
 
 */
 
+// Libraries and Modules
 #include <Servo.h>
 #include "HX711.h"
 #include "ACS758.h"
@@ -16,36 +17,45 @@
 #define TOP_ESC 6
 #define BOTTOM_ESC 5
 
+#define SWITCH_PIN 9
+#define POWER_PIN 11  
+
+#define LED_PIN 7
+
 #define VIN_TOP A1
 #define CIN_TOP A0
 #define VIN_BOTTOM A3
 #define CIN_BOTTOM A2
 
-//Load cell presets
+
+// Load cell presets
 #define LOADCELL_SCALE 60000
 
-//Motor presets
+// Motor presets
 #define SPEED_MIN 1000
 #define SPEED_MAX 1800
 #define SPEED_INC 100
 
-//Power presets
+// Power presets
 #define VOLTAGE_RATIO_TOP 18.84300
 #define CURRENT_RATIO_TOP 18.91505
 #define VOLTAGE_RATIO_BOTTOM 18.95842
 #define CURRENT_RATIO_BOTTOM 19.33637
 
+// Constants
 #define ONE_THOUSAND 1000
 #define START_UP_WAIT 3000
 #define SLOW_DOWN 15
 #define RUN_NUM 5
 #define MAX_CURRENT 17
 
-// Interrupt for emergency stop
-#define SWITCH_PIN 9
-#define POWER_PIN 11  
+// Globals Variables
 unsigned long switch_time = 0;  
 unsigned long last_switch_time = 0; 
+int speed = 0;
+bool done = false;
+
+
 
 
 ACS758 top_motor(CIN_TOP, VIN_TOP, CURRENT_RATIO_TOP, VOLTAGE_RATIO_TOP);
@@ -82,8 +92,14 @@ void setup() {
   top_esc.writeMicroseconds(1000);
   bottom_esc.writeMicroseconds(1000);
 
+  pinMode(LED_PIN, OUTPUT);
+  digitalWrite(LED_PIN, HIGH);
+
   // baud rate init
   Serial.begin(9600);
+
+  pinMode(LED_BUILTIN, OUTPUT);
+
 }
 
 
@@ -121,10 +137,11 @@ void motor_speeds(int speed)
   bottom_esc.writeMicroseconds(speed);
 }
 
-bool done = false;
+
 
 bool check_current() 
-{
+{ //  Checks if current is over motor limit. If so will turn them off
+  //  and will end the test 
   float top_current = top_motor.current();
   float bottom_current = bottom_motor.current();
 
@@ -139,7 +156,7 @@ bool check_current()
 
 }
 
-int speed = 0;
+
 
 void turn_off_sequence(int speed)
 {
@@ -154,12 +171,19 @@ void turn_off_sequence(int speed)
   done = true;
 }
 
+
 void loop() {
   // The main function
-  if (Serial.available() > 0 && done == false) {       // 
+  if (Serial.available() > 0 && done == false) {
+    digitalWrite(LED_BUILTIN, HIGH);
+
+       // 
     delay(ONE_THOUSAND);              // Allow time to for python to send '1'
 
     if (Serial.read() == '1') {     // When received 1 start up sequence will begin
+    digitalWrite(LED_BUILTIN, LOW);
+
+
       Serial.println("Turing Power On!");
       delay(START_UP_WAIT);           // Delay before start up
 
@@ -204,7 +228,7 @@ void emergency_SIR()
     motor_speeds(SPEED_MIN);
 
     last_switch_time = switch_time;
+    abort();
   }
-
-  abort(); // Ensures there is no way the motors can start back up as no PWM will be sent
+   // Ensures there is no way the motors can start back up as no PWM will be sent
 }
