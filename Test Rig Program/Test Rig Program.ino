@@ -26,10 +26,6 @@
 #define VIN_BOTTOM A3
 #define CIN_BOTTOM A2
 
-#define TOP_TEMP_SENSOR A4
-#define TOP_TEMP_SENSOR A5
-
-
 // Load cell presets
 #define LOADCELL_SCALE 60000
 
@@ -50,6 +46,7 @@
 #define SLOW_DOWN 15
 #define RUN_NUM 5
 #define MAX_CURRENT 17
+#define TEST_TEMP 31
 
 // Globals Variables
 unsigned long switch_time = 0;  
@@ -63,8 +60,8 @@ ACS758 bottom_motor(CIN_BOTTOM, VIN_BOTTOM, CURRENT_RATIO_BOTTOM, VOLTAGE_RATIO_
 Servo top_esc;
 Servo bottom_esc;
 HX711 loadcell;
-LMT87 sensor1(A4);
-LMT87 sensor2(A5);
+LMT87 top_temp(A4);
+LMT87 botttom_temp(A5);
 
 
 void setup() {
@@ -93,6 +90,7 @@ void setup() {
   bottom_esc.attach(BOTTOM_ESC);
   top_esc.writeMicroseconds(1000);
   bottom_esc.writeMicroseconds(1000);
+  pinMode(LED_BUILTIN, OUTPUT);
 
   // baud rate init
   Serial.begin(9600);
@@ -136,7 +134,6 @@ void motor_speeds(int speed)
 }
 
 
-
 bool check_current() 
 { //  Checks if current is over motor limit. If so will turn them off
   //  and will end the test 
@@ -152,6 +149,15 @@ bool check_current()
     return false;
   }
 
+}
+
+void temp_check() 
+{
+  if(top_temp <= TEST_TEMP && botttom_temp <= TEST_TEMP) {
+    digitalWrite(LED_BUILTIN, HIGH);
+  } else {
+    digitalWrite(LED_BUILTIN, LOW);
+  }
 }
 
 
@@ -217,7 +223,6 @@ void emergency_SIR()
 {
   switch_time = millis();
   if(switch_time - last_switch_time > 500) {
-    Serial.println("STOP SWITCH");
     done = true;
     motor_speeds(SPEED_MIN);
 

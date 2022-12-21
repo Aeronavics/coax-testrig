@@ -96,7 +96,6 @@ def serialread(fileName: str) -> list:
             
             if readings[0] not in invalid_list: sensor_data.append(readings)
             
-            
             print(Fore.RESET + f"{fileName} data:\n{sensor_data}")  # prints data as ots collected
 
             line = line + 1
@@ -115,11 +114,6 @@ def warning_message(data) -> bool:
         
     elif data.startswith("MAX TEMP"):
         print(Fore.RED + f"\Temperature has exceeded the max limit!!!")
-        print(f"Shutting down" + Fore. RESET)
-        return True
-    
-    elif data.startswith("STOP SWITCH"):
-        print(Fore.RED + f"\Stop switch has been pressed!")
         print(f"Shutting down" + Fore. RESET)
         return True
     
