@@ -140,7 +140,7 @@ bool check_current()
   float top_current = top_motor.current();
   float bottom_current = bottom_motor.current();
 
-  if(top_current > MAX_CURRENT || bottom_current > MAX_CURRENT) {
+  if(top_current.temp() > MAX_CURRENT || bottom_current.temp() > MAX_CURRENT) {
     Serial.println("MAX CURRENT");
     Serial.println("Shutting down");
 
