@@ -20,7 +20,7 @@ from plotter_helper import Graph_Labels
 from file_combine import get_file_list, same_files
 
 PATH = '..\\Data_scripts\\'     # Change to what path your folder is in (MACS use '/')
-FOLDER = 'Data\\Single prop\\cross1\\'
+FOLDER = 'Data\\COAX\\non final\\'
 
 PWM_INDEX = 0
 TOP_V_INDEX, BOTTOM_V_INDEX = 1, 2
@@ -33,15 +33,25 @@ EFFICIENCY_CUTOFF = 0.1
 PWM_vs_T_Labels = Graph_Labels("PWM", "Thurst (kg)", 1000, 50, True, 100, 25, 1, 0.25)
 PWM_vs_E_Labels =  Graph_Labels("PWM", "Relative Efficiency (Thrust / Power)", 1000, 50, True, 100, 25, 0.5, 0.125)
 T_vs_E_Labels =  Graph_Labels("Thrust (kg)", "Relative Efficiency (Thrust / Power)", 0, 1, True, 1, 0.25, 0.5, 0.125)
+T_vs_P_Labels = Graph_Labels("Thrust (kg)", "Power (W)", 0, 1, True, 1, 0.25, 200, 50)
 
 
 LF = list[float]
+
+# class Plotting_set_up:
+#     """ Class that deals with plotting set_up"""
+    
+#     def __init__(self, file_dict, labels) -> None:
+#         self.file_dict = file_dict
+#         self.labels = labels
+        
+#     def 
+        
 
 
 def get_data(filename: str) -> LF:
     """Gets data and gets it error checked"""
     data =  control_func(filename, PATH, FOLDER)     
-    print(data)     
     
     # Format checks
     header_check(data, filename)
@@ -49,6 +59,26 @@ def get_data(filename: str) -> LF:
     
     good_data = give_average_data(data[2:])
     return good_data
+
+def power_find(data: list[LF]) -> list[LF]:
+    """Finds relative efficiency and thrust"""
+    power_list = list()
+    
+    top_I_offset = data[0][TOP_I_INDEX]
+    bottom_I_offset = data[0][BOTTOM_I_INDEX]
+
+    
+    for row in data:
+        top_motor_power = row[TOP_V_INDEX] * (row[TOP_I_INDEX] - top_I_offset)
+        bottom_motor_power = row[BOTTOM_V_INDEX] * (row[BOTTOM_I_INDEX] - bottom_I_offset) # edit out for single prop
+        total_power = top_motor_power + bottom_motor_power
+        
+        if total_power == 0:
+            continue
+        
+        power_list.append(total_power)
+        
+    return power_list
 
 
 def efficiency_and_thrust_find(data: list[LF]) -> tuple[LF, LF]:
@@ -65,14 +95,14 @@ def efficiency_and_thrust_find(data: list[LF]) -> tuple[LF, LF]:
         
         top_motor_power = row[TOP_V_INDEX] * (row[TOP_I_INDEX] - top_I_offset)
         bottom_motor_power = row[BOTTOM_V_INDEX] * (row[BOTTOM_I_INDEX] - bottom_I_offset) # edit out for single prop
-        total_power = top_motor_power #+ bottom_motor_power    
+        total_power = top_motor_power + bottom_motor_power    
         
-        total_power = bottom_motor_power
+        # total_power = bottom_motor_power
         
         if total_power == 0:
             continue
         
-        efficiency = SCALE_FACTOR * thrust / total_power
+        efficiency = SCALE_FACTOR * (thrust / total_power)
         
         if efficiency < EFFICIENCY_CUTOFF or efficiency > 2.5:
             continue
@@ -158,10 +188,22 @@ def do_plot_TvsE(file_dict: dict[str, list[LF]]) -> None:
     general_plotter(plotting_dict, T_vs_E_Labels)
 
 
+def do_plot_TvsP(file_dict: dict[str, list[LF]]) -> None:
+    """Sets up data to be plotted for thrust against efficiency"""
+    plotting_dict = dict()
+
+    for file_name, data in file_dict.items():
+        efficiency_list, thrust_list = efficiency_and_thrust_find(data)
+        power_list = power_find(data)
+        plotting_dict[file_name] = [thrust_list, power_list]
+        
+      
+    general_plotter(plotting_dict, T_vs_P_Labels)
+
+
 def raw_data_dict_check(file_list: list[list[str]]) -> list[dict[str,list[LF]]]:
     """ Plots all files of same test type against each other so it can be easily checked for errors"""
     data_list = []
-    print(file_list)
     
     for test_types in file_list:
         data_to_check = dict()
@@ -203,11 +245,13 @@ def analysis_main() -> None:
     same_file_list = same_files(file_list)
     
     combined_data_dict = raw_data_dict(same_file_list)
+    print(combined_data_dict)
     
-    data_check(same_file_list)  # Remove if confident in data
+    # data_check(same_file_list)  # Remove if confident in data
 
-    do_plot_PWMvsE(combined_data_dict)
-    do_plot_PWMvsT(combined_data_dict)
+    # do_plot_PWMvsE(combined_data_dict)
+    # do_plot_PWMvsT(combined_data_dict)
     do_plot_TvsE(combined_data_dict)
+    # do_plot_TvsP(combined_data_dict)
     
 analysis_main()

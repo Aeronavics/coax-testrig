@@ -103,7 +103,7 @@ def test_plotter(plotting_dict: dict, labels: Graph_Labels) -> None:
     
     # Sets graph min and max values that will be shown
     ax.set_xlim(labels.xstart, labels.max_ytick(lim_x, NEAT_OFFSET))
-    ax.set_ylim(0, labels.max_ytick(lim_y, NEAT_OFFSET))
+    ax.set_ylim(0 , labels.max_ytick(lim_y, NEAT_OFFSET))
     
     # Sets the grid lines and ticks for x an dy
     xmajor_ticks = np.arange(labels.xstart, labels.max_xtick(lim_x, NEAT_OFFSET), labels.Mxticks)

@@ -89,10 +89,14 @@ def give_average_data(data):
     try:
         combined_data, occurrence_list = summing_data(data)
         avg_data = avg_data_func(combined_data, occurrence_list)
-        return avg_data
     
     except:
         print(Fore.RED + f"ERROR\nSomething went wrong inside of average_data.py")
         print(f"This doesn't usually happen")
+        
+    else: 
+        return avg_data
     
     input(f"Press ENTER to view error message: " + Fore.RESET)
+    combined_data, occurrence_list = summing_data(data)
+    avg_data = avg_data_func(combined_data, occurrence_list)

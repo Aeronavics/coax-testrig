@@ -20,8 +20,6 @@
 #define SWITCH_PIN 9
 #define POWER_PIN 11  
 
-#define LED_PIN 7
-
 #define VIN_TOP A1
 #define CIN_TOP A0
 #define VIN_BOTTOM A3
@@ -54,8 +52,6 @@ unsigned long switch_time = 0;
 unsigned long last_switch_time = 0; 
 int speed = 0;
 bool done = false;
-
-
 
 
 ACS758 top_motor(CIN_TOP, VIN_TOP, CURRENT_RATIO_TOP, VOLTAGE_RATIO_TOP);
@@ -92,13 +88,8 @@ void setup() {
   top_esc.writeMicroseconds(1000);
   bottom_esc.writeMicroseconds(1000);
 
-  pinMode(LED_PIN, OUTPUT);
-  digitalWrite(LED_PIN, HIGH);
-
   // baud rate init
   Serial.begin(9600);
-
-  pinMode(LED_BUILTIN, OUTPUT);
 
 }
 
@@ -175,14 +166,9 @@ void turn_off_sequence(int speed)
 void loop() {
   // The main function
   if (Serial.available() > 0 && done == false) {
-    digitalWrite(LED_BUILTIN, HIGH);
-
-       // 
     delay(ONE_THOUSAND);              // Allow time to for python to send '1'
 
     if (Serial.read() == '1') {     // When received 1 start up sequence will begin
-    digitalWrite(LED_BUILTIN, LOW);
-
 
       Serial.println("Turing Power On!");
       delay(START_UP_WAIT);           // Delay before start up
@@ -228,7 +214,8 @@ void emergency_SIR()
     motor_speeds(SPEED_MIN);
 
     last_switch_time = switch_time;
-    abort();
   }
+
+  abort();
    // Ensures there is no way the motors can start back up as no PWM will be sent
 }
