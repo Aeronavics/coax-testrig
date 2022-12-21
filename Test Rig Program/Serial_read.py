@@ -33,7 +33,10 @@ baud = 9600                 # arduino nano every runs at 9600 baud (can change b
 
 t = time()
 
+WARNING_MESSAGES = [""]
+
 invalid_list = ['Waiting for Authorization', 'Turing Power On!', 'Finished', '', 'Waiting...']
+
 
 
 def serialread(fileName: str) -> list:
@@ -86,8 +89,7 @@ def serialread(fileName: str) -> list:
             
             if data.startswith("Time:"): data = data + ctime()
             
-            if data.startswith("MAX CURRENT"):
-                current_overload()
+            if warning_message(data) == True:
                 break
 
             readings = data.split(",")
@@ -102,10 +104,27 @@ def serialread(fileName: str) -> list:
     return sensor_data
 
 
-def current_overload():
-    """Prints message if current has exceeded the max limit"""
-    print(Fore.RED + f"\nCurrent has exceeded the max limit!!!")
-    print(f"Shutting down" + Fore. RESET)
+def warning_message(data) -> bool:
+    """ Prints message if either temperature or current go over max limit
+        Also triggered if stops switch on test rig is pressed"""
+        
+    if data.startswith("MAX CURRENT"):
+        print(Fore.RED + f"\nCurrent has exceeded the max limit!!!")
+        print(f"Shutting down" + Fore. RESET)
+        return True
+        
+    elif data.startswith("MAX TEMP"):
+        print(Fore.RED + f"\Temperature has exceeded the max limit!!!")
+        print(f"Shutting down" + Fore. RESET)
+        return True
+    
+    elif data.startswith("STOP SWITCH"):
+        print(Fore.RED + f"\Stop switch has been pressed!")
+        print(f"Shutting down" + Fore. RESET)
+        return True
+    
+    else:
+        return False
     
     
 def csv_make(fileName: str, sensor_data: list) -> None:

@@ -8,6 +8,7 @@
 #include <Servo.h>
 #include "HX711.h"
 #include "ACS758.h"
+#include "LMT87.h"
 
 
 // Arduino ports
@@ -24,6 +25,9 @@
 #define CIN_TOP A0
 #define VIN_BOTTOM A3
 #define CIN_BOTTOM A2
+
+#define TOP_TEMP_SENSOR A4
+#define TOP_TEMP_SENSOR A5
 
 
 // Load cell presets
@@ -59,6 +63,8 @@ ACS758 bottom_motor(CIN_BOTTOM, VIN_BOTTOM, CURRENT_RATIO_BOTTOM, VOLTAGE_RATIO_
 Servo top_esc;
 Servo bottom_esc;
 HX711 loadcell;
+LMT87 sensor1(A4);
+LMT87 sensor2(A5);
 
 
 void setup() {
@@ -117,6 +123,7 @@ void printer(int speed)
     Serial.print(bottom_motor.current());
     Serial.print(",");  
     Serial.println(loadcell.get_units(10));
+    delay(1);
   }
 }
 
@@ -210,6 +217,7 @@ void emergency_SIR()
 {
   switch_time = millis();
   if(switch_time - last_switch_time > 500) {
+    Serial.println("STOP SWITCH");
     done = true;
     motor_speeds(SPEED_MIN);
 
