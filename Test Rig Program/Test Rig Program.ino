@@ -166,7 +166,7 @@ void turn_off_sequence(int speed)
 {
   // Turn off sequence
   if(done != true) {
-    for(int ispeed = speed; ispeed >= SPEED_MIN; ispeed -= SLOW_DOWN) {
+    for(int ispeed = speed - 100; ispeed >= SPEED_MIN; ispeed -= SLOW_DOWN) {
       motor_speeds(ispeed);
       delay(50);
     }
@@ -213,6 +213,7 @@ void loop() {
   else {  // Wait time so python can communicate w Arduino
     delay(ONE_THOUSAND);
     Serial.println("Waiting...");
+    temp_check();
   }
 
 }
