@@ -1,0 +1,11 @@
+C:\Users\Aeronavics\Documents\Test Rig Application\Test Rig Application\bin\Debug\Test Rig Application.exe.config
+C:\Users\Aeronavics\Documents\Test Rig Application\Test Rig Application\bin\Debug\Test Rig Application.exe
+C:\Users\Aeronavics\Documents\Test Rig Application\Test Rig Application\bin\Debug\Test Rig Application.pdb
+C:\Users\Aeronavics\Documents\Test Rig Application\Test Rig Application\obj\Debug\Test Rig Application.csproj.AssemblyReference.cache
+C:\Users\Aeronavics\Documents\Test Rig Application\Test Rig Application\obj\Debug\Test Rig Application.csproj.SuggestedBindingRedirects.cache
+C:\Users\Aeronavics\Documents\Test Rig Application\Test Rig Application\obj\Debug\Test_Rig_Application.Form1.resources
+C:\Users\Aeronavics\Documents\Test Rig Application\Test Rig Application\obj\Debug\Test_Rig_Application.Properties.Resources.resources
+C:\Users\Aeronavics\Documents\Test Rig Application\Test Rig Application\obj\Debug\Test Rig Application.csproj.GenerateResource.cache
+C:\Users\Aeronavics\Documents\Test Rig Application\Test Rig Application\obj\Debug\Test Rig Application.csproj.CoreCompileInputs.cache
+C:\Users\Aeronavics\Documents\Test Rig Application\Test Rig Application\obj\Debug\Test Rig Application.exe
+C:\Users\Aeronavics\Documents\Test Rig Application\Test Rig Application\obj\Debug\Test Rig Application.pdb
