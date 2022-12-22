@@ -26,6 +26,8 @@
 #define VIN_BOTTOM A3
 #define CIN_BOTTOM A2
 
+#define TEMP_LED 7
+
 // Load cell presets
 #define LOADCELL_SCALE 60000
 
@@ -80,6 +82,7 @@ void setup() {
 
   analogReference(EXTERNAL);  // 2.76V
 
+
   //Initialise load cell
   loadcell.begin(LOADCELL_DOUT, LOADCELL_SCK);
   loadcell.set_scale(LOADCELL_SCALE);
@@ -90,7 +93,7 @@ void setup() {
   bottom_esc.attach(BOTTOM_ESC);
   top_esc.writeMicroseconds(1000);
   bottom_esc.writeMicroseconds(1000);
-  pinMode(LED_BUILTIN, OUTPUT);
+  pinMode(TEMP_LED, OUTPUT);
 
   // baud rate init
   Serial.begin(9600);
@@ -150,9 +153,9 @@ bool check_current()
 void temp_check() 
 { // Checks if temorature is in range to start test again
   if(top_temp <= TEST_TEMP && botttom_temp <= TEST_TEMP) {
-    digitalWrite(LED_BUILTIN, HIGH);
+    digitalWrite(TEMP_LED, HIGH);
   } else {
-    digitalWrite(LED_BUILTIN, LOW);
+    digitalWrite(TEMP_LED, LOW);
   }
 }
 
