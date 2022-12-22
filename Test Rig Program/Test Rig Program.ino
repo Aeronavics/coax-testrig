@@ -43,10 +43,10 @@
 // Constants
 #define ONE_THOUSAND 1000
 #define START_UP_WAIT 3000
-#define SLOW_DOWN 15
+#define SLOW_DOWN 13
 #define RUN_NUM 5
 #define MAX_CURRENT 17
-#define TEST_TEMP 31
+#define TEST_TEMP 30
 
 // Globals Variables
 unsigned long switch_time = 0;  
@@ -127,8 +127,7 @@ void printer(int speed)
 
 
 void motor_speeds(int speed) 
-{
-  // changes speeds of motor by changing PWM to ESCs
+{ // changes speeds of motor by changing PWM to ESCs
   top_esc.writeMicroseconds(speed);
   bottom_esc.writeMicroseconds(speed);
 }
@@ -143,16 +142,13 @@ bool check_current()
   if(top_current.temp() > MAX_CURRENT || bottom_current.temp() > MAX_CURRENT) {
     Serial.println("MAX CURRENT");
     Serial.println("Shutting down");
-
-    return true;
-  } else {
-    return false;
+    done = true;
   }
 
 }
 
 void temp_check() 
-{
+{ // Checks if temorature is in range to start test again
   if(top_temp <= TEST_TEMP && botttom_temp <= TEST_TEMP) {
     digitalWrite(LED_BUILTIN, HIGH);
   } else {
@@ -161,14 +157,14 @@ void temp_check()
 }
 
 
-
 void turn_off_sequence(int speed)
 {
   // Turn off sequence
+  
   if(done != true) {
     for(int ispeed = speed - 100; ispeed >= SPEED_MIN; ispeed -= SLOW_DOWN) {
       motor_speeds(ispeed);
-      delay(50);
+      delay(40);
     }
   }
 
@@ -177,7 +173,8 @@ void turn_off_sequence(int speed)
 
 
 void loop() {
-  // The main function
+  // The main function 
+  temp_check();
   if (Serial.available() > 0 && done == false) {
     delay(ONE_THOUSAND);              // Allow time to for python to send '1'
 
@@ -185,16 +182,15 @@ void loop() {
 
       Serial.println("Turing Power On!");
       delay(START_UP_WAIT);           // Delay before start up
-
+      digitalWrite(LED_BUILTIN, LOW);
       header_setup();
       
       for (speed = SPEED_MIN; speed <= SPEED_MAX; speed += SPEED_INC) {  // Toggles ESC PWM
-        motor_speeds(speed);
-        done = check_current();
         if(done == true) {
           break;
         }
-
+        motor_speeds(speed);
+        check_current();
         delay(300);  
         printer(speed);
       }
@@ -213,7 +209,6 @@ void loop() {
   else {  // Wait time so python can communicate w Arduino
     delay(ONE_THOUSAND);
     Serial.println("Waiting...");
-    temp_check();
   }
 
 }
@@ -229,7 +224,4 @@ void emergency_SIR()
 
     last_switch_time = switch_time;
   }
-
-  abort();
-   // Ensures there is no way the motors can start back up as no PWM will be sent
 }
