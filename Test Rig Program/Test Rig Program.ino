@@ -204,7 +204,7 @@ void loop() {
 
       // Turn off sequence
 
-      // remove items in serial for next test
+      // remove items in serial for next test1
       Serial.flush();
     }
   }
