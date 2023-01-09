@@ -176,12 +176,13 @@ void spin_test()
 {
   Serial.println("Turing Power On!");
   delay(START_UP_WAIT);
-  int speed = 1200;
+  int speed = 1100;
   motor_speeds(speed);
   delay(2000);
   turn_off_sequence(speed);
   Serial.flush();
 }
+
 
 void loop() 
 {
@@ -215,11 +216,13 @@ void loop()
       // remove items in serial for next test1
       Serial.flush();
     }
+
+    else if (Serial.read() == '2') {
+      spin_test();
+  }
   }
 
-  else if (Serial.read() == '2') {
-    spin_test();
-  }
+  
 
   else {  // Wait time so python can communicate w Arduino
     delay(ONE_THOUSAND);

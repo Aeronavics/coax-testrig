@@ -53,7 +53,7 @@ def serialread(fileName: str) -> list:
         ser.flush()             # clear serial 
         send = str(input("Press 1 to attempt to connect to arduino and start test. Press 2 to test motor direction:  "))
         
-        if send != '1' or send != '2':
+        if send != '1' and send != '2':
             print(Fore.RED + f"\n1 was not pressed\nExiting program" + Fore.RESET)
             os.abort()
             
