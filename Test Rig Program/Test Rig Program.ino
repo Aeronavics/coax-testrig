@@ -26,8 +26,6 @@
 #define VIN_BOTTOM A3
 #define CIN_BOTTOM A2
 
-#define TEMP_LED 7
-
 // Load cell presets
 #define LOADCELL_SCALE 60000
 
@@ -49,6 +47,8 @@
 #define RUN_NUM 5
 #define MAX_CURRENT 17
 #define TEST_TEMP 30
+#define TMAX 60
+#define ABS_MAX_PWM 2000
 
 // Globals Variables
 unsigned long switch_time = 0;  
@@ -68,11 +68,7 @@ LMT87 botttom_temp(A5);
 
 void setup() {
 
-  if(SPEED_MAX > 2000) {  // Safety feature so motors speed range cannot go above a pre set limit
-    Serial.println("MAX SPEED IS TOO HIGH");
-    Serial.println("Aborting");
-    abort();
-  }
+  constrain(SPEED_MAX, 0, ABS_MAX_PWM);
 
   // Pin set up for switch
   pinMode(POWER_PIN, OUTPUT);
@@ -93,9 +89,8 @@ void setup() {
   bottom_esc.attach(BOTTOM_ESC);
   top_esc.writeMicroseconds(1000);
   bottom_esc.writeMicroseconds(1000);
-  pinMode(TEMP_LED, OUTPUT);
 
-  // baud rate init
+  // Baud rate init
   Serial.begin(9600);
 
 }
@@ -121,7 +116,7 @@ void printer(int speed)
     Serial.print(",");
     Serial.print(top_motor.current());
     Serial.print(",");
-    Serial.print(bottom_motor.current());
+    Serial.print(bottom_motor.current()); 
     Serial.print(",");  
     Serial.println(loadcell.get_units(10));
     delay(1);
@@ -142,7 +137,7 @@ bool check_current()
   float top_current = top_motor.current();
   float bottom_current = bottom_motor.current();
 
-  if(top_current.temp() > MAX_CURRENT || bottom_current.temp() > MAX_CURRENT) {
+  if(top_current > MAX_CURRENT ||  bottom_current > MAX_CURRENT) {
     Serial.println("MAX CURRENT");
     Serial.println("Shutting down");
     done = true;
@@ -150,13 +145,16 @@ bool check_current()
 
 }
 
-void temp_check() 
-{ // Checks if temorature is in range to start test again
-  if(top_temp <= TEST_TEMP && botttom_temp <= TEST_TEMP) {
-    digitalWrite(TEMP_LED, HIGH);
-  } else {
-    digitalWrite(TEMP_LED, LOW);
+bool check_temp() 
+{ //  Checks if current is over motor limit. If so will turn them off
+  //  and will end the test 
+
+  if(top_temp.temp() > TMAX || botttom_temp.temp() > TMAX) {
+    Serial.println("MAX TEMP");
+    Serial.println("Shutting down");
+    done = true;
   }
+
 }
 
 
@@ -165,8 +163,8 @@ void turn_off_sequence(int speed)
   // Turn off sequence
   
   if(done != true) {
-    for(int ispeed = speed - 100; ispeed >= SPEED_MIN; ispeed -= SLOW_DOWN) {
-      motor_speeds(ispeed);
+    for(int decel_speed = speed - 100; decel_speed >= SPEED_MIN; decel_speed -= SLOW_DOWN) {
+      motor_speeds(decel_speed);
       delay(40);
     }
   }
@@ -175,9 +173,9 @@ void turn_off_sequence(int speed)
 }
 
 
-void loop() {
+void loop() 
+{
   // The main function 
-  temp_check();
   if (Serial.available() > 0 && done == false) {
     delay(ONE_THOUSAND);              // Allow time to for python to send '1'
 
@@ -207,6 +205,16 @@ void loop() {
       // remove items in serial for next test1
       Serial.flush();
     }
+  }
+
+  else if (Serial.read() == '2') {
+    Serial.println("Turing Power On!");
+    delay(START_UP_WAIT);
+    int speed = 1200;
+    motor_speeds(speed);
+    delay(2000);
+    turn_off_sequence(speed);
+    Serial.flush();
   }
 
   else {  // Wait time so python can communicate w Arduino

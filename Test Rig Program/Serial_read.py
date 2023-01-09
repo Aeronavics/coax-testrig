@@ -51,9 +51,9 @@ def serialread(fileName: str) -> list:
         sensor_data = []        # store raw data
         
         ser.flush()             # clear serial 
-        send = str(input("Press 1 to attempt to connect to arduino and start test: "))
+        send = str(input("Press 1 to attempt to connect to arduino and start test. Press 2 to test motor direction:  "))
         
-        if send != '1':
+        if send != '1' or send != '2':
             print(Fore.RED + f"\n1 was not pressed\nExiting program" + Fore.RESET)
             os.abort()
             
@@ -81,6 +81,7 @@ def serialread(fileName: str) -> list:
             
         # collect the samples
         while line <= SAMPLES:
+            if send == '2': break
             getData=ser.readline()
             dataString = getData.decode('utf-8')
             data=dataString[0:][:-2]
