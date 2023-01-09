@@ -56,7 +56,7 @@ unsigned long last_switch_time = 0;
 int speed = 0;
 bool done = false;
 
-
+// Sensor and motor inits
 ACS758 top_motor(CIN_TOP, VIN_TOP, CURRENT_RATIO_TOP, VOLTAGE_RATIO_TOP);
 ACS758 bottom_motor(CIN_BOTTOM, VIN_BOTTOM, CURRENT_RATIO_BOTTOM, VOLTAGE_RATIO_BOTTOM);
 Servo top_esc;
@@ -119,7 +119,7 @@ void printer(int speed)
     Serial.print(bottom_motor.current()); 
     Serial.print(",");  
     Serial.println(loadcell.get_units(10));
-    delay(1);
+    delay(2);
   }
 }
 
@@ -168,10 +168,20 @@ void turn_off_sequence(int speed)
       delay(40);
     }
   }
-
+  // Sets flag
   done = true;
 }
 
+void spin_test()
+{
+  Serial.println("Turing Power On!");
+  delay(START_UP_WAIT);
+  int speed = 1200;
+  motor_speeds(speed);
+  delay(2000);
+  turn_off_sequence(speed);
+  Serial.flush();
+}
 
 void loop() 
 {
@@ -208,13 +218,7 @@ void loop()
   }
 
   else if (Serial.read() == '2') {
-    Serial.println("Turing Power On!");
-    delay(START_UP_WAIT);
-    int speed = 1200;
-    motor_speeds(speed);
-    delay(2000);
-    turn_off_sequence(speed);
-    Serial.flush();
+    spin_test();
   }
 
   else {  // Wait time so python can communicate w Arduino
