@@ -139,7 +139,6 @@ bool check_current()
     Serial.println("Shutting down");
     done = true;
   }
-
 }
 
 bool check_temp() 
@@ -151,7 +150,6 @@ bool check_temp()
     Serial.println("Shutting down");
     done = true;
   }
-
 }
 
 void smooth_acceleration(int desired_speed)
@@ -209,7 +207,6 @@ void loop()
           delay(300);  
           printer(speed);
         }
-        
       }
 
       turn_off_sequence(speed);
@@ -227,7 +224,6 @@ void loop()
     Serial.println("Waiting...");
   }
   }
-
 }
 
 
