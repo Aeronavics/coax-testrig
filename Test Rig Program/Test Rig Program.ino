@@ -201,7 +201,7 @@ void loop()
         if(done == true) {
           break;
         } else if (done != true) {
-          motor_speeds(speed);
+          smooth_acceleration(speed);
           check_current();
           check_temp();
           delay(300);  

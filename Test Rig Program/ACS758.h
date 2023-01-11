@@ -14,7 +14,7 @@ class ACS758
   public:
     ACS758(int cin, int vin, float current_ratio, float voltage_ratio);
     float voltage(int times = 10);
-    float current(int times = 60);
+    float current(int times = 70);
 };
 
 #endif
