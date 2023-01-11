@@ -18,7 +18,8 @@ LINE_WIDTH = 0.7
 
     
 def general_plotter(plotting_dict: dict, labels: Graph_Labels) -> None:
-    """_summary_
+    """ Plots 2 variables against each other cased on the data in the dict passed to it.
+        matplotlib graph values are given by the labels.
 
     Args:
         plotting_dict (dict): Values that will be plotted against each other
