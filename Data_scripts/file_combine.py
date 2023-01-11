@@ -1,16 +1,27 @@
-# ===================================================
+# ============================================================
 # AUTHOR        : Oliver Clements
 # CREATE DATE   : 2/12/22
-# PURPOSE       : Combines csv files of same test     
-# ===================================================
-
+# PURPOSE       : Identifies files that are the testing based
+#                 on the file name. This also means that files
+#                 MUST be ordered. Eg files of teh same test
+#                 should be next to each other when ordered
+#                 alphabetically.
+# ============================================================
 
 # Library Imports
 import os
 
 
 def splited_files_list(file_list: list) -> list[list]:
-    """ Returns a list of files that have been split by '-' char"""
+    """ Returns a list of files that have been split by '-' char
+
+    Args:
+        file_list (list): List of all csv files found in directory specified
+
+    Returns:
+        list[list]: returns a 2d list where each sub list is the file name that
+                    has been split by the '-' char
+    """
     
     split_file_list = list()
     
@@ -21,15 +32,28 @@ def splited_files_list(file_list: list) -> list[list]:
 
 
 def two_d_list_init(file_list: list) -> list[list]:
-    """ Inits a 2d list of the size of the the len(files)"""
+    """ Initializes an empty 2d list that is the same size as the file
+
+    Args:
+        file_list (list): List of all csv files found in directory specified
+
+    Returns:
+        list[list]: Empty 2d list that is the same size as the file
+    """
     rows, cols = (len(file_list), 0)
     arr = [[0 for i in range(cols)] for j in range(rows)]
     return arr
 
 
 def same_files(file_list: list) -> list[list]:
-    """ Returns a 2d list that contains lists of files that are of the same test
-        FILE MUST BE ORDERED"""
+    """ Goes through each file name to determine if they are of the same test 
+
+    Args:
+        file_list (list): List of all csv files found in directory specified
+
+    Returns:
+        list[list]: 2d list where all elements in each sub list are tests of the same type
+    """
     split_file_list = splited_files_list(file_list)
     same_file_list = two_d_list_init(file_list)
     
@@ -56,14 +80,20 @@ def same_files(file_list: list) -> list[list]:
             i += 1
     
     # removes empty lists elements 
-    same_file_list = [x for x in same_file_list if x != []]
+    same_file_list = [index for index in same_file_list if index != []]
         
-    # print(f"This is the sorted file list:\n{same_file_list}")
     return same_file_list
 
         
 def get_file_list(FOLDER: str) -> list:
-    """Gets all the files from the directory"""
+    """ Gets all scv files from the specified directory
+
+    Args:
+        FOLDER (str): Specified folder
+
+    Returns:
+        list: list of all csv files found
+    """
     file_list = list()
 
     with os.scandir(".\\" + FOLDER + "\\") as entries:

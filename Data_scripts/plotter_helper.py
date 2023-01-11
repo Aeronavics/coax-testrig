@@ -11,7 +11,7 @@ LF = list[float]
 
 
 class Graph_Labels:
-    """ Class that has all the labels and values for graphing"""
+    """ Class that has all the labels and graph values for graphing to make it look pretty"""
     
     def __init__(self, xlabel: str, ylabel: str, xstart: int, offset_multiply: float, LoBF: bool, Mxticks: float, mxticks: float, Myticks: float, myticks: float):
         self.xlabel = xlabel
@@ -25,16 +25,16 @@ class Graph_Labels:
         self.myticks = myticks
         
         
-    def max_xtick(self, lim_x: int, NEAT_OFFSET: float):
+    def max_xtick(self, lim_x: int, NEAT_OFFSET: float) -> float:
         """ Returns the maximum x value that should be displayed of the graph"""
         return lim_x + NEAT_OFFSET * self.offset_multiply
     
-    def max_ytick(self, lim_y: int, NEAT_OFFSET: float):
+    def max_ytick(self, lim_y: int, NEAT_OFFSET: float) -> float:
         """ Returns the maximum y value that should be displayed of the graph"""
         return lim_y + NEAT_OFFSET
            
 
-def ask_title():
+def ask_title() -> None:
     """ Asks user for a title to their graph"""
     title = str(input("\nWhat should the title for this graph be: "))
     return title
@@ -75,7 +75,7 @@ def function_sub(coefficients: np.ndarray, x: float) -> float:
     return y
 
 
-def exp_estimate(data):
+def exp_estimate(data: LF) -> np.ndarray:
     """exp model least squares estimate (redundant)"""
     x = data[0]
     y = data[1]

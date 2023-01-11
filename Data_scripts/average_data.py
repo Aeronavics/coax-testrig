@@ -2,14 +2,13 @@
 # AUTHOR        : Oliver Clements
 # CREATE DATE   : 1/12/22
 # PURPOSE       : Averages the data based on the PWM
-#                 sent to ESC
+#                 sent to the ESC
 # ===================================================
 
 # Library Imports
-    
 from colorama import Fore
 
-#  Data Index's
+# Index of where each value in a row of a csv file
 PWM_INDEX = 0
 TOP_V_INDEX, BOTTOM_V_INDEX = 1, 2
 TOP_I_INDEX, BOTTOM_I_INDEX = 3, 4,
@@ -18,9 +17,15 @@ LOAD_INDEX = 5
 LF = list[float]
 
 
-def summing_data(data: list[list]) -> list[LF]: # NOT CORRECT
-    """ Sums data based on the PWM into ESC and returns list of summed data
-        the number of times each PWM data set was summed"""
+def summing_data(data: list[LF]) -> list[LF]:
+    """ Sums data based on the PWM into ESC
+
+    Args:
+        data (list[LF]): 2d list of all processed data
+
+    Returns:
+        list[LF]: 2d list of data but all elements with the same PWM have been summed
+    """
     # Variable declaration
     data.sort()
     combined_data = list()
@@ -66,14 +71,32 @@ def summing_data(data: list[list]) -> list[LF]: # NOT CORRECT
 
 
 def divide_by_occurrence(row_data: list[LF], occurrence_num: list[int]) -> LF:
-    """Divides all elements except PWM by the num of occurrences"""
+    """ Divides all elements except PWM by the num of occurrences
+
+    Args:
+        row_data (list[LF]): _description_
+        occurrence_num (list[int]): _description_
+
+    Returns:
+        LF: row data that has been averaged
+    """
+    
     for i in range(1, len(row_data)):
         row_data[i] /= occurrence_num
     return row_data
         
     
 def avg_data_func(combined_data: list[LF], occurrence_list: list[int]) -> list[LF]:
-    """Divides the avg data by num of occurrence's to get the actual average of the data"""
+    """_summary_
+
+    Args:
+        combined_data (list[LF]): Summed data based on PWM
+        occurrence_list (list[int]): Number of times each PWM was in data set
+
+    Returns:
+        list[LF]: The averaged data
+    """
+    
     avg_data = list()
     i = 0
     while i in range(0, len(combined_data)):
@@ -85,8 +108,13 @@ def avg_data_func(combined_data: list[LF], occurrence_list: list[int]) -> list[L
         
 
 def give_average_data(data: list[LF]) -> list[LF]:
-    """ LINKER FUNCTION
-        Function that directs all others in this module"""
+    """ Error handling and will send the averaged data to other modules
+
+    Args:
+        data (list[LF]): Un averaged data
+    Returns:
+        list[LF]: The averaged data
+    """
         
     try:
         combined_data, occurrence_list = summing_data(data)

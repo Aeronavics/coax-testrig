@@ -1,14 +1,18 @@
-# ===================================================
+# =========================================================
 # AUTHOR        : Oliver Clements
 # CREATE DATE   : 30/11/22
-# PURPOSE       : Checks the data is in expected format
+# PURPOSE       : Checks the data is in expected format and
+#                 removes non int and float data
 #               
-# ===================================================
+# ========================================================
 
 
 # Library Imports
 from colorama import Fore
 import os
+from typing import Union
+
+EXPECTED_LABEL = "Motor PWM"            # This is the first expected label
 
 
 EXPECTED_HEADER = ['Motor PWM', ' Top Voltage (V)', ' Bottom Voltage (V)', ' Top Current (A)', ' Bottom Current (A)', ' Thrust (kg)']
@@ -16,9 +20,52 @@ EXPECTED_ROW_SIZE = 6
 
 LF = list[float]
 
+def error_check(raw_data: list[Union[LF, list[str], str]]) -> list[Union[LF, list[str], str]]:
+    """ Removes all non int or float data except the header and time data
+
+    Args:
+        raw_data (list[Union[LF, list[str], str]]): All elements from original file in 2d list
+
+    Returns:
+        list[Union[LF, list[str], str]]: 2d list of processed data
+    """
+    
+    processed_data = []
+    row_index = 0
+    
+    for row in raw_data:
+        
+        add_row = True
+        col_index = 0
+        
+        # Tests for float
+        while col_index < len(row) and add_row == True:
+            try:
+                row[col_index] = float(row[col_index])
+                
+            except ValueError:
+                add_row = False
+        
+            col_index += 1
+        
+        if add_row == True or row[0] == EXPECTED_LABEL or row[0].startswith("Time:"):
+            processed_data.append(row)
+        
+        elif add_row == False and row_index != 0:
+            print(Fore.RED + f"\nInvalid value at row {row_index}.\nThis row was removed\n")
+            
+        row_index += 1
+        
+    return processed_data   
+
 
 def header_check(data: list[LF], filename: str) -> None:
-    """Checks to ensure headers are in the expected format"""
+    """ Will display error message if header is not in the correct format
+
+    Args:
+        data (list[LF]): 2d list of proceeded data
+        filename (str): Name of current file
+    """
     header_row = data[1]
     
     try:
@@ -32,7 +79,12 @@ def header_check(data: list[LF], filename: str) -> None:
         
           
 def row_check(data: list[LF], filename: str) -> None:
-    """Checks to see rows are correct size in case data has 'slipped' in serial transmission"""
+    """ If rows are not of teh expected size then will display an error message
+
+    Args:
+        data (list[LF]): 2d list of proceeded data
+        filename (str): Name of current file
+    """
     for index, row in enumerate(data[2:]): # Skips header rows
         
         try:

@@ -18,7 +18,13 @@ LINE_WIDTH = 0.7
 
     
 def general_plotter(plotting_dict: dict, labels: Graph_Labels) -> None:
-    """"Plots the efficiency to thrust multiple file"""
+    """_summary_
+
+    Args:
+        plotting_dict (dict): Values that will be plotted against each other
+        labels (Graph_Labels): Preset values to make the graph look nice
+    """
+    
     fig, ax = plt.subplots()
     lim_x = 0
     lim_y = 0
@@ -70,7 +76,16 @@ def general_plotter(plotting_dict: dict, labels: Graph_Labels) -> None:
     
 
 def test_plotter(plotting_dict: dict, labels: Graph_Labels) -> None:
-    """"Plots the efficiency to thrust multiple file"""
+    """ Near identical function as general_plotter but tailored for the test types
+    
+        Will probably be deleted and will be implemented into the general plotter with
+        an extra parameter in graph labels
+
+    Args:
+        plotting_dict (dict): Values that will be plotted against each other
+        labels (Graph_Labels): Preset values to make the graph look nice
+    """
+    
     fig, ax = plt.subplots()
     lim_x = 0
     lim_y = 0
