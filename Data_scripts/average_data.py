@@ -15,8 +15,10 @@ TOP_V_INDEX, BOTTOM_V_INDEX = 1, 2
 TOP_I_INDEX, BOTTOM_I_INDEX = 3, 4,
 LOAD_INDEX = 5
 
+LF = list[float]
 
-def summing_data(data):
+
+def summing_data(data: list[list]) -> list[LF]: # NOT CORRECT
     """ Sums data based on the PWM into ESC and returns list of summed data
         the number of times each PWM data set was summed"""
     # Variable declaration
@@ -63,14 +65,14 @@ def summing_data(data):
     return combined_data, occurrence_list
 
 
-def divide_by_occurrence(row_data, occurrence_num):
+def divide_by_occurrence(row_data: list[LF], occurrence_num: list[int]) -> LF:
     """Divides all elements except PWM by the num of occurrences"""
     for i in range(1, len(row_data)):
         row_data[i] /= occurrence_num
     return row_data
         
     
-def avg_data_func(combined_data, occurrence_list):
+def avg_data_func(combined_data: list[LF], occurrence_list: list[int]) -> list[LF]:
     """Divides the avg data by num of occurrence's to get the actual average of the data"""
     avg_data = list()
     i = 0
@@ -78,11 +80,11 @@ def avg_data_func(combined_data, occurrence_list):
         avg_row = divide_by_occurrence(combined_data[i], occurrence_list[i])
         avg_data.append(avg_row)
         i += 1
-        
+    
     return avg_data
         
 
-def give_average_data(data):
+def give_average_data(data: list[LF]) -> list[LF]:
     """ LINKER FUNCTION
         Function that directs all others in this module"""
         

@@ -118,6 +118,11 @@ def warning_message(data) -> bool:
         print(f"Shutting down" + Fore. RESET)
         return True
     
+    elif data.startswith("INTERRUPT"):
+        print(Fore.RED + f"\Interrupt has been triggered!!!")
+        print(f"Shutting down" + Fore. RESET)
+        return True
+    
     else:
         return False
     

@@ -9,7 +9,7 @@
 import os
 
 
-def splited_files_list(file_list):
+def splited_files_list(file_list: list) -> list[list]:
     """ Returns a list of files that have been split by '-' char"""
     
     split_file_list = list()
@@ -20,14 +20,14 @@ def splited_files_list(file_list):
     return split_file_list
 
 
-def two_d_list_init(file_list):
+def two_d_list_init(file_list: list) -> list[list]:
     """ Inits a 2d list of the size of the the len(files)"""
     rows, cols = (len(file_list), 0)
     arr = [[0 for i in range(cols)] for j in range(rows)]
     return arr
 
 
-def same_files(file_list):
+def same_files(file_list: list) -> list[list]:
     """ Returns a 2d list that contains lists of files that are of the same test
         FILE MUST BE ORDERED"""
     split_file_list = splited_files_list(file_list)
@@ -62,7 +62,7 @@ def same_files(file_list):
     return same_file_list
 
         
-def get_file_list(FOLDER):
+def get_file_list(FOLDER: str) -> list:
     """Gets all the files from the directory"""
     file_list = list()
 

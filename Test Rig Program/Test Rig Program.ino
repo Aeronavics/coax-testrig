@@ -43,12 +43,13 @@
 // Constants
 #define ONE_THOUSAND 1000
 #define START_UP_WAIT 3000
-#define SLOW_DOWN 13
+#define SLOW_DOWN 5
 #define RUN_NUM 5
 #define MAX_CURRENT 17
 #define TEST_TEMP 30
 #define TMAX 60
 #define ABS_MAX_PWM 2000
+#define SPEED_DELAY 20
 
 // Globals Variables
 unsigned long switch_time = 0;  
@@ -72,12 +73,11 @@ void setup() {
 
   // Pin set up for switch
   pinMode(POWER_PIN, OUTPUT);
-  pinMode(SWITCH_PIN, INPUT_PULLDOWN);
+  pinMode(SWITCH_PIN, INPUT);
   digitalWrite(POWER_PIN, HIGH);
   attachInterrupt(digitalPinToInterrupt(SWITCH_PIN), emergency_SIR, CHANGE);
 
   analogReference(EXTERNAL);  // 2.76V
-
 
   //Initialise load cell
   loadcell.begin(LOADCELL_DOUT, LOADCELL_SCK);
@@ -157,6 +157,22 @@ bool check_temp()
 
 }
 
+void smooth_acceleration(int desired_speed)
+{ // Accelerates the motors at a smooth rate to increase life span
+  for(float current_speed = desired_speed - SPEED_INC; current_speed < desired_speed; current_speed += SPEED_INC / 100) {
+
+    if(done == true) {
+      motor_speeds(0);
+      break;
+
+    } else if(done != true) {
+      motor_speeds(current_speed);
+      delay(SPEED_DELAY);
+
+    }
+  }
+}
+
 
 void turn_off_sequence(int speed)
 {
@@ -165,22 +181,11 @@ void turn_off_sequence(int speed)
   if(done != true) {
     for(int decel_speed = speed - 100; decel_speed >= SPEED_MIN; decel_speed -= SLOW_DOWN) {
       motor_speeds(decel_speed);
-      delay(40);
+      delay(SPEED_DELAY);
     }
   }
   // Sets flag
   done = true;
-}
-
-void spin_test()
-{
-  Serial.println("Turing Power On!");
-  delay(START_UP_WAIT);
-  int speed = 1100;
-  motor_speeds(speed);
-  delay(2000);
-  turn_off_sequence(speed);
-  Serial.flush();
 }
 
 
@@ -200,11 +205,14 @@ void loop()
       for (speed = SPEED_MIN; speed <= SPEED_MAX; speed += SPEED_INC) {  // Toggles ESC PWM
         if(done == true) {
           break;
+        } else if (done != true) {
+          motor_speeds(speed);
+          check_current();
+          check_temp();
+          delay(300);  
+          printer(speed);
         }
-        motor_speeds(speed);
-        check_current();
-        delay(300);  
-        printer(speed);
+        
       }
 
       turn_off_sequence(speed);
@@ -216,14 +224,7 @@ void loop()
       // remove items in serial for next test1
       Serial.flush();
     }
-
-    else if (Serial.read() == '2') {
-      spin_test();
-  }
-  }
-
   
-
   else {  // Wait time so python can communicate w Arduino
     delay(ONE_THOUSAND);
     Serial.println("Waiting...");
@@ -242,4 +243,6 @@ void emergency_SIR()
 
     last_switch_time = switch_time;
   }
+
+  Serial.println("INTERRUPT");
 }

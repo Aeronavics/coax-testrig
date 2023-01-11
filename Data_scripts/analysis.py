@@ -21,7 +21,7 @@ from plotter_helper import Graph_Labels
 from file_combine import get_file_list, same_files
 
 PATH = '..\\Data_scripts\\'     # Change to what path your folder is in (MACS use '/')
-FOLDER = 'Data\\COAX\\Prop sizes\\'
+FOLDER = 'Data\\Motor Config\\10-1-23\\'
 
 PWM_INDEX = 0
 TOP_V_INDEX, BOTTOM_V_INDEX = 1, 2
@@ -37,17 +37,7 @@ T_vs_E_Labels =  Graph_Labels("Thrust (kg)", "Relative Efficiency (Thrust / Powe
 T_vs_P_Labels = Graph_Labels("Thrust (kg)", "Power (W)", 0, 1, True, 1, 0.25, 200, 50)
 
 
-LF = list[float]
-
-# class Plotting_set_up:
-#     """ Class that deals with plotting set_up"""
-    
-#     def __init__(self, file_dict, labels) -> None:
-#         self.file_dict = file_dict
-#         self.labels = labels
-        
-#     def 
-        
+LF = list[float]   
 
 
 def get_data(filename: str) -> LF:
@@ -72,7 +62,7 @@ def power_find(data: list[LF]) -> list[LF]:
     for row in data:
         top_motor_power = row[TOP_V_INDEX] * (row[TOP_I_INDEX] - top_I_offset)
         bottom_motor_power = row[BOTTOM_V_INDEX] * (row[BOTTOM_I_INDEX] - bottom_I_offset) # edit out for single prop
-        total_power = top_motor_power #+ bottom_motor_power
+        total_power = top_motor_power + bottom_motor_power
         
         if total_power == 0:
             continue
@@ -83,7 +73,7 @@ def power_find(data: list[LF]) -> list[LF]:
 
 
 def efficiency_and_thrust_find(data: list[LF]) -> tuple[LF, LF]:
-    """Finds relative efficiency and thrust"""
+    """ Finds relative efficiency and thrust"""
     thrust_list = list()
     efficiency_list = list()
     
@@ -246,14 +236,12 @@ def analysis_main() -> None:
     same_file_list = same_files(file_list)
     
     combined_data_dict = raw_data_dict(same_file_list)
-    print(combined_data_dict)
     
-    data_check(same_file_list)  # Remove if confident in data
+    # data_check(same_file_list)  # Remove if confident in data
 
     do_plot_PWMvsE(combined_data_dict)
     do_plot_PWMvsT(combined_data_dict)
-    print(combined_data_dict)
     do_plot_TvsE(combined_data_dict)
-    # do_plot_TvsP(combined_data_dict)
+    do_plot_TvsP(combined_data_dict)
     
 analysis_main()

@@ -23,10 +23,6 @@ def general_plotter(plotting_dict: dict, labels: Graph_Labels) -> None:
     lim_x = 0
     lim_y = 0
     
-    for item, row in plotting_dict.items():
-        print(f"{item}: {row}")
-    # print(plotting_dict)
-    
     for TvsE_data in plotting_dict.values():
         coefficients = least_squares_estimate(TvsE_data)
     
