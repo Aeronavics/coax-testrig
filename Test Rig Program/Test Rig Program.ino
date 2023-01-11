@@ -18,8 +18,7 @@
 #define TOP_ESC 6
 #define BOTTOM_ESC 5
 
-#define SWITCH_PIN 9
-#define POWER_PIN 11  
+#define SWITCH_PIN 12
 
 #define VIN_TOP A1
 #define CIN_TOP A0
@@ -72,9 +71,7 @@ void setup() {
   constrain(SPEED_MAX, 0, ABS_MAX_PWM);
 
   // Pin set up for switch
-  pinMode(POWER_PIN, OUTPUT);
-  pinMode(SWITCH_PIN, INPUT);
-  digitalWrite(POWER_PIN, HIGH);
+  pinMode(SWITCH_PIN, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(SWITCH_PIN), emergency_SIR, CHANGE);
 
   analogReference(EXTERNAL);  // 2.76V
@@ -228,6 +225,7 @@ void loop()
   else {  // Wait time so python can communicate w Arduino
     delay(ONE_THOUSAND);
     Serial.println("Waiting...");
+  }
   }
 
 }
