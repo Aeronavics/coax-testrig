@@ -22,7 +22,7 @@ LF = list[float]
 SAMPLES = 55
 TIME_OUT = 2                # This needs to be > 1 for good readings
 SLEEP_TIME = 3
-SHORT_SLEEP = 0.5
+SHORT_SLEEP = 0.55
 MAX_SERIAL_SEND_ATTEMPTS = 50
 
 CSV = ".csv"
@@ -114,7 +114,7 @@ def warning_message(data) -> bool:
         return True
         
     elif data.startswith("MAX TEMP"):
-        print(Fore.RED + f"\Temperature has exceeded the max limit!!!")
+        print(Fore.RED + f"\nTemperature has exceeded the max limit!!!")
         print(f"Shutting down" + Fore. RESET)
         return True
     

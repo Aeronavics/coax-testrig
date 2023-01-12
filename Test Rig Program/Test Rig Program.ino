@@ -49,6 +49,7 @@
 #define TMAX 60
 #define ABS_MAX_PWM 2000
 #define SPEED_DELAY 20
+#define WAIT_TIME 500
 
 // Globals Variables
 unsigned long switch_time = 0;  
@@ -219,10 +220,10 @@ void loop()
       Serial.flush();
     }
   
-  else {  // Wait time so python can communicate w Arduino
-    delay(ONE_THOUSAND);
+  
+  } else {  // Wait time so python can communicate w Arduino
+    delay(WAIT_TIME);
     Serial.println("Waiting...");
-  }
   }
 }
 
