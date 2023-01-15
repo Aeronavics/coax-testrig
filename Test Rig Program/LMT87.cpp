@@ -1,3 +1,10 @@
+//=========================================================================
+//  Author: Reuben Campbell
+//  Date Created: 10/01/2023
+//  Description: Returns infomation about the temperature value from the 
+//               LMT87 sensors
+//=========================================================================
+
 #include "LMT87.h"
 
 #define ADC_SCALE 2.76 / 1023.0
