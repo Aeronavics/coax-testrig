@@ -41,7 +41,15 @@ def ask_title() -> None:
 
    
 def give_file_list(plotting_dict: dict[str, list[LF]], LoBF: bool) -> list[str]:
-    """Gives file list based onb dict passed to plotting function"""
+    """_summary_
+
+    Args:
+        plotting_dict (dict[str, list[LF]]): _description_
+        LoBF (bool): _description_
+
+    Returns:
+        list[str]: List of files 
+    """
     file_list = list()
     
     for file in plotting_dict.keys():

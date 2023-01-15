@@ -6,6 +6,8 @@
 #                 thrust to relative efficiency.
 #                 Calls plotting module to then plot the
 #                 results
+#
+#               CODE IS EXECUTED FROM HERE!!!
 # =========================================================
 
 
@@ -22,8 +24,8 @@ from plotter_helper import Graph_Labels
 from file_combine import get_file_list, same_files
 
 # Where desired csv files are located
-PATH = '..\\Data_scripts\\'     # Change to what path your folder is in (MACS use '/')
-FOLDER = 'Data\\Prop Config\\non final software\\'
+PATH = '..\\Data_scripts\\'     # DOne change this!!!! (MAC's use '/')
+FOLDER = 'Data\\Motor Config\\Lots\\'   # Change to what path your folder is in (MACS use '/')
 
 # Index of where each value in a row of a csv file
 PWM_INDEX = 0
@@ -305,7 +307,7 @@ def data_check(same_file_list: list) -> None:
 
     for file in file_dict:
         plot_data_check(file)
-        
+
     
 def analysis_main() -> None:
     """ Main func that will direct all others in this module"""
