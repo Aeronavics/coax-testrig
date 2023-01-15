@@ -1,3 +1,10 @@
+//=========================================================================
+//  Author: Reuben Campbell
+//  Date Created: 21/11/2022
+//  Description: Returns infomation about the current and voltage from the
+//               the ACS758 sensors
+//=========================================================================
+
 #include "ACS758.h"
 
 #define ADC_SCALE 2.76 / 1023.0

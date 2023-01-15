@@ -19,8 +19,8 @@ from file_name_make import file_name
 LF = list[float]
 
 
-SAMPLES = 55
-TIME_OUT = 2                # This needs to be > 1 for good readings
+SAMPLES = 55                # Make sure this is big enough
+TIME_OUT = 2                # This needs to be > 1 for good readings otherwise may skip rows
 SLEEP_TIME = 3
 SHORT_SLEEP = 0.55
 MAX_SERIAL_SEND_ATTEMPTS = 50
@@ -28,21 +28,26 @@ MAX_SERIAL_SEND_ATTEMPTS = 50
 CSV = ".csv"
 
 # Arduino related setup
-arduino_port = 'COM3'       # serial port of Arduino. CHANGE TO WHAT YOURS IS
-baud = 9600                 # arduino nano every runs at 9600 baud (can change but doesn't effect speed)         
+arduino_port = 'COM3'       # Serial port of Arduino. CHANGE TO WHAT YOURS IS
+baud = 9600                 # Arduino nano every runs at 9600 baud (can change but doesn't significantly effect speed)         
 
 t = time()
 
-WARNING_MESSAGES = [""]
-
-invalid_list = ['Waiting for Authorization', 'Turing Power On!', 'Finished', '', 'Waiting...']
+DONT_APPEND = ['Waiting for Authorization', 'Turing Power On!', 'Finished', '', 'Waiting...']
 
 
 
-def serialread(fileName: str) -> list:
+def serialread(fileName: str) -> list[LF]:
     """ This function sends a 1 to the serial port specified by 'arduino_port'.
         The Arduino should send a message back that when read by this function will
-        begin reading the serial output from the Arduino"""
+        begin reading the serial output from the Arduino
+
+    Args:
+        fileName (str): Name for the file to be created
+
+    Returns:
+        list: 2d list of data read
+    """
         
     with serial.Serial(arduino_port, baud, timeout=TIME_OUT) as ser:
         print(Fore.GREEN + "\nConnected to port: " + arduino_port)
@@ -53,7 +58,7 @@ def serialread(fileName: str) -> list:
         ser.flush()             # clear serial 
         send = str(input("Press 1 to attempt to connect to arduino and start test. Press 2 to test motor direction:  "))
         
-        if send != '1' and send != '2':
+        if send != '1':
             print(Fore.RED + f"\n1 was not pressed\nExiting program" + Fore.RESET)
             os.abort()
             
@@ -95,9 +100,9 @@ def serialread(fileName: str) -> list:
 
             readings = data.split(",")
             
-            if readings[0] not in invalid_list: sensor_data.append(readings)
+            if readings[0] not in DONT_APPEND: sensor_data.append(readings) # doesn't include messages from Arduino
             
-            print(Fore.RESET + f"{fileName} data:\n{sensor_data}")  # prints data as ots collected
+            print(Fore.RESET + f"{fileName} data:\n{sensor_data}")  # prints data as its collected
 
             line = line + 1
     
@@ -106,7 +111,14 @@ def serialread(fileName: str) -> list:
 
 def warning_message(data) -> bool:
     """ Prints message if either temperature or current go over max limit
-        Also triggered if stops switch on test rig is pressed"""
+        Also triggered if interrupt is triggered which is good for debugging
+
+    Args:
+        data (_type_): Current row of data
+
+    Returns:
+        bool: Returns True if this warning message is in the row and prints it has occurred
+    """
         
     if data.startswith("MAX CURRENT"):
         print(Fore.RED + f"\nCurrent has exceeded the max limit!!!")
@@ -128,7 +140,12 @@ def warning_message(data) -> bool:
     
     
 def csv_make(fileName: str, sensor_data: list) -> None:
-    """Creates csv file with data from the serialread function"""
+    """ Creates the csv file from the list provided. Each sub list is a row
+
+    Args:
+        fileName (str): Filename
+        sensor_data (list): 2d list with the data
+    """
     
     file = open(fileName, "a")
     
@@ -144,7 +161,8 @@ def csv_make(fileName: str, sensor_data: list) -> None:
     
     
 def serial_error() -> None:
-    """ If serial error occurs then prints message and halts program until ENTER is pressed"""
+    """ Prints error message if failing to connect with Arduino"""
+
     print(Fore.RED + f"\nERROR")
     print(f"Access to serial port {arduino_port} has been denied.")
     print("This is likely due to another program using the serial monitor.")
@@ -153,8 +171,7 @@ def serial_error() -> None:
 
 
 def control_func() -> None:
-    """ LINKER FUNCTION
-        In a try loop until data is successfully collected"""
+    """ LINKER FUNCTION. In a try loop until data is successfully collected"""
     fileName = file_name()
 
     attempt = 0

@@ -1,7 +1,7 @@
 # ======================================================================
 # AUTHOR        : Oliver Clements
 # CREATE DATE   : 29/11/22
-# PURPOSE       : File with common functions
+# PURPOSE       : Module with common functions
 # ======================================================================
 
 
@@ -9,14 +9,28 @@
 from colorama import Fore
 
 def print_list(list: list) -> None:
-    """Prints elements in list"""
+    """ Prints all items in list
+
+    Args:
+        list (list): A list
+    """
     
     for item in list:
         print(Fore.RESET + f"{item}")
         
 
 def list_check(user_input: str, list_used: list, data_type: type) -> bool:
-    """Returns bool if element is in list"""
+    """ Checks if user input is an item inside a given list
+
+    Args:
+        user_input (str): The users input
+        list_used (list): The List used as reference
+        data_type (type): The data type
+
+    Returns:
+        bool: T or F if in list
+    """
+    
     try:
         if data_type(user_input) in list_used:
             return True
@@ -33,9 +47,18 @@ def list_check(user_input: str, list_used: list, data_type: type) -> bool:
     
     
 def ask_user(question: str) -> bool:
-    """Asks a user a question and returns bool dependant on answer"""
+    """ Asks the user a bool question (yes or no) adn will return the corresponding bool
+
+    Args:
+        question (str): The question to be asked
+
+    Returns:
+        bool: Result from question
+    """
+    
     print(question)
     user_input = str(input("Type yes or no: "))
+    
     while True:
         try:
             if user_input.lower() == "yes":

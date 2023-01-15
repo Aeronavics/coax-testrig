@@ -1,8 +1,10 @@
-/*
-  Code that runs the test and puts data into csv format for python to read
-  Automatically changes motor speeds
-
-*/
+//============================================================================
+//  AUTHOR: Reuben Campbell and Oliver Clements
+//  Date Created: 21/11/2022
+//  Description: Code that runs the test and puts data into csv format for 
+//               python to read. 
+//
+//============================================================================
 
 // Libraries and Modules
 #include <Servo.h>
@@ -68,10 +70,10 @@ LMT87 botttom_temp(A5);
 
 
 void setup() {
-
+  // Ensures max speed is valid
   constrain(SPEED_MAX, 0, ABS_MAX_PWM);
 
-  // Pin set up for switch
+  // Pin set up for switch interrupt
   pinMode(SWITCH_PIN, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(SWITCH_PIN), emergency_SIR, CHANGE);
 
@@ -95,16 +97,15 @@ void setup() {
 
 
 void header_setup(void) 
-{
-  //  Writes headers to serial
+{ //  Writes headers to serial
   Serial.println("Time: ");
   Serial.println("Motor PWM, Top Voltage (V), Bottom Voltage (V), Top Current (A), Bottom Current (A), Thrust (kg)");
 }
 
 
 void printer(int speed) 
-{
-  // Prints results into csv friendly format
+{ // Prints results into csv friendly format
+  // int speed: The current PWM (speed) of motors
   for(int reps = 0; reps < RUN_NUM; reps++) {
     Serial.print(speed);
     Serial.print(",");
@@ -124,13 +125,14 @@ void printer(int speed)
 
 void motor_speeds(int speed) 
 { // changes speeds of motor by changing PWM to ESCs
+  // int speed: The current PWM (speed) of motors
   top_esc.writeMicroseconds(speed);
   bottom_esc.writeMicroseconds(speed);
 }
 
 
-bool check_current() 
-{ //  Checks if current is over motor limit. If so will turn them off
+bool check_current(void) 
+{ //  Checks if current is over motor limit. If so will turn motors off
   //  and will end the test 
   float top_current = top_motor.current();
   float bottom_current = bottom_motor.current();
@@ -142,8 +144,9 @@ bool check_current()
   }
 }
 
-bool check_temp() 
-{ //  Checks if current is over motor limit. If so will turn them off
+
+bool check_temp(void) 
+{ //  Checks if current is over motor limit. If so will turn motors off
   //  and will end the test 
 
   if(top_temp.temp() > TMAX || botttom_temp.temp() > TMAX) {
@@ -153,14 +156,17 @@ bool check_temp()
   }
 }
 
-void smooth_acceleration(int desired_speed)
-{ // Accelerates the motors at a smooth rate to increase life span
-  for(float current_speed = desired_speed - SPEED_INC; current_speed < desired_speed; current_speed += SPEED_INC / 100) {
 
+void smooth_acceleration(int desired_speed)
+{ // Accelerates the motors at a smooth rate
+  // int desired_speed: The speed the motors should go at 
+  for(float current_speed = desired_speed - SPEED_INC; current_speed < desired_speed; current_speed += SPEED_INC / 100) {
+    // Turns motors off if the done flag has been set
     if(done == true) {
       motor_speeds(0);
       break;
 
+    // Increments speed
     } else if(done != true) {
       motor_speeds(current_speed);
       delay(SPEED_DELAY);
@@ -171,16 +177,15 @@ void smooth_acceleration(int desired_speed)
 
 
 void turn_off_sequence(int speed)
-{
-  // Turn off sequence
-  
+{ // Turn off sequence
+  // int speed: The current PWM (speed) of motors
   if(done != true) {
     for(int decel_speed = speed - 100; decel_speed >= SPEED_MIN; decel_speed -= SLOW_DOWN) {
       motor_speeds(decel_speed);
       delay(SPEED_DELAY);
     }
   }
-  // Sets flag
+
   done = true;
 }
 
@@ -201,6 +206,7 @@ void loop()
       for (speed = SPEED_MIN; speed <= SPEED_MAX; speed += SPEED_INC) {  // Toggles ESC PWM
         if(done == true) {
           break;
+
         } else if (done != true) {
           smooth_acceleration(speed);
           check_current();
@@ -214,9 +220,7 @@ void loop()
       // Test finished. Set ESC's to low
       Serial.println("Finished");
 
-      // Turn off sequence
-
-      // remove items in serial for next test1
+      // remove items in serial for next test
       Serial.flush();
     }
   
@@ -229,8 +233,7 @@ void loop()
 
 
 void emergency_SIR()
-// Interrupt that stops program if switch has been pressed
-{
+{ // Interrupt that stops program if switch has been pressed
   switch_time = millis();
   if(switch_time - last_switch_time > 500) {
     done = true;
@@ -238,6 +241,7 @@ void emergency_SIR()
 
     last_switch_time = switch_time;
   }
-
+  
+  // For debugging
   Serial.println("INTERRUPT");
 }

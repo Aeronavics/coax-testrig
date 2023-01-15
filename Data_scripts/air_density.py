@@ -28,6 +28,7 @@ def keeper():
     Fri_8 = air_density_calc(15.9, 0.99, 1004)
     Mon_9 = air_density_calc(21, 0.80, 1019)
     Thr_12 = air_density_calc(14.9, 0.85, 1011)
+    Mon_16 =  air_density_calc(20, 0.8, 1023)
     
     print(Tue_2)
     print(Wed_9)
@@ -35,6 +36,7 @@ def keeper():
     print(Fri_8)
     print(Mon_9)
     print(Thr_12)
+    print(Mon_16)
     
     
     print(f"Difference is {Thr_12 - Tue_2}")

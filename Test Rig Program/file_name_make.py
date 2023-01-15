@@ -1,7 +1,7 @@
 # ======================================================================
 # AUTHOR        : Oliver Clements
 # CREATE DATE   : 29/11/22
-# PURPOSE       : File name set up with naming Scheme
+# PURPOSE       : File name set up with naming scheme
 # ======================================================================
 
 # Library Imports
@@ -12,12 +12,17 @@ from typing import Union
 from common_funcs import list_check, print_list
 
 # Lists of set parameters
-PROP_LIST = [0, 14, 15, 15.2, 16.2, 17, 18, 18.2, 18.3]   # ADD PROP SIZES YOU ARE USING
-KV_LIST = [0, 140, 160, 220, 240]                   # ADD MOTOR KVs YOU ARE USING
+PROP_LIST = [0, 14, 15, 15.2, 16.2, 17, 18, 18.2, 18.3]     # ADD PROP SIZES YOU ARE USING
+KV_LIST = [0, 140, 160, 220, 240]                           # ADD MOTOR KVs YOU ARE USING
     
     
 def file_name() -> str:
-    """ Asks user to select the different parameters"""
+    """ Module director. Asks user for all the parameters of test to be used as the file name.
+        Only accepts pre selected parameter's
+
+    Returns:
+        str: Filename
+    """
     test_type = str(input("Whats some useful info about test.\nEg brand of prop?\nEnsure it is similar for same test.\nInput here: "))
     
     top_prop = str(prop_input("top"))
@@ -36,7 +41,14 @@ def file_name() -> str:
 
 
 def prop_input(position: str) -> str:
-    """ Gets prop input from user"""
+    """ Gets the prop size from user
+
+    Args:
+        position (str): The position of the prop
+
+    Returns:
+        str: Prop size
+    """
     
     print(f"\nEnter {position} propeller size (inch) from the following list\n")
     print_list(PROP_LIST)
@@ -55,7 +67,14 @@ def prop_input(position: str) -> str:
 
 
 def KV_input(position: str) -> str:
-    """Gets motor KV input from user"""
+    """ Gets the motor kV from the user
+
+    Args:
+        position (str): The position of the motor in question
+
+    Returns:
+        str: Motor kV
+    """
     
     print(f"\nEnter {position} motor KV from the following list\n")
     print_list(KV_LIST)
