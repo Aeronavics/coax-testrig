@@ -103,9 +103,21 @@ This assumes you have used the data collection method **without the GUI**. This 
    ```
 2. Go to 'Data_scripts' directory
 3. Add the data you wish to analyze somewhere in the directory of the repository.
-4. Open 'analysis.py and change the FOLDER to where the data is. This should be realitve to the 'Data_scripts' folder. Example:
+4. Open 'analysis.py and change the FOLDER to where the data is. This should be relative to the 'Data_scripts' folder. Example:
     ```python
     FOLDER = 'Data\\Motor Config\\160-160vs160-220\\'   # Change to what path your folder is in (MACS use '/')
     ```
-    4.1 If using MAC or Linux you will need to change the '\\\\' to '/ ' for the PATH_SLASHES variable
-5.
+    - If using MAC or Linux you will need to change the '\\\\' to '/ ' for the PATH_SLASHES variable
+5. In analysis_main() inside analysis.py comment out the graphs you don't want to plot. Example
+    ```python
+    do_plot_PWMvsE(combined_data_dict)  # Plots PWM against efficiency
+    do_plot_PWMvsT(combined_data_dict)  # Plots PWM against Thrust
+    do_plot_TvsE(combined_data_dict)    # Plots Thrust against efficiency
+    do_plot_TvsP(combined_data_dict)    # Plots Power against Thrust
+6. Compile and execute analysis.py. Example:
+   ```bash
+   python3 analysis.py
+    ```
+### Trouble Shooting
+
+## Contact

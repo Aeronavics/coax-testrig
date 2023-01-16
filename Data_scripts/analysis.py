@@ -47,6 +47,24 @@ T_vs_P_Labels = Graph_Labels("Thrust (kg)", "Power (W)", 0, 1, True, 1, 0.25, 20
 # Short hand as this data type is used extensively
 LF = list[float]    
     
+def analysis_main() -> None:
+    """ Main func that will direct all others in this module"""
+    file_list = get_file_list(FOLDER, PATH_SLASHES)
+    same_file_list = same_files(file_list)
+    
+    combined_data_dict = raw_data_dict(same_file_list)
+    
+    # Graphs same test against each other for manual error checking
+    data_check(same_file_list)  # Remove if confident in data
+
+    # Comment out graphs you dont want
+    do_plot_PWMvsE(combined_data_dict)      # Plots PWM against efficiency
+    do_plot_PWMvsT(combined_data_dict)      # Plots PWM against Thrust
+    do_plot_TvsE(combined_data_dict)        # Plots Thrust against efficiency
+    do_plot_TvsP(combined_data_dict)        # Plots Power against Thrust
+    
+analysis_main()
+
 
 def get_data(filename: str) -> list[LF]:
     """ Gets data from file and converts to a 2d list. Calls data checks as well
@@ -310,20 +328,4 @@ def data_check(same_file_list: list) -> None:
         plot_data_check(file)
 
     
-def analysis_main() -> None:
-    """ Main func that will direct all others in this module"""
-    file_list = get_file_list(FOLDER, PATH_SLASHES)
-    same_file_list = same_files(file_list)
-    
-    combined_data_dict = raw_data_dict(same_file_list)
-    
-    # Graphs same test against each other for manual error checking
-    data_check(same_file_list)  # Remove if confident in data
 
-    # Comment out graphs you dont want
-    do_plot_PWMvsE(combined_data_dict)
-    do_plot_PWMvsT(combined_data_dict)
-    do_plot_TvsE(combined_data_dict)
-    do_plot_TvsP(combined_data_dict)
-    
-analysis_main()
