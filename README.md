@@ -3,6 +3,8 @@
 # About
 Contains all the code used for the investigation of optimizing thrust and efficiency of coaxial propeller systems. This was conducted and created by the 2022 - 2023 interns.
 
+This branch contains the code to conduct each test through the terminal.
+
 ## Pre-requisites
 [Python3](https://www.python.org/) and [Arduino IDE](https://www.arduino.cc/en/software) as linked. The following modules are also required with their install commands seen below:
 
@@ -31,7 +33,7 @@ pip install pyserial
   - Setup and Use
 
 ## Data Collection
-All code for the data collection is found in the 'Test Rig Program' folder. Ensure you name the files of the same test the same as each other (with differing numbers). Example:
+All code for the data collection is found in the 'Test Rig Program' folder. Ensure you name the files of the same test the same as each other (with differing test numbers). Example:
 ```
 Pitch2-18-160-6-15-220-5-#1.csv
 Pitch2-18-160-6-15-220-5-#2.csv
