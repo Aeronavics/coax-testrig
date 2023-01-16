@@ -6,7 +6,6 @@
 
 # Library Imports
 from colorama import Fore
-from typing import Union
 
 # Module Imports
 from common_funcs import list_check, print_list

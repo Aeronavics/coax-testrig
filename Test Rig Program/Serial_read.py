@@ -56,7 +56,7 @@ def serialread(fileName: str) -> list[LF]:
         sensor_data = []        # store raw data
         
         ser.flush()             # clear serial 
-        send = str(input("Press 1 to attempt to connect to arduino and start test. Press 2 to test motor direction:  "))
+        send = str(input("Press 1 to attempt to connect to arduino and start test: "))
         
         if send != '1':
             print(Fore.RED + f"\n1 was not pressed\nExiting program" + Fore.RESET)

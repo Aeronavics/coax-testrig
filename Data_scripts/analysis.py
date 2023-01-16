@@ -24,8 +24,9 @@ from plotter_helper import Graph_Labels
 from file_combine import get_file_list, same_files
 
 # Where desired csv files are located
-PATH = '..\\Data_scripts\\'     # DOne change this!!!! (MAC's use '/')
-FOLDER = 'Data\\Motor Config\\160-160vs160-220\\'   # Change to what path your folder is in (MACS use '/')
+PATH_SLASHES = "\\"                                                             # CHANGE IF ON MAC OR LINUX       
+PATH = '..' + PATH_SLASHES + 'Data_scripts' + PATH_SLASHES                      # Dont change this!!!! (MAC's use '/')
+FOLDER = 'Data' + PATH_SLASHES + 'Motor Config' + PATH_SLASHES + '160-160vs160-220' + PATH_SLASHES   # Change to what path your folder is in (MACS use '/')
 
 # Index of where each value in a row of a csv file
 PWM_INDEX = 0
@@ -311,13 +312,15 @@ def data_check(same_file_list: list) -> None:
     
 def analysis_main() -> None:
     """ Main func that will direct all others in this module"""
-    file_list = get_file_list(FOLDER)
+    file_list = get_file_list(FOLDER, PATH_SLASHES)
     same_file_list = same_files(file_list)
     
     combined_data_dict = raw_data_dict(same_file_list)
     
+    # Graphs same test against each other for manual error checking
     data_check(same_file_list)  # Remove if confident in data
 
+    # Comment out graphs you dont want
     do_plot_PWMvsE(combined_data_dict)
     do_plot_PWMvsT(combined_data_dict)
     do_plot_TvsE(combined_data_dict)

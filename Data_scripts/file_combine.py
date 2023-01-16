@@ -85,7 +85,7 @@ def same_files(file_list: list) -> list[list]:
     return same_file_list
 
         
-def get_file_list(FOLDER: str) -> list:
+def get_file_list(FOLDER: str, PATH_SLASHES: str) -> list:
     """ Gets all scv files from the specified directory
 
     Args:
@@ -96,7 +96,7 @@ def get_file_list(FOLDER: str) -> list:
     """
     file_list = list()
 
-    with os.scandir(".\\" + FOLDER + "\\") as entries:
+    with os.scandir("." + PATH_SLASHES + FOLDER + PATH_SLASHES) as entries:
         print("\nFiles found:")
         
         for entry in entries:
