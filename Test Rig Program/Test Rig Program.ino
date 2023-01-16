@@ -46,9 +46,9 @@
 #define START_UP_WAIT 3000
 #define SLOW_DOWN 5
 #define RUN_NUM 5
-#define MAX_CURRENT 17
+#define MAX_CURRENT 15
 #define TEST_TEMP 30
-#define TMAX 60
+#define TMAX 50
 #define ABS_MAX_PWM 2000
 #define SPEED_DELAY 20
 #define WAIT_TIME 500
@@ -160,6 +160,7 @@ bool check_temp(void)
 void smooth_acceleration(int desired_speed)
 { // Accelerates the motors at a smooth rate
   // int desired_speed: The speed the motors should go at 
+
   for(float current_speed = desired_speed - SPEED_INC; current_speed < desired_speed; current_speed += SPEED_INC / 100) {
     // Turns motors off if the done flag has been set
     if(done == true) {
@@ -209,9 +210,9 @@ void loop()
 
         } else if (done != true) {
           smooth_acceleration(speed);
+          delay(300);  
           check_current();
           check_temp();
-          delay(300);  
           printer(speed);
         }
       }
