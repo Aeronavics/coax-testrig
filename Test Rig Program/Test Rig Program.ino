@@ -149,7 +149,10 @@ bool check_temp(void)
 { //  Checks if current is over motor limit. If so will turn motors off
   //  and will end the test 
 
-  if(top_temp.temp() > TMAX || botttom_temp.temp() > TMAX) {
+  float top_motor = top_temp.temp();
+  float bottom_motor = botttom_temp.temp();
+
+  if(top_motor > TMAX || bottom_motor.temp > TMAX) {
     Serial.println("MAX TEMP");
     Serial.println("Shutting down");
     done = true;

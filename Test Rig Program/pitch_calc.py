@@ -82,8 +82,8 @@ def main(prop_len_inch, t_h, t_l, width, added_pitch):
     pitch_iterate(angle, width, current_pitch)
     
 # main(15.2, 13.50, 10.42, 23.45, np.deg2rad(0)) # for 15.2 inch prop
-# main(16.2, 14.40, 11.2, 24.83, 0) # for 16.2 inch prop
-main(18.2, 10.77, 14.750, 29.50, 0)
+main(16.2, 14.40, 11.2, 24.83, 0) # for 16.2 inch prop
+# main(18.2, 10.77, 14.750, 29.50, 0)
 
     
     
