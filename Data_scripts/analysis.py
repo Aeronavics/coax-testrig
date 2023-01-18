@@ -24,9 +24,9 @@ from plotter_helper import Graph_Labels
 from file_combine import get_file_list, same_files
 
 # Where desired csv files are located
-PATH_SLASHES = "\\"                                                             # CHANGE IF ON MAC OR LINUX       
-PATH = '..' + PATH_SLASHES + 'Data_scripts' + PATH_SLASHES                      # Dont change this!!!! (MAC's use '/')
-FOLDER = 'Data' + PATH_SLASHES + 'Prop Config' + PATH_SLASHES + 'Single prop' + PATH_SLASHES +  'FoldvsStiff' + PATH_SLASHES # Change to what path your folder is in (MACS use '/')
+PATH_SLASHES = "\\"                             # CHANGE IF ON MAC OR LINUX      (MAC's use '/') 
+FOLDER_PATH = '..' + PATH_SLASHES + 'Data_scripts' + PATH_SLASHES + 'Data' + PATH_SLASHES + 'Pitch Config' + PATH_SLASHES + '18vs16' + PATH_SLASHES
+# Change to what path your folder is in (MACS use '/')
 
 # Index of where each value in a row of a csv file
 PWM_INDEX = 0
@@ -58,15 +58,17 @@ def get_data(filename: str) -> list[LF]:
         good_data (list[LF]): 2d list with data from file. Each new list is the next row.
     """
     
-    raw_data =  control_func(filename, PATH, FOLDER)     
+    raw_data =  control_func(filename, FOLDER_PATH)     
     
     # Format checks
-    data = error_check(raw_data)
+    data = error_check(raw_data, filename)
+    
     header_check(data, filename)
     row_check(data, filename)
     
     good_data = give_average_data(data[2:])
     return good_data
+
 
 def power_find(data: list[LF]) -> list[LF]:
     """Finds relative efficiency and thrust"""
@@ -79,7 +81,7 @@ def power_find(data: list[LF]) -> list[LF]:
     for row in data:
         top_motor_power = row[TOP_V_INDEX] * (row[TOP_I_INDEX] - top_I_offset)
         bottom_motor_power = row[BOTTOM_V_INDEX] * (row[BOTTOM_I_INDEX] - bottom_I_offset) # edit out for single prop
-        total_power = top_motor_power #+ bottom_motor_power
+        total_power = top_motor_power + bottom_motor_power
         
         if total_power == 0:
             continue
@@ -115,7 +117,7 @@ def efficiency_and_thrust_find(data: list[LF]) -> tuple[LF, LF]:
         
         top_motor_power = row[TOP_V_INDEX] * (row[TOP_I_INDEX] - top_I_offset)
         bottom_motor_power = row[BOTTOM_V_INDEX] * (row[BOTTOM_I_INDEX] - bottom_I_offset) # edit out for single prop
-        total_power = top_motor_power #+ bottom_motor_power
+        total_power = top_motor_power + bottom_motor_power
         
         # total_power = bottom_motor_power
         
@@ -166,7 +168,6 @@ def raw_data_dict(file_list: list[list]) -> dict[str, list[LF]]:
             
         all_the_data[filename] = data
         
-        print(all_the_data)
  
     return all_the_data      
               
@@ -311,7 +312,7 @@ def data_check(same_file_list: list) -> None:
 
 def analysis_main() -> None:
     """ Main func that will direct all others in this module"""
-    file_list = get_file_list(FOLDER, PATH_SLASHES)
+    file_list = get_file_list(FOLDER_PATH)
     same_file_list = same_files(file_list)
     
     combined_data_dict = raw_data_dict(same_file_list)
@@ -320,10 +321,10 @@ def analysis_main() -> None:
     data_check(same_file_list)  # Remove if confident in data
 
     # Comment out graphs you dont want
-    do_plot_PWMvsE(combined_data_dict)      # Plots PWM against efficiency
-    do_plot_PWMvsT(combined_data_dict)      # Plots PWM against Thrust
-    do_plot_TvsE(combined_data_dict)        # Plots Thrust against efficiency
-    do_plot_TvsP(combined_data_dict)        # Plots Power against Thrust
+    # do_plot_PWMvsE(combined_data_dict)      # Plots PWM against efficiency
+    # do_plot_PWMvsT(combined_data_dict)      # Plots PWM against Thrust
+    # do_plot_TvsE(combined_data_dict)        # Plots Thrust against efficiency
+    # do_plot_TvsP(combined_data_dict)        # Plots Power against Thrust
     
 analysis_main()
 

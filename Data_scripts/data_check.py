@@ -20,11 +20,12 @@ EXPECTED_ROW_SIZE = 6
 
 LF = list[float]
 
-def error_check(raw_data: list[Union[LF, list[str], str]]) -> list[Union[LF, list[str], str]]:
+def error_check(raw_data: list[Union[LF, list[str], str]], filename: str) -> list[Union[LF, list[str], str]]:
     """ Removes all non int or float data except the header and time data
 
     Args:
         raw_data (list[Union[LF, list[str], str]]): All elements from original file in 2d list
+        filename (str): Name of the file the data belongs to
 
     Returns:
         list[Union[LF, list[str], str]]: 2d list of processed data
@@ -34,7 +35,6 @@ def error_check(raw_data: list[Union[LF, list[str], str]]) -> list[Union[LF, lis
     row_index = 0
     
     for row in raw_data:
-        
         add_row = True
         col_index = 0
         
@@ -43,20 +43,25 @@ def error_check(raw_data: list[Union[LF, list[str], str]]) -> list[Union[LF, lis
             try:
                 row[col_index] = float(row[col_index])
                 
-            except ValueError:
+            except:# ValueError or AttributeError:
                 add_row = False
         
             col_index += 1
+            
         
-        if add_row == True or row[0] == EXPECTED_LABEL or row[0].startswith("Time:"):
+        if add_row == True:
             processed_data.append(row)
         
-        elif add_row == False and row_index != 0:
-            print(Fore.RED + f"\nInvalid value at row {row_index}.\nThis row was removed\n")
+        elif add_row == False and (row[0] != EXPECTED_LABEL or row[0].startswith("Time:")) and row_index != 0:
+            print(Fore.RED + f"\nInvalid value at row {row_index + 1}.\nThis row was removed inside {filename}\n" + Fore.RESET)
+            
+        elif row[0] == EXPECTED_LABEL or row[0].startswith("Time:"):
+            processed_data.append(row)
             
         row_index += 1
         
-    return processed_data   
+        
+    return processed_data
 
 
 def header_check(data: list[LF], filename: str) -> None:
