@@ -22,10 +22,11 @@ from data_check import header_check, row_check, error_check
 from plotting import general_plotter, test_plotter
 from plotter_helper import Graph_Labels
 from file_combine import get_file_list, same_files
+from data_functions import give_power_list, give_thrust_list, give_efficiency_list
 
 # Where desired csv files are located
 PATH_SLASHES = "\\"                             # CHANGE IF ON MAC OR LINUX      (MAC's use '/') 
-FOLDER_PATH = '..' + PATH_SLASHES + 'Data_scripts' + PATH_SLASHES + 'Data' + PATH_SLASHES + 'Pitch Config' + PATH_SLASHES + '18vs16' + PATH_SLASHES
+FOLDER_PATH = '..' + PATH_SLASHES + 'Data_scripts' + PATH_SLASHES + 'Data' + PATH_SLASHES + 'Pitch Config' + PATH_SLASHES + 'Front 140vs160' + PATH_SLASHES + 'Pre fine pitch' + PATH_SLASHES
 # Change to what path your folder is in (MACS use '/')
 
 # Index of where each value in a row of a csv file
@@ -36,7 +37,8 @@ LOAD_INDEX = 5
 
 # Constants
 SCALE_FACTOR = 100
-EFFICIENCY_CUTOFF = 0.1
+EFFICIENCY_CUTOFF = 0.08
+LOAD_CUTOFF = 0.2
 
 # Label settings used for each graph type
 PWM_vs_T_Labels = Graph_Labels("PWM", "Thurst (kg)", 1000, 50, True, 100, 25, 1, 0.25)
@@ -68,71 +70,6 @@ def get_data(filename: str) -> list[LF]:
     
     good_data = give_average_data(data[2:])
     return good_data
-
-
-def power_find(data: list[LF]) -> list[LF]:
-    """Finds relative efficiency and thrust"""
-    power_list = list()
-    
-    top_I_offset = data[0][TOP_I_INDEX]
-    bottom_I_offset = data[0][BOTTOM_I_INDEX]
-
-    
-    for row in data:
-        top_motor_power = row[TOP_V_INDEX] * (row[TOP_I_INDEX] - top_I_offset)
-        bottom_motor_power = row[BOTTOM_V_INDEX] * (row[BOTTOM_I_INDEX] - bottom_I_offset) # edit out for single prop
-        total_power = top_motor_power + bottom_motor_power
-        
-        if total_power == 0:
-            continue
-        
-        power_list.append(total_power)
-        
-    return power_list
-
-
-def efficiency_and_thrust_find(data: list[LF]) -> tuple[LF, LF]:
-    """ Calculates the relative efficient with the corresponding thrust output.
-    
-        Note: If you are doing single prop testing you may want to only include
-        motor you are using as part of your calculations. This means only including
-        the motor you are using foe the total power variable.
-
-    Args:
-        data (list[LF]): The data ready to be used
-
-    Returns:
-        tuple[LF, LF]: Relative efficient with the corresponding thrust output
-    """
-    
-    thrust_list = list()
-    efficiency_list = list()
-    
-    top_I_offset = data[0][TOP_I_INDEX]
-    bottom_I_offset = data[0][BOTTOM_I_INDEX]
-
-    
-    for row in data:
-        thrust = row[LOAD_INDEX]
-        
-        top_motor_power = row[TOP_V_INDEX] * (row[TOP_I_INDEX] - top_I_offset)
-        bottom_motor_power = row[BOTTOM_V_INDEX] * (row[BOTTOM_I_INDEX] - bottom_I_offset) # edit out for single prop
-        total_power = top_motor_power + bottom_motor_power
-        
-        # total_power = bottom_motor_power
-        
-        if total_power == 0:
-            continue
-        
-        efficiency = SCALE_FACTOR * (thrust / total_power)
-        
-        if efficiency < EFFICIENCY_CUTOFF or efficiency > 2.5:
-            continue
-        
-        thrust_list.append(thrust)
-        efficiency_list.append(efficiency)
-          
-    return efficiency_list, thrust_list
 
 
 def raw_data_dict(file_list: list[list]) -> dict[str, list[LF]]:
@@ -183,7 +120,7 @@ def do_plot_PWMvsE(file_dict: dict[str, list[LF]]) -> None:
     plotting_dict = dict()
     
     for file_name, data in file_dict.items():
-        efficiency_list, dw = efficiency_and_thrust_find(data)
+        efficiency_list = give_efficiency_list(data)
         PWM_list = []
         
         for row in data:
@@ -206,7 +143,7 @@ def do_plot_PWMvsT(file_dict: dict[str, list[LF]]) -> None:
     
     
     for file_name, data in file_dict.items():
-        efficiency_list, thrust_list = efficiency_and_thrust_find(data)
+        thrust_list = give_thrust_list(data)
         PWM_list = []
         
         for row in data:
@@ -230,7 +167,8 @@ def do_plot_TvsE(file_dict: dict[str, list[LF]]) -> None:
     plotting_dict = dict()
 
     for file_name, data in file_dict.items():
-        efficiency_list, thrust_list = efficiency_and_thrust_find(data)
+        efficiency_list = give_efficiency_list(data)
+        thrust_list = give_thrust_list(data)
         plotting_dict[file_name] = [thrust_list, efficiency_list]
         
       
@@ -248,8 +186,8 @@ def do_plot_TvsP(file_dict: dict[str, list[LF]]) -> None:
     plotting_dict = dict()
 
     for file_name, data in file_dict.items():
-        efficiency_list, thrust_list = efficiency_and_thrust_find(data)
-        power_list = power_find(data)
+        thrust_list = give_thrust_list(data)
+        power_list = give_power_list(data)
         plotting_dict[file_name] = [thrust_list, power_list]
         
       
@@ -293,7 +231,8 @@ def plot_data_check(file_dict: dict[str, list[LF]]) -> None:
     plotting_dict = dict()
     
     for file_name, data in file_dict.items():
-        efficiency_list, thrust_list = efficiency_and_thrust_find(data)
+        efficiency_list = give_efficiency_list(data)
+        thrust_list = give_thrust_list(data)
         plotting_dict[file_name] = [thrust_list, efficiency_list]
       
     test_plotter(plotting_dict, T_vs_E_Labels)
@@ -309,6 +248,7 @@ def data_check(same_file_list: list) -> None:
 
     for file in file_dict:
         plot_data_check(file)
+        
 
 def analysis_main() -> None:
     """ Main func that will direct all others in this module"""
@@ -321,10 +261,10 @@ def analysis_main() -> None:
     data_check(same_file_list)  # Remove if confident in data
 
     # Comment out graphs you dont want
-    # do_plot_PWMvsE(combined_data_dict)      # Plots PWM against efficiency
-    # do_plot_PWMvsT(combined_data_dict)      # Plots PWM against Thrust
-    # do_plot_TvsE(combined_data_dict)        # Plots Thrust against efficiency
-    # do_plot_TvsP(combined_data_dict)        # Plots Power against Thrust
+    do_plot_PWMvsE(combined_data_dict)      # Plots PWM against efficiency
+    do_plot_PWMvsT(combined_data_dict)      # Plots PWM against Thrust
+    do_plot_TvsE(combined_data_dict)        # Plots Thrust against efficiency
+    do_plot_TvsP(combined_data_dict)        # Plots Power against Thrust
     
 analysis_main()
 
