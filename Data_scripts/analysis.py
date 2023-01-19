@@ -26,7 +26,7 @@ from data_functions import give_power_list, give_thrust_list, give_efficiency_li
 
 # Where desired csv files are located
 PATH_SLASHES = "\\"                             # CHANGE IF ON MAC OR LINUX      (MAC's use '/') 
-FOLDER_PATH = '..' + PATH_SLASHES + 'Data_scripts' + PATH_SLASHES + 'Data' + PATH_SLASHES + 'Pitch Config' + PATH_SLASHES + 'Front 140vs160' + PATH_SLASHES + 'Pre fine pitch' + PATH_SLASHES
+FOLDER_PATH = '..' + PATH_SLASHES + 'Data_scripts' + PATH_SLASHES + 'Data' + PATH_SLASHES + 'Pitch Config' + PATH_SLASHES + 'Pitch matching' + PATH_SLASHES + '160-160' + PATH_SLASHES + '18.3' + PATH_SLASHES
 # Change to what path your folder is in (MACS use '/')
 
 # Index of where each value in a row of a csv file
@@ -48,6 +48,7 @@ T_vs_P_Labels = Graph_Labels("Thrust (kg)", "Power (W)", 0, 1, True, 1, 0.25, 20
 
 # Short hand as this data type is used extensively
 LF = list[float]    
+
 
 
 def get_data(filename: str) -> list[LF]:

@@ -10,6 +10,12 @@ import numpy as np
 LF = list[float]
 
 
+class Do_plot:
+    """ Class that allows to plot different things"""
+    
+    def __init__(self, file_dict: dict[str, list[LF]]) -> None:
+        self.file_dict = file_dict
+
 class Graph_Labels:
     """ Class that has all the labels and graph values for graphing to make it look pretty"""
     

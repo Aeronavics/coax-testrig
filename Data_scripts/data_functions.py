@@ -31,13 +31,36 @@ def calc_power(voltage: float, current: float) -> float:
     
     return voltage * current
 
+
+def give_current_offset(data: list[LF], index: int) -> float:
+    """ Gives the current offset
+
+    Args:
+        data (list[LF]): 2d lost of data ready to be used_
+        index (int): desired index for columns of data where current is
+
+    Returns:
+        float: current offset
+    """
+    
+    current_offset_list = list()
+    
+    for row in data:
+        if row[LOAD_INDEX] < LOAD_CUTOFF:
+            current_offset_list.append(row[index])
+    
+    current_offset = sum(current_offset_list) / len(current_offset_list)
+    
+    return current_offset
+        
+        
+
 def give_power_list(data: list[LF]) -> list[LF]:
     """Finds relative efficiency and thrust"""
     power_list = list()
     
-    top_I_offset = data[0][TOP_I_INDEX]
-    bottom_I_offset = data[0][BOTTOM_I_INDEX]
-
+    top_I_offset = give_current_offset(data, TOP_I_INDEX)
+    bottom_I_offset = give_current_offset(data, BOTTOM_I_INDEX)
     
     for row in data:
         top_motor_power = calc_power(row[TOP_V_INDEX], (row[TOP_I_INDEX] - top_I_offset))
@@ -60,7 +83,7 @@ def give_efficiency_list(data: list[LF]) -> LF:
         the motor you are using foe the total power variable.
 
     Args:
-        data (list[LF]): The data ready to be used
+        data (list[LF]): 2d list of data ready to be used
 
     Returns:
         LF: Returns a list of valid efficiency's
@@ -70,9 +93,6 @@ def give_efficiency_list(data: list[LF]) -> LF:
     
     power_list = give_power_list(data)
     thrust_list = give_thrust_list(data)
-    
-    print(power_list)
-    print(thrust_list)
     
     try:
         assert(len(power_list) == len(thrust_list))
@@ -92,7 +112,7 @@ def give_thrust_list(data: list[LF]) -> LF:
     """ Returns a list of thrusts
 
     Args:
-        data (list[LF]): The data ready to be used
+        data (list[LF]): 2d list of data ready to be used
 
     Returns:
         LF: Returns a list of valid thrusts
