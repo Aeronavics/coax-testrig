@@ -48,7 +48,7 @@ def general_plotter(plotting_dict: dict, labels: Graph_Labels) -> None:
     ax.legend(file_list)
     
     # Sets titles and labels
-    ax.set_title("lol")
+    ax.set_title(labels.title)
     ax.set_xlabel(labels.xlabel)
     ax.set_ylabel(labels.ylabel)
     
@@ -56,7 +56,7 @@ def general_plotter(plotting_dict: dict, labels: Graph_Labels) -> None:
     ax.set_xlim(labels.xstart, labels.max_ytick(lim_x, NEAT_OFFSET))
     ax.set_ylim(0, labels.max_ytick(lim_y, NEAT_OFFSET))
     
-    # Sets the grid lines and ticks for x an dy
+    # Sets the grid lines and ticks for x and y
     xmajor_ticks = np.arange(labels.xstart, labels.max_xtick(lim_x, NEAT_OFFSET), labels.Mxticks)
     xminor_ticks = np.arange(labels.xstart, labels.max_xtick(lim_x, NEAT_OFFSET), labels.mxticks)
     

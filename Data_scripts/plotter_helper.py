@@ -9,17 +9,26 @@ import numpy as np
 
 LF = list[float]
 
-
-class Do_plot:
-    """ Class that allows to plot different things"""
-    
-    def __init__(self, file_dict: dict[str, list[LF]]) -> None:
-        self.file_dict = file_dict
-
 class Graph_Labels:
     """ Class that has all the labels and graph values for graphing to make it look pretty"""
-    
-    def __init__(self, xlabel: str, ylabel: str, xstart: int, offset_multiply: float, LoBF: bool, Mxticks: float, mxticks: float, Myticks: float, myticks: float):
+
+    def __init__(self, title: str, xlabel: str, ylabel: str, xstart: int, offset_multiply: float, LoBF: bool, Mxticks: float, mxticks: float, Myticks: float, myticks: float):
+        """ Initializes the class variables
+
+        Args:
+            title (str): Title of the graph
+            xlabel (str): What is being plotted in x
+            ylabel (str): What is being plotted in y
+            xstart (int): Where the graph will begin in the x direction
+            offset_multiply (float): Scaler factor to make graph look nice
+            LoBF (bool): True means line of best fit will be plotted.
+            Mxticks (float): Major x ticks which are labeled
+            mxticks (float): Minor x ticks which are unlabeled
+            Myticks (float): Major y ticks which are labeled
+            myticks (float): Minor y ticks which are unlabeled
+        """
+        
+        self.title = title
         self.xlabel = xlabel
         self.ylabel = ylabel
         self.xstart = xstart
