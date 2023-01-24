@@ -14,6 +14,7 @@
 # Library Imports
 from colorama import Fore
 import copy
+from typing import Callable
 
 # Module Imports
 from average_data import give_average_data
@@ -26,7 +27,7 @@ from data_functions import give_power_list, give_thrust_list, give_efficiency_li
 
 # Where desired csv files are located
 PATH_SLASHES = "\\"                             # CHANGE IF ON MAC OR LINUX      (MAC's use '/') 
-FOLDER_PATH = '..' + PATH_SLASHES + 'Data_scripts' + PATH_SLASHES + 'Data' + PATH_SLASHES + 'Pitch Config' + PATH_SLASHES + 'Pitch matching' + PATH_SLASHES + '160-160' + PATH_SLASHES + '18.3' + PATH_SLASHES
+FOLDER_PATH = '..' + PATH_SLASHES + 'Data_scripts' + PATH_SLASHES + 'Data' + PATH_SLASHES + 'Prop Config' + PATH_SLASHES + 'Single prop' + PATH_SLASHES + "160" + PATH_SLASHES
 # Change to what path your folder is in (MACS use '/')
 
 # Index of where each value in a row of a csv file
@@ -44,7 +45,7 @@ LOAD_CUTOFF = 0.2
 PWM_vs_T_Labels = Graph_Labels( "PWM against Thrust", "PWM", "Thurst (kg)", 1000, 50, True, 100, 25, 1, 0.25)
 PWM_vs_E_Labels =  Graph_Labels("PWM against Efficiency", "PWM", "Relative Efficiency (Thrust / Power)", 1000, 50, True, 100, 25, 0.5, 0.125)
 T_vs_E_Labels =  Graph_Labels( "Thrust against Efficiency", "Thrust (kg)", "Relative Efficiency (Thrust / Power)", 0, 1, True, 1, 0.25, 0.5, 0.125)
-T_vs_P_Labels = Graph_Labels("Thrust against Power", "Thrust (kg)", "Power (W)", 0, 1, True, 1, 0.25, 200, 50)
+T_vs_P_Labels = Graph_Labels("Thrust against Power", "Power (W)", "Thrust (kg)", 0, 1, True, 200, 50, 1, 0.25)
 
 # Short hand as this data type is used extensively
 LF = list[float]    
@@ -165,7 +166,7 @@ def data_check(same_file_list: list) -> None:
         plot_data_check(file)
 
         
-def get_ready_plot(file_dict: dict[str, list[LF]], x_func, y_func, labels: Graph_Labels) -> None:
+def get_ready_plot(file_dict: dict[str, list[LF]], x_func: Callable[[list[LF]], LF], y_func: Callable[[list[LF]], LF], labels: Graph_Labels) -> None:
     """ General way of processing the data for specific graphs without the need of many functions.
 
     Args:
@@ -200,13 +201,13 @@ def analysis_main() -> None:
     
     
     # Graphs same test against each other for manual error checking
-    data_check(same_file_list)  # Remove if confident in data
+    # data_check(same_file_list)  # Remove if confident in data
     
     # Comment out graphs you dont want
-    get_ready_plot(combined_data_dict, give_PWM_list, give_thrust_list, PWM_vs_T_Labels)
-    get_ready_plot(combined_data_dict, give_PWM_list, give_efficiency_list, PWM_vs_E_Labels)
+    # get_ready_plot(combined_data_dict, give_PWM_list, give_thrust_list, PWM_vs_T_Labels)
+    # get_ready_plot(combined_data_dict, give_PWM_list, give_efficiency_list, PWM_vs_E_Labels)
     get_ready_plot(combined_data_dict, give_thrust_list, give_efficiency_list, T_vs_E_Labels)
-    get_ready_plot(combined_data_dict, give_thrust_list, give_power_list, T_vs_P_Labels)
+    get_ready_plot(combined_data_dict, give_power_list, give_thrust_list, T_vs_P_Labels)
     
 analysis_main()
 

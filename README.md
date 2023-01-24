@@ -122,4 +122,7 @@ This assumes you have used the data collection method **without the GUI**. This 
     ```
 ### Trouble Shooting
 
-## Contact
+Firstly if you have collected the data usign the GUI then this is the wrong page for you. Please go to the GUI_final branch.
+
+The most common issue withe analysis scripts is the file path so please **triple check** your data is there and you have named the path correctly.
+

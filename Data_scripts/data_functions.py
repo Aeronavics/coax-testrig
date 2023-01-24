@@ -9,6 +9,7 @@
 # Libary imports
 import os
 from colorama import Fore
+import mypy
 
 # Index of where each value in a row of a csv file
 PWM_INDEX = 0
@@ -19,7 +20,7 @@ LOAD_INDEX = 5
 # Constants
 SCALE_FACTOR = 100
 EFFICIENCY_CUTOFF = 0.08
-LOAD_CUTOFF = 0.2
+LOAD_CUTOFF = 0.1
 
 LF = list[float]
 
@@ -65,9 +66,9 @@ def give_power_list(data: list[LF]) -> list[LF]:
     for row in data:
         top_motor_power = calc_power(row[TOP_V_INDEX], (row[TOP_I_INDEX] - top_I_offset))
         bottom_motor_power = calc_power(row[BOTTOM_V_INDEX], (row[BOTTOM_I_INDEX] - bottom_I_offset))
-        total_power = top_motor_power + bottom_motor_power
+        total_power = top_motor_power #+ bottom_motor_power
         
-        if total_power == 0:
+        if total_power <= 0:
             continue
         
         power_list.append(total_power)
@@ -94,12 +95,13 @@ def give_efficiency_list(data: list[LF]) -> LF:
     power_list = give_power_list(data)
     thrust_list = give_thrust_list(data)
     
+
+    
     try:
         assert(len(power_list) == len(thrust_list))
     
     except AssertionError:
         print(Fore.RED + f"ERROR\nPower list and Thrust list are not the same length")
-        os.abort()
         
     for i in range(0, len(thrust_list)):
         efficiency = SCALE_FACTOR * (thrust_list[i] / power_list[i])
