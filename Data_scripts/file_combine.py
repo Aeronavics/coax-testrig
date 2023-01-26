@@ -105,3 +105,5 @@ def get_file_list(FOLDER: str) -> list:
                 print(entry.name)
             
     return file_list
+
+

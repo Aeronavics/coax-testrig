@@ -66,7 +66,7 @@ def give_power_list(data: list[LF]) -> list[LF]:
     for row in data:
         top_motor_power = calc_power(row[TOP_V_INDEX], (row[TOP_I_INDEX] - top_I_offset))
         bottom_motor_power = calc_power(row[BOTTOM_V_INDEX], (row[BOTTOM_I_INDEX] - bottom_I_offset))
-        total_power = top_motor_power #+ bottom_motor_power
+        total_power = top_motor_power + bottom_motor_power
         
         if total_power <= 0:
             continue

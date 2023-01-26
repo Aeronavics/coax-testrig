@@ -27,7 +27,7 @@ from data_functions import give_power_list, give_thrust_list, give_efficiency_li
 
 # Where desired csv files are located
 PATH_SLASHES = "\\"                             # CHANGE IF ON MAC OR LINUX      (MAC's use '/') 
-FOLDER_PATH = '..' + PATH_SLASHES + 'Data_scripts' + PATH_SLASHES + 'Data' + PATH_SLASHES + 'Prop Config' + PATH_SLASHES + 'Single prop' + PATH_SLASHES + "160" + PATH_SLASHES
+FOLDER_PATH = '..' + PATH_SLASHES + 'Data_scripts' + PATH_SLASHES + 'Data' + PATH_SLASHES + 'Prop Config' + PATH_SLASHES + "Single prop" + PATH_SLASHES + '160' + PATH_SLASHES
 # Change to what path your folder is in (MACS use '/')
 
 # Index of where each value in a row of a csv file
@@ -65,9 +65,6 @@ def get_data(filename: str) -> list[LF]:
     
     # Format checks
     data = error_check(raw_data, filename)
-    
-    header_check(data, filename)
-    row_check(data, filename)
     
     good_data = give_average_data(data[2:])
     return good_data
@@ -191,23 +188,35 @@ def get_ready_plot(file_dict: dict[str, list[LF]], x_func: Callable[[list[LF]], 
         
     general_plotter(plotting_dict, labels)
         
-
-def analysis_main() -> None:
+        
+def give_same_file_list() -> None:
     """ Main func that will direct all others in this module"""
     file_list = get_file_list(FOLDER_PATH)
     same_file_list = same_files(file_list)
     
-    combined_data_dict = raw_data_dict(same_file_list)
-    
-    
     # Graphs same test against each other for manual error checking
-    # data_check(same_file_list)  # Remove if confident in data
+    
+    return same_file_list
+
+
+def give_combined_data_dict(same_file_list):
+    """ Returns the main data"""
+    
+    combined_data_dict = raw_data_dict(same_file_list)
+    return combined_data_dict
+    
+
+def plot_tests():
+    """ Plots the data"""
+    same_file_list =  give_same_file_list()
+    combined_data_dict = give_combined_data_dict(same_file_list)
+    
+    data_check(same_file_list)  
     
     # Comment out graphs you dont want
-    # get_ready_plot(combined_data_dict, give_PWM_list, give_thrust_list, PWM_vs_T_Labels)
-    # get_ready_plot(combined_data_dict, give_PWM_list, give_efficiency_list, PWM_vs_E_Labels)
+    get_ready_plot(combined_data_dict, give_PWM_list, give_thrust_list, PWM_vs_T_Labels)
+    get_ready_plot(combined_data_dict, give_PWM_list, give_efficiency_list, PWM_vs_E_Labels)
     get_ready_plot(combined_data_dict, give_thrust_list, give_efficiency_list, T_vs_E_Labels)
     get_ready_plot(combined_data_dict, give_power_list, give_thrust_list, T_vs_P_Labels)
-    
-analysis_main()
 
+# plot_tests()
