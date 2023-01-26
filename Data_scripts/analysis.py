@@ -7,7 +7,7 @@
 #                 Calls plotting module to then plot the
 #                 results
 #
-#               CODE IS EXECUTED FROM HERE!!!
+#               MAIN CODE IS EXECUTED FROM HERE!!!
 # =========================================================
 
 

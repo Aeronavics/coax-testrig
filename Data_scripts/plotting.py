@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 # Module Imports
 from plotter_helper import *
 
-NEAT_OFFSET = 0.3
+NEAT_OFFSET = 0.3 # NEEDS TO CHANGE INTO GRAPH LABELS
 LINE_WIDTH = 0.7
 
     
