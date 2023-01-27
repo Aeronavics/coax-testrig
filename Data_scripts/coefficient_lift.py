@@ -109,5 +109,3 @@ def CL_director() -> None:
     PWMvsCL(combined_data_dict)
     
 CL_director()
-    
-    

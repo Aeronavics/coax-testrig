@@ -98,6 +98,7 @@ def function_sub(coefficients: np.ndarray, x: float) -> float:
     return y
 
 
+# OLD CURVE FITTING FUNCTIONS
 def exp_estimate(data: LF) -> np.ndarray:
     """exp model least squares estimate (redundant)"""
     x = data[0]

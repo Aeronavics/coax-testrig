@@ -9,7 +9,6 @@
 import csv
 from colorama import Fore
 from typing import Union
-from os import abort
 
 EXPECTED_LABEL = "Motor PWM"            # This is the first label you expect to see
                                        

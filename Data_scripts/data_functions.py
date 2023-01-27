@@ -127,6 +127,7 @@ def give_thrust_list(data: list[LF]) -> LF:
             
     return thrust_list
 
+
 def give_PWM_list(data: list[LF]) -> LF:
     """ Returns a list of PWMs
 
@@ -141,7 +142,5 @@ def give_PWM_list(data: list[LF]) -> LF:
         
     for row in data:
         PWM_list.append(row[PWM_INDEX])
-    
-    # PWM_list.pop(0) # DANGER LINE. Assuming the first value will not be included (true in majority cases)
     
     return PWM_list
