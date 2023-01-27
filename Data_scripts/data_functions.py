@@ -6,10 +6,8 @@
 #
 # =========================================================
 
-# Libary imports
-import os
+# Library imports
 from colorama import Fore
-import mypy
 
 # Index of where each value in a row of a csv file
 PWM_INDEX = 0
@@ -21,6 +19,7 @@ LOAD_INDEX = 5
 SCALE_FACTOR = 100
 EFFICIENCY_CUTOFF = 0.08
 LOAD_CUTOFF = 0.1
+IDLE_I = 0.18
 
 LF = list[float]
 
@@ -50,7 +49,7 @@ def give_current_offset(data: list[LF], index: int) -> float:
         if row[LOAD_INDEX] < LOAD_CUTOFF:
             current_offset_list.append(row[index])
     
-    current_offset = sum(current_offset_list) / len(current_offset_list)
+    current_offset = (sum(current_offset_list) / len(current_offset_list)) / 2
     
     return current_offset
         
@@ -63,12 +62,12 @@ def give_power_list(data: list[LF]) -> list[LF]:
     top_I_offset = give_current_offset(data, TOP_I_INDEX)
     bottom_I_offset = give_current_offset(data, BOTTOM_I_INDEX)
     
-    for row in data:
+    for row in data[1:]:
         top_motor_power = calc_power(row[TOP_V_INDEX], (row[TOP_I_INDEX] - top_I_offset))
         bottom_motor_power = calc_power(row[BOTTOM_V_INDEX], (row[BOTTOM_I_INDEX] - bottom_I_offset))
         total_power = top_motor_power + bottom_motor_power
         
-        if total_power <= 0:
+        if total_power <= 0.18:
             continue
         
         power_list.append(total_power)
@@ -94,9 +93,7 @@ def give_efficiency_list(data: list[LF]) -> LF:
     
     power_list = give_power_list(data)
     thrust_list = give_thrust_list(data)
-    
-
-    
+     
     try:
         assert(len(power_list) == len(thrust_list))
     
