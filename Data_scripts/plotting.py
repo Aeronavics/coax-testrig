@@ -13,7 +13,6 @@ import matplotlib.pyplot as plt
 # Module Imports
 from plotter_helper import *
 
-NEAT_OFFSET = 0.3 # NEEDS TO CHANGE INTO GRAPH LABELS
 LINE_WIDTH = 0.7
 
     
@@ -40,6 +39,7 @@ def general_plotter(plotting_dict: dict, labels: Graph_Labels) -> None:
             plt.scatter(TvsE_data[0],TvsE_data[1], marker='o')
             x = np.linspace(labels.xstart, max(TvsE_data[0]) , 100)
             ax.plot(x, function_sub(coefficients, x))
+            
         else: 
             ax.plot(TvsE_data[0],TvsE_data[1], marker='o')
         
@@ -53,80 +53,15 @@ def general_plotter(plotting_dict: dict, labels: Graph_Labels) -> None:
     ax.set_ylabel(labels.ylabel)
     
     # Sets graph min and max values that will be shown
-    ax.set_xlim(labels.xstart, labels.max_ytick(lim_x, NEAT_OFFSET))
-    ax.set_ylim(0, labels.max_ytick(lim_y, NEAT_OFFSET))
+    ax.set_xlim(labels.xstart, labels.max_ytick(lim_x, labels.offset))
+    ax.set_ylim(0, labels.max_ytick(lim_y, labels.offset))
     
     # Sets the grid lines and ticks for x and y
-    xmajor_ticks = np.arange(labels.xstart, labels.max_xtick(lim_x, NEAT_OFFSET), labels.Mxticks)
-    xminor_ticks = np.arange(labels.xstart, labels.max_xtick(lim_x, NEAT_OFFSET), labels.mxticks)
+    xmajor_ticks = np.arange(labels.xstart, labels.max_xtick(lim_x, labels.offset), labels.Mxticks)
+    xminor_ticks = np.arange(labels.xstart, labels.max_xtick(lim_x, labels.offset), labels.mxticks)
     
-    ymajor_ticks = np.arange(0, labels.max_ytick(lim_y, NEAT_OFFSET), labels.Myticks)
-    yminor_ticks = np.arange(0, labels.max_ytick(lim_y, NEAT_OFFSET), labels.myticks)
-    
-    ax.set_xticks(xmajor_ticks)
-    ax.set_xticks(xminor_ticks, minor=True)
-    
-    ax.set_yticks(ymajor_ticks)
-    ax.set_yticks(yminor_ticks, minor=True)
-    
-    # Specify more info about the grid lines
-    ax.grid(which='minor', linewidth=LINE_WIDTH)
-    ax.grid(which='major', linewidth=LINE_WIDTH, color ='#252b39')
-    
-    plt.show()
-    
-
-def test_plotter(plotting_dict: dict, labels: Graph_Labels) -> None:
-    """ Near identical function as general_plotter but tailored for the test types
-    
-        Will probably be deleted and will be implemented into the general plotter with
-        an extra parameter in graph labels
-
-    Args:
-        plotting_dict (dict): Values that will be plotted against each other
-        labels (Graph_Labels): Preset values to make the graph look nice
-    """
-    
-    fig, ax = plt.subplots()
-    lim_x = 0
-    lim_y = 0
-    
-    for TvsE_data in plotting_dict.values():
-        coefficients = least_squares_estimate(TvsE_data)
-        
-        lim_x = max(max(TvsE_data[0]), lim_x)
-        lim_y = max(max(TvsE_data[1]), lim_y)
-        
-        plt.scatter(TvsE_data[0],TvsE_data[1], marker='o')
-        
-        x = np.linspace(labels.xstart, max(TvsE_data[0]) , 100)
-        
-        ax.plot(x, function_sub(coefficients, x))
-    
-    file_list = list()
-    
-    for file in plotting_dict.keys():
-        print(file)
-        file_list.append(file)
-        file_list.append("fitted " + file)
-    
-    ax.legend(file_list)
-    
-    # Sets titles and labels
-    ax.set_title("CHECK THE DATA")
-    ax.set_xlabel(labels.xlabel)
-    ax.set_ylabel(labels.ylabel)
-    
-    # Sets graph min and max values that will be shown
-    ax.set_xlim(labels.xstart, labels.max_ytick(lim_x, NEAT_OFFSET))
-    ax.set_ylim(0 , labels.max_ytick(lim_y, NEAT_OFFSET))
-    
-    # Sets the grid lines and ticks for x an dy
-    xmajor_ticks = np.arange(labels.xstart, labels.max_xtick(lim_x, NEAT_OFFSET), labels.Mxticks)
-    xminor_ticks = np.arange(labels.xstart, labels.max_xtick(lim_x, NEAT_OFFSET), labels.mxticks)
-    
-    ymajor_ticks = np.arange(0, labels.max_ytick(lim_y, NEAT_OFFSET), labels.Myticks)
-    yminor_ticks = np.arange(0, labels.max_ytick(lim_y, NEAT_OFFSET), labels.myticks)
+    ymajor_ticks = np.arange(0, labels.max_ytick(lim_y, labels.offset), labels.Myticks)
+    yminor_ticks = np.arange(0, labels.max_ytick(lim_y, labels.offset), labels.myticks)
     
     ax.set_xticks(xmajor_ticks)
     ax.set_xticks(xminor_ticks, minor=True)

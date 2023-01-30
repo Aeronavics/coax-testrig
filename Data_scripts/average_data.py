@@ -83,11 +83,12 @@ def divide_by_occurrence(row_data: list[LF], occurrence_num: list[int]) -> LF:
     
     for i in range(1, len(row_data)):
         row_data[i] /= occurrence_num
+        
     return row_data
         
     
 def avg_data_func(combined_data: list[LF], occurrence_list: list[int]) -> list[LF]:
-    """_summary_
+    """ The function that averages the data and returns the 2d list
 
     Args:
         combined_data (list[LF]): Summed data based on PWM
@@ -99,6 +100,7 @@ def avg_data_func(combined_data: list[LF], occurrence_list: list[int]) -> list[L
     
     avg_data = list()
     i = 0
+    
     while i in range(0, len(combined_data)):
         avg_row = divide_by_occurrence(combined_data[i], occurrence_list[i])
         avg_data.append(avg_row)

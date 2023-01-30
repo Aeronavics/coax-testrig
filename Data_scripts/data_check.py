@@ -43,7 +43,7 @@ def error_check(raw_data: list[Union[LF, list[str], str]], filename: str) -> lis
             try:
                 row[col_index] = float(row[col_index])
                 
-            except:# ValueError or AttributeError:
+            except:
                 add_row = False
         
             col_index += 1
@@ -59,7 +59,6 @@ def error_check(raw_data: list[Union[LF, list[str], str]], filename: str) -> lis
             processed_data.append(row)
             
         row_index += 1
-        
         
     return processed_data
 

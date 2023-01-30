@@ -106,6 +106,7 @@ def CL_director() -> None:
     """ Directs all functions in this module"""
     same_file_list = give_same_file_list(FOLDER_PATH)
     combined_data_dict = give_combined_data_dict(same_file_list, FOLDER_PATH)
+    print(combined_data_dict)
     PWMvsCL(combined_data_dict)
     
 CL_director()

@@ -1,8 +1,8 @@
 # =========================================================
 # AUTHOR        : Oliver Clements
 # CREATE DATE   : 19/1/23
-# PURPOSE       : This module contains math on the data to
-#               : to give power etc.
+# PURPOSE       : This module contains math functions for
+#                 the data
 #
 # =========================================================
 
@@ -56,7 +56,14 @@ def give_current_offset(data: list[LF], index: int) -> float:
         
 
 def give_power_list(data: list[LF]) -> list[LF]:
-    """Finds relative efficiency and thrust"""
+    """ Calculates the electrical power used
+
+    Args:
+        data (list[LF]): The combined processed data from the data dict
+
+    Returns:
+        list[LF]: 2d list of power values where each sublist is a specific test type
+    """
     power_list = list()
     
     top_I_offset = give_current_offset(data, TOP_I_INDEX)

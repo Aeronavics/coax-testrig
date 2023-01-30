@@ -12,7 +12,7 @@ LF = list[float]
 class Graph_Labels:
     """ Class that has all the labels and graph values for graphing to make it look pretty"""
 
-    def __init__(self, title: str, xlabel: str, ylabel: str, xstart: int, offset_multiply: float, LoBF: bool, Mxticks: float, mxticks: float, Myticks: float, myticks: float):
+    def __init__(self, title: str, xlabel: str, ylabel: str, xstart: int, offset_multiply: float, LoBF: bool, Mxticks: float, mxticks: float, Myticks: float, myticks: float, offset: float):
         """ Initializes the class variables
 
         Args:
@@ -38,6 +38,7 @@ class Graph_Labels:
         self.mxticks = mxticks
         self.Myticks = Myticks
         self.myticks = myticks
+        self.offset = offset
         
         
     def max_xtick(self, lim_x: int, NEAT_OFFSET: float) -> float:
@@ -56,11 +57,11 @@ def ask_title() -> None:
 
    
 def give_file_list(plotting_dict: dict[str, list[LF]], LoBF: bool) -> list[str]:
-    """_summary_
+    """ Gets all the file names from the plotting dict by extracting the keys from it
 
     Args:
-        plotting_dict (dict[str, list[LF]]): _description_
-        LoBF (bool): _description_
+        plotting_dict (dict[str, list[LF]]): The plotting dict that contains 
+        LoBF (bool): bool whether to plot a least squares line of best fit
 
     Returns:
         list[str]: List of files 
@@ -98,7 +99,10 @@ def function_sub(coefficients: np.ndarray, x: float) -> float:
     return y
 
 
+#  ==========================
 # OLD CURVE FITTING FUNCTIONS
+#  ==========================
+
 def exp_estimate(data: LF) -> np.ndarray:
     """exp model least squares estimate (redundant)"""
     x = data[0]

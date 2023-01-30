@@ -14,21 +14,22 @@ from typing import Callable
 # Module Imports
 from plotter_helper import Graph_Labels
 from data_sort import give_same_file_list, give_combined_data_dict, raw_data_dict_check
-from plotting import general_plotter, test_plotter
+from plotting import general_plotter
 from data_functions import give_thrust_list, give_efficiency_list, give_power_list, give_PWM_list
 
 
 LF =list[float]
 
 # Label settings used for each graph type
-PWM_vs_T_Labels = Graph_Labels( "PWM against Thrust", "PWM", "Thurst (kg)", 1000, 50, True, 100, 25, 1, 0.25)
-PWM_vs_E_Labels =  Graph_Labels("PWM against Efficiency", "PWM", "Relative Efficiency (Thrust / Power)", 1000, 50, True, 100, 25, 0.5, 0.125)
-T_vs_E_Labels =  Graph_Labels( "Thrust against Efficiency", "Thrust (kg)", "Relative Efficiency (Thrust / Power)", 0, 1, True, 1, 0.25, 0.5, 0.125)
-T_vs_P_Labels = Graph_Labels("Thrust against Power", "Power (W)", "Thrust (kg)", 0, 1, True, 200, 50, 1, 0.25)
+PWM_vs_T_Labels = Graph_Labels( "PWM against Thrust", "PWM", "Thurst (kg)", 1000, 50, True, 100, 25, 1, 0.25, 1)
+PWM_vs_E_Labels =  Graph_Labels("PWM against Efficiency", "PWM", "Relative Efficiency (Thrust / Power)", 1000, 50, True, 100, 25, 0.5, 0.125, 1)
+T_vs_E_Labels =  Graph_Labels( "Thrust against Efficiency", "Thrust (kg)", "Relative Efficiency (Thrust / Power)", 0, 1, True, 1, 0.25, 0.5, 0.125, 0.15)
+T_vs_P_Labels = Graph_Labels("Thrust against Power", "Power (W)", "Thrust (kg)", 0, 1, True, 200, 50, 1, 0.25, 0.5)
+Compare_plots_Labels = Graph_Labels( "CHECK THE DATA", "Thrust (kg)", "Relative Efficiency (Thrust / Power)", 0, 1, True, 1, 0.25, 0.5, 0.125, 0.15)
 
 # Where desired csv files are located
 PATH_SLASHES = "\\"                             # CHANGE IF ON MAC OR LINUX      (MAC's use '/') 
-FOLDER_PATH = '..' + PATH_SLASHES + 'Data_scripts' + PATH_SLASHES + 'Data' + PATH_SLASHES + 'Prop Config' + PATH_SLASHES + "Single prop" + PATH_SLASHES + 'FoldvsStiff' + PATH_SLASHES
+FOLDER_PATH = '..' + PATH_SLASHES + 'Data_scripts' + PATH_SLASHES + 'Data' + PATH_SLASHES  + "Pitch matching" + PATH_SLASHES  +'160-160' + PATH_SLASHES + '18.3' + PATH_SLASHES
 # Change to what path your folder is in (MACS use '/')
 
 
@@ -46,7 +47,7 @@ def plot_data_check(file_dict: dict[str, list[LF]]) -> None:
         thrust_list = give_thrust_list(data)
         plotting_dict[file_name] = [thrust_list, efficiency_list]
       
-    test_plotter(plotting_dict, T_vs_E_Labels)
+    general_plotter(plotting_dict, Compare_plots_Labels)
     
 
 def data_check(same_file_list: list) -> None:
@@ -89,12 +90,12 @@ def get_ready_plot(file_dict: dict[str, list[LF]], x_func: Callable[[list[LF]], 
 
 
 def plot_tests():
-    """ Plots the data"""
+    """ Main function that calls functions to give the data dict.
+        Then plots the data"""
     same_file_list =  give_same_file_list(FOLDER_PATH)
     combined_data_dict = give_combined_data_dict(same_file_list, FOLDER_PATH)
     
-    data_check(same_file_list)  
-    print(combined_data_dict)
+    # data_check(same_file_list)  
     
     # Comment out graphs you dont want
     get_ready_plot(combined_data_dict, give_PWM_list, give_thrust_list, PWM_vs_T_Labels)
