@@ -8,7 +8,7 @@
 #
 # ===========================================================
 
-
+# Library Imports
 from typing import Callable
 
 # Module Imports
@@ -95,7 +95,7 @@ def plot_tests():
     same_file_list =  give_same_file_list(FOLDER_PATH)
     combined_data_dict = give_combined_data_dict(same_file_list, FOLDER_PATH)
     
-    # data_check(same_file_list)  
+    data_check(same_file_list)  
     
     # Comment out graphs you dont want
     get_ready_plot(combined_data_dict, give_PWM_list, give_thrust_list, PWM_vs_T_Labels)
