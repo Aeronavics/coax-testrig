@@ -20,10 +20,9 @@ from file_combine import get_file_list, same_files
 
 # Index of where each value in a row of a csv file
 PWM_INDEX = 0
-TOP_V_INDEX, BOTTOM_V_INDEX = 1, 2
-TOP_I_INDEX, BOTTOM_I_INDEX = 3, 4,
-LOAD_INDEX = 5
-
+TOP_V_INDEX, BOTTOM_V_INDEX = 2, 4
+TOP_I_INDEX, BOTTOM_I_INDEX = 3, 5,
+LOAD_INDEX = 1
 
 # Short hand as this data type is used extensively
 LF = list[float]    
@@ -40,12 +39,12 @@ def get_data(filename: str, folder_path: str) -> list[LF]:
         good_data (list[LF]): 2d list with data from file. Each new list is the next row.
     """
     
-    raw_data =  control_func(filename, folder_path)     
+    raw_data =  control_func(filename, folder_path)    
     
     # Format checks
     data = error_check(raw_data, filename)
     
-    good_data = give_average_data(data[2:])
+    good_data = give_average_data(data)
     return good_data
 
 
@@ -82,6 +81,7 @@ def raw_data_dict(file_list: list[list], folder_path: str) -> dict[str, list[LF]
         data = give_average_data(data)
             
         all_the_data[filename] = data
+    
         
  
     return all_the_data      
@@ -128,7 +128,7 @@ def give_same_file_list(folder_path) -> list[str]:
     
     file_list = get_file_list(folder_path)
     same_file_list = same_files(file_list)
-    
+
     # Graphs same test against each other for manual error checking
     
     return same_file_list
@@ -138,6 +138,5 @@ def give_combined_data_dict(same_file_list, folder_path):
     """ Returns the main data"""
     
     combined_data_dict = raw_data_dict(same_file_list, folder_path)
+    print(combined_data_dict)
     return combined_data_dict
-    
-

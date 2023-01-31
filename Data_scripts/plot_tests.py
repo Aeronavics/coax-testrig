@@ -21,15 +21,15 @@ from data_functions import give_thrust_list, give_efficiency_list, give_power_li
 LF =list[float]
 
 # Label settings used for each graph type
-PWM_vs_T_Labels = Graph_Labels( "PWM against Thrust", "PWM", "Thurst (kg)", 1000, 50, True, 100, 25, 1, 0.25, 1)
-PWM_vs_E_Labels =  Graph_Labels("PWM against Efficiency", "PWM", "Relative Efficiency (Thrust / Power)", 1000, 50, True, 100, 25, 0.5, 0.125, 1)
+PWM_vs_T_Labels = Graph_Labels( "PWM against Thrust", "PWM", "Thurst (kg)", 1100, 50, True, 100, 25, 1, 0.25, 1)
+PWM_vs_E_Labels =  Graph_Labels("PWM against Efficiency", "PWM", "Relative Efficiency (Thrust / Power)", 1100, 50, True, 100, 25, 0.5, 0.125, 1)
 T_vs_E_Labels =  Graph_Labels( "Thrust against Efficiency", "Thrust (kg)", "Relative Efficiency (Thrust / Power)", 0, 1, True, 1, 0.25, 0.5, 0.125, 0.15)
 T_vs_P_Labels = Graph_Labels("Thrust against Power", "Power (W)", "Thrust (kg)", 0, 1, True, 200, 50, 1, 0.25, 0.5)
 Compare_plots_Labels = Graph_Labels( "CHECK THE DATA", "Thrust (kg)", "Relative Efficiency (Thrust / Power)", 0, 1, True, 1, 0.25, 0.5, 0.125, 0.15)
 
 # Where desired csv files are located
 PATH_SLASHES = "\\"                             # CHANGE IF ON MAC OR LINUX      (MAC's use '/') 
-FOLDER_PATH = '..' + PATH_SLASHES + 'Data_scripts' + PATH_SLASHES + 'Data' + PATH_SLASHES  + "Pitch matching" + PATH_SLASHES  +'160-160' + PATH_SLASHES + '18.3' + PATH_SLASHES
+FOLDER_PATH = '..' + PATH_SLASHES + 'Data_scripts' + PATH_SLASHES + 'Data' + PATH_SLASHES  + 'Reuben Data' + PATH_SLASHES
 # Change to what path your folder is in (MACS use '/')
 
 

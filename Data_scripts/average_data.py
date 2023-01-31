@@ -10,9 +10,10 @@ from colorama import Fore
 
 # Index of where each value in a row of a csv file
 PWM_INDEX = 0
-TOP_V_INDEX, BOTTOM_V_INDEX = 1, 2
-TOP_I_INDEX, BOTTOM_I_INDEX = 3, 4,
-LOAD_INDEX = 5
+TOP_V_INDEX, BOTTOM_V_INDEX = 2, 4
+TOP_I_INDEX, BOTTOM_I_INDEX = 3, 5,
+LOAD_INDEX = 1
+
 
 LF = list[float]
 

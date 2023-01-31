@@ -26,7 +26,8 @@ def splited_files_list(file_list: list) -> list[list]:
     split_file_list = list()
     
     for file in file_list:
-        split_file_list.append(file.split("-"))
+        split_file_list.append(file.split(" "))
+    
     
     return split_file_list
 
@@ -66,7 +67,7 @@ def same_files(file_list: list) -> list[list]:
             same_file_list[special_index].append(file_list[i])
         
         try:   
-            if split_file_list[i][1:7] != split_file_list[i + 1][1:7]:
+            if split_file_list[i][1:5] != split_file_list[i + 1][1:5]:
                 special_index += 1
                 
         except IndexError:
@@ -74,7 +75,7 @@ def same_files(file_list: list) -> list[list]:
         
         while i < len(file_list):
             
-            if sfile[1:7] == split_file_list[i][1:7] and sfile != split_file_list[i] and file_list[i] not in same_file_list[special_index]:
+            if sfile[1:7] == split_file_list[i][1:5] and sfile != split_file_list[i] and file_list[i] not in same_file_list[special_index]:
                 same_file_list[special_index].append(file_list[i])
                 
             i += 1

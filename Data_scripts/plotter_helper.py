@@ -69,7 +69,7 @@ def give_file_list(plotting_dict: dict[str, list[LF]], LoBF: bool) -> list[str]:
     file_list = list()
     
     for file in plotting_dict.keys():
-        file = file.split("#")
+        file = file.split("T")
         file[0] = file[0].rstrip(file[0][-1])
         
         file_list.append(file[0])

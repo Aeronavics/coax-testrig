@@ -49,7 +49,7 @@ def control_func(file_name: str, folder_path: str) -> list[Union[LF, list[str], 
     """
     
     try:
-        raw_data = file_open(file_name, folder_path)   
+        raw_data = file_open(file_name, folder_path)
         return raw_data
     
     except FileNotFoundError:
