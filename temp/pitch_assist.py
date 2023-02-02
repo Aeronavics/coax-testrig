@@ -1,3 +1,12 @@
+# ===================================================
+# AUTHOR        : Oliver Clements
+# CREATE DATE   : 2/2/23
+# PURPOSE       : Contains the classes and methods used
+#                 to find the optimal pitch
+#               
+# ===================================================
+
+
 from __future__ import annotations
 
 import sympy as sp
@@ -7,19 +16,29 @@ INCH_M_CONSTANT = 39.37
 
 
 def inch_to_m(measurement: float) -> float:
+    """ Converts inch to m"""
     return measurement / INCH_M_CONSTANT
 
 def m_to_inch(measurement: float) -> float:
+    """ Converts m to inchs"""
     return measurement * INCH_M_CONSTANT
 
 def rpm_to_theta(rpm: float) -> float:
+    """ Converts rpm to angular velocity"""
     return rpm / 60 * 2 * sp.pi
 
 
 class Prop:
-    """ Class containing the useful prop data and supporting functions"""
+    """ Groups prop data together and methods to calculate common proprieties
+    """
     
     def __init__(self, diameter: float, pitch: float, constant_proportionality: float) -> None:
+        """
+        Args:
+            diameter (float): Diameter of the prop in inches
+            pitch (float): Pitch of the prop in inches
+            constant_proportionality (float): Constant thats involve wth the swirl velocity
+        """
         self.diameter = inch_to_m(diameter)
         self.pitch = inch_to_m(pitch)
         self.constant_proportionality = constant_proportionality
@@ -32,7 +51,7 @@ class Prop:
         """ Finds the 75% of the prop radius
 
         Returns:
-            float: _description_
+            float: 75% of th radius
         """
         return self.diameter / 2 * 0.75
     
@@ -88,6 +107,11 @@ class Velocity:
     """ Velocity class"""
     
     def __init__(self, vx: Velocity, vy: Velocity) -> None:
+        """ 
+        Args:
+            vx (Velocity): velocity in the plane of rotation
+            vy (Velocity): velocity in the normal direction to the plane of rotation
+        """
         self.vx = vx
         self.vy = vy
         
@@ -96,6 +120,14 @@ class Velocity:
     
     @classmethod    
     def add_vectors(self, vec_list: list[Velocity]) -> Velocity:
+        """ Finds the resulted vector from multiple
+
+        Args:
+            vec_list (list[Velocity]): list of vectors
+
+        Returns:
+            Velocity: the resulted velocity vector
+        """
         resultant_vec = Velocity(0, 0)
         
         for vec in vec_list:
@@ -104,11 +136,19 @@ class Velocity:
         
         return resultant_vec
     
-    @classmethod 
     def give_magnitude(self) -> Velocity:
+        """ Gives the total magnitude of the vector via the 2 norm
+
+        Returns:
+            Velocity: the scalar speed
+        """
         return sp.sqrt((self.vx) ** 2 + (self.vy) ** 2)
     
-    @classmethod 
-    def give_angle(self) -> Velocity:
+    def give_angle(self) -> float:
+        """ The angle of the velocity to the plane of rotation
+
+        Returns:
+            Velocity: the angle
+        """
         angle = float(sp.atan(self.vy / self.vx))
         return np.rad2deg(angle)
