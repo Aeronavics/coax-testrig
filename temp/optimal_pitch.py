@@ -3,6 +3,7 @@ from __future__ import annotations
 import sympy as sp
 import numpy as np
 
+from pitch_assist import Prop, Motor, Velocity, rpm_to_theta
 
 
 AIR_DENSITY = 1.22
@@ -13,112 +14,7 @@ LOSES = 0.83
 INCH_M_CONSTANT = 39.37
 
 v1 = sp.Symbol('v1', real=True)
-
-def inch_to_m(measurement: float) -> float:
-    return measurement / INCH_M_CONSTANT
-
-def m_to_inch(measurement: float) -> float:
-    return measurement * INCH_M_CONSTANT
-
-def rpm_to_theta(rpm: float) -> float:
-    return rpm / 60 * 2 * sp.pi
-
-class Prop:
-    """ Class containing the useful prop data and supporting functions"""
-    
-    def __init__(self, diameter: float, pitch: float, constant_proportionality: float) -> None:
-        self.diameter = inch_to_m(diameter)
-        self.pitch = inch_to_m(pitch)
-        self.constant_proportionality = constant_proportionality
-        
-    def __str__(self) -> str:
-        return f"Diameter (inch): {m_to_inch(self.diameter)}, Pitch (inch): {m_to_inch(self.pitch)}"
-    
-    
-    def seventy_five_len(self) -> float:
-        """ Finds the 75% of the prop radius
-
-        Returns:
-            float: _description_
-        """
-        return self.diameter / 2 * 0.75
-    
-    def give_Acs(self) -> float:
-        """ Finds the cross sectional area of the propeller
-
-        Args:
-            prop Prop: Prop data
-
-        Returns:
-            float: cross sectional area
-        """
-        return sp.pi * (self.diameter / 2) ** 2
-    
-    def angle(self) -> float:
-        """ Finds the angle of the propeller at 75% of the props radius
-        angle = atan(pitch/(2π * 75%len))
-
-        Returns:
-            float: Angle (degrees)
-        """
-        working_radius = Prop.seventy_five_len()
-        angle = sp.atan(self.pitch / (2 * sp.pi * working_radius))
-        return np.rad2deg(float(angle))
-    
-
-class Motor:
-    
-    def __init__(self, kV, throttle_pct, V, I) -> None:
-        self.kV = kV
-        self.throttle_pct = throttle_pct
-        self.V = V
-        self.I = I
-
-    def give_power(self) -> float:
-        """ Calculates the power based off ohms law P = VI
-
-        Args:
-            V (float): Voltage (V)
-            I (float): Current (A)
-
-        Returns:
-            float: Power (W)
-        """
-        return self.V * self.I
-     
-    def give_rpm(self) -> float:
-        """ Calculates the rpm of motor"""
-        return self.V * self.kV * self.throttle_pct
-    
-
-class Velocity:
-    """ Velocity class"""
-    
-    def __init__(self, vx: Velocity, vy: Velocity) -> None:
-        self.vx = vx
-        self.vy = vy
-        
-    def __str__(self) -> str:
-        return f"Velocity(vx: {self.vx}, vy: {self.vy})"
-    
-    
-    @classmethod    
-    def add_vectors(self, vec_list: list[Velocity]) -> Velocity:
-        resultant_vec = Velocity(0, 0)
-        
-        for vec in vec_list:
-            resultant_vec.vx += vec.vx
-            resultant_vec.vy += vec.vy
-        
-        return resultant_vec
-        
-    def give_magnitude(vec: Velocity) -> Velocity:
-        return sp.sqrt(vec.vx ** 2 + vec.vy)
-    
-    def give_angle(vec: Velocity) -> Velocity:
-        return sp.atan(vec.vy / vec.vx)
-        
-        
+         
     
 def give_v0(top_prop: Prop, top_motor: Motor) -> Velocity:
     """ Finds the effective exit velocity of the 1st propeller
@@ -170,7 +66,7 @@ def give_v_rel(prop: Prop, motor: Motor) -> Velocity:
         
 F18 = Prop(18.3, 6.2, 0.04)
 FOLD = Prop(18.2, 5.9, 0.04)
-TOP_MOTOR = Motor(140, 0.51, 48.3, 2.55)
+TOP_MOTOR = Motor(160, 0.51, 48.3, 3.8)
 BOT_MOTOR = Motor(160, 0.51, 48.3, 3.8)
 
 
@@ -185,8 +81,13 @@ def main(top_prop: Prop, back_prop: Prop, top_motor: Motor, back_motor: Motor):
     
     v0_total = Velocity.add_vectors([v0, v0_rel])
     v1_total = Velocity.add_vectors([v1, v_swirl, v1_rel])
-    print(v0_total)
-    print(v1_total)
+    v0_mag = v0_total.give_magnitude()
+    v1_mag = v1_total.give_magnitude()
+    v0_angle = v0_total.give_angle()
+    v1_angle = v1_total.give_angle()
+    print(f"v0 mag: {v0_mag}, v0 angle: {v0_angle}")
+    print(f"v1 mag: {v1_mag}, v1 angle: {v1_angle}")
+    print(top_prop.angle())
 
 main(FOLD, FOLD, TOP_MOTOR, BOT_MOTOR)
 
