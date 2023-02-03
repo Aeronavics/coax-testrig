@@ -66,7 +66,7 @@ class Prop:
         """
         return sp.pi * (self.diameter / 2) ** 2
     
-    def angle(self) -> float:
+    def g_angle(self) -> float:
         """ Finds the angle of the propeller at 75% of the props radius
         angle = atan(pitch/(2π * 75%len))
 
@@ -76,6 +76,10 @@ class Prop:
         working_radius = Prop.seventy_five_len(self)
         angle = sp.atan(self.pitch / (2 * sp.pi * working_radius))
         return np.rad2deg(float(angle))
+    
+    def pitch_inch_deg_ratio(self) -> float:
+        """ Gives the ratio to the pitch in degrees to inches"""
+        return Prop.g_angle(self) / self.pitch
     
 
 class Motor:
@@ -99,7 +103,8 @@ class Motor:
         return self.V * self.I
      
     def give_rpm(self) -> float:
-        """ Calculates the rpm of motor"""
+        """ Calculates the rpm of motor. Only works when propeller is properly matched to motor.
+            Fails if motor is under or over proped"""
         return self.V * self.kV * self.throttle_pct
     
 
