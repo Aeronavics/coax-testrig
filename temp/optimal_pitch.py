@@ -10,10 +10,11 @@ from pitch_assist import Prop, Motor, Velocity, rpm_to_theta
 AIR_DENSITY = 1.21
 MOTOR_EFFICIENCY = 0.8
 LOSES = 0.83    # Guessed value. About 22% less thrust is produced than the ideal equation so this is a value somewhere in that range
-                # Works well with
+                # Works well with 140kv - 240kv motors and 15 - 18.3 inch props. Accuracy is not gareenteed passed these values.
+                # Prop Should be well matched with motor for accuracy
 
 
-# PROP TO CHOOSE FROM
+# PROP TO CHOOSE FROM (add you own)
 F18 = Prop(18.3, 6.2, 0.04)
 FOLD18 = Prop(18.2, 5.9, 0.04)
 FOLD16 = Prop(16.2, 5.3, 0.04)
@@ -21,10 +22,10 @@ FOLD15 = Prop(15.2, 5, 0.04)
 
 # ======================================
 # EDIT THESE VALUES!!!!
-TOP_MOTOR = Motor(160, 0.51, 48.3, 3.8)
-BOT_MOTOR = Motor(220, 0.51, 48.3, 5)
-TOP_PROP = F18
-BACK_PROP = FOLD15
+TOP_MOTOR = Motor(140, 0.51, 48.3, 2.5)
+BOT_MOTOR = Motor(160, 0.51, 48.3, 3.8)
+TOP_PROP = FOLD18
+BACK_PROP = FOLD16
 # ======================================
 
 v1 = sp.Symbol('v1', real=True)        
@@ -79,9 +80,6 @@ def give_v_rel(prop: Prop, motor: Motor) -> Velocity:
     
     return Velocity(v_rel, 0)
 
-# def pitch_to_angle_ratio(prop: Prop) -> float:
-#     angle = prop.angle()
-#     return angle / prop.pitch
 
 def angle_comp(prop: Prop, v_total: Velocity) -> float:
     
@@ -91,15 +89,16 @@ def angle_comp(prop: Prop, v_total: Velocity) -> float:
 
 
 def optimal_angle(v0_total: Velocity, v1_total: Velocity, free_v1_total: Velocity, bottom_prop: Prop) -> float:
-    """ Finds the ratio to pitch in inches to an angle. 
-        Assumes linear relationship so only can be used for small angles
+    """ Finds the optimal angle to pitch the lower prop based on values fed to it
 
     Args:
-        v0_total (Velocity): The total velocity leaving the first prop
-        v1_total (Velocity): The total local velocity at the 2nd prop
+        v0_total (Velocity): The local velocity vector of the top propeller
+        v1_total (Velocity): The local velocity vector of the bottom propeller
+        free_v1_total (Velocity): The local velocity vector of the bottom propeller IF free stream = 0
+        bottom_prop (Prop): Bottom Prop parameters
 
     Returns:
-        float: The ratio to multiply the angle with
+        float: Optimal angle to pitch propellers
     """
     
     v0_angle = v0_total.give_angle()
@@ -118,6 +117,8 @@ def optimal_angle(v0_total: Velocity, v1_total: Velocity, free_v1_total: Velocit
     opt_angle = diff_v_angle - diff_pv_angle
     
     print(f"Angle: {opt_angle}")
+    
+    return opt_angle
     
 
 

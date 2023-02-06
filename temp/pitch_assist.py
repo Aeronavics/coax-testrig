@@ -20,7 +20,7 @@ def inch_to_m(measurement: float) -> float:
     return measurement / INCH_M_CONSTANT
 
 def m_to_inch(measurement: float) -> float:
-    """ Converts m to inchs"""
+    """ Converts m to inches"""
     return measurement * INCH_M_CONSTANT
 
 def rpm_to_theta(rpm: float) -> float:
@@ -150,7 +150,7 @@ class Velocity:
         return sp.sqrt((self.vx) ** 2 + (self.vy) ** 2)
     
     def give_angle(self) -> float:
-        """ The angle of the velocity to the plane of rotation
+        """ The angle of the velocity to the plane of rotation of the propeller
 
         Returns:
             Velocity: the angle
