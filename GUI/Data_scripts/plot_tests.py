@@ -29,7 +29,7 @@ Compare_plots_Labels = Graph_Labels( "CHECK THE DATA", "Thrust (kg)", "Relative 
 
 # Where desired csv files are located
 PATH_SLASHES = "\\"                             # CHANGE IF ON MAC OR LINUX      (MAC's use '/') 
-FOLDER_PATH = '..' + PATH_SLASHES + 'Data_scripts' + PATH_SLASHES + 'Data' + PATH_SLASHES  + 'Reuben Data' + PATH_SLASHES
+FOLDER_PATH = '..' + PATH_SLASHES + 'Data_scripts' + PATH_SLASHES + 'Data' + PATH_SLASHES  + 'Testing 190123' + PATH_SLASHES
 # Change to what path your folder is in (MACS use '/')
 
 
