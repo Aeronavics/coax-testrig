@@ -3,7 +3,7 @@
 # About
 Contains all the code used for the investigation of optimizing thrust and efficiency of coaxial propeller systems. This was conducted and created by the 2022 - 2023 interns.
 
-This branch contains the code to conduct each test through the terminal.
+This branch contains the code to conduct each test through the **terminal**.
 
 ## Pre-requisites
 [Python3](https://www.python.org/) and [Arduino IDE](https://www.arduino.cc/en/software) as linked. The following modules are also required with their install commands seen below:
