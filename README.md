@@ -12,7 +12,8 @@ There are two ways to collect the data:
 
 Both methods collect the data through the serial port through the arduino and your computer.
 
-- If you want ot use the GUI navigate to the "GUI" branch inside this repository
-- If you wish to use the terminal method then navigate to the "Serial" branch.
+- If you want ot use the GUI navigate to the "GUI" folder inside this repository
+- If you wish to use the terminal method then navigate to the "terminal" folder.
 
-Data analysis scripts have been set up for each individual method. More information is contained inside of those branch's
+Data analysis scripts have been set up for each individual method. More information is contained inside of those folders.
+
