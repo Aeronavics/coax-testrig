@@ -10,7 +10,7 @@ from pitch_assist import Prop, Motor, Velocity, rpm_to_theta
 AIR_DENSITY = 1.21
 MOTOR_EFFICIENCY = 0.8
 LOSES = 0.83    # Guessed value. About 22% less thrust is produced than the ideal equation so this is a value somewhere in that range
-                # Works well with 140kv - 240kv motors and 15 - 18.3 inch props. Accuracy is not gareenteed passed these values.
+                # Works well with 140kv - 240kv motors and 15 - 18.3 inch props. Accuracy is not guaranteed passed these values.
                 # Prop Should be well matched with motor for accuracy
 
 
@@ -22,8 +22,8 @@ FOLD15 = Prop(15.2, 5, 0.04)
 
 # ======================================
 # EDIT THESE VALUES!!!!
-TOP_MOTOR = Motor(140, 0.51, 48.3, 2.5)
-BOT_MOTOR = Motor(160, 0.51, 48.3, 3.8)
+TOP_MOTOR = Motor(160, 0.51, 48.3, 3.8)
+BOT_MOTOR = Motor(220, 0.51, 48.3, 5.6)
 TOP_PROP = FOLD18
 BACK_PROP = FOLD16
 # ======================================
@@ -158,15 +158,6 @@ def main(top_prop: Prop, back_prop: Prop, top_motor: Motor, back_motor: Motor):
     v1_mag = v1_total.give_magnitude()
     v0_angle = v0_total.give_angle()
     v1_angle = v1_total.give_angle()
-    
-    # print(f"v0 mag: {v0_mag}, v0 angle: {v0_angle}")
-    # print(f"v1 mag: {v1_mag}, v1 angle: {v1_angle}")
-    
-    # print(back_prop.g_angle())
-
-    # diff_angle = v1_angle - v0_angle
-    # # angle_comp(TOP_PROP, v0_total)
-    # print(diff_angle)
 
     
 main(TOP_PROP, BACK_PROP, TOP_MOTOR, BOT_MOTOR)
