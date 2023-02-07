@@ -105,9 +105,9 @@ This assumes you have used the data collection method **without the GUI**. This 
    ```
 2. Go to 'Data_scripts' directory
 3. Add the data you wish to analyze somewhere in the directory of the repository or elsewhere.
-4. Open 'plot_tests.py' and change the PATH_FOLDER to where the data is. This should be relative to the 'Data_scripts' folder. Example:
+4. Open 'plot_tests.py' and change the FOLDER_PATH to where the data is. Example:
     ```python
-    PATH FOLDER = 'Data\\Motor Config\\160-160vs160-220\\'   # Change to what path your folder is in (MACS use '/')
+    FOLDER_PATH = '..\\Data\\Motor Config\\160-160vs160-220\\'  
     ```
     - If using MAC or Linux you will need to change the '\\\\' to '/ ' for the PATH_SLASHES variable
 5. In plot_tests() inside plot_tests.py comment out the graphs you don't want to plot. Example
