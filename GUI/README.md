@@ -31,16 +31,13 @@ pip install colorama
 ## Data Collection
 All code for the data collection is found in the 'Test Rig Program' folder. Ensure you name the files of the same test the same as each other (with differing test numbers). Example:
 
-*add your naming scheme here Reuben*
+18in 160kv 15in 220kv T1
 
 ### Setup and Use:
 
-*Add your stuff Reuben*
+Program Arduino with code
+Connect sensors according to wiring diagram
 
-
-### Trouble Shooting
-
-*Add your stuff Reuben*
 ## Data Analysis
 
 All the code for the data analysis is found in the 'Data_scripts' folder.
