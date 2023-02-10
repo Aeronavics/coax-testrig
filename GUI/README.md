@@ -35,8 +35,21 @@ All code for the data collection is found in the 'Test Rig Program' folder. Ensu
 
 ### Setup and Use:
 
-Program Arduino with code
-Connect sensors according to wiring diagram
+- Program Arduino with code
+- Connect sensors according to wiring diagram
+- Select com port and press connect
+- Press START button under "Ramp test" to start automatic test
+  - Warning: STOP button will not stop motors spinning instantaneously, shut off main power in emergency
+  - Ramp test min and max speed as well as increment can be changed at top in arduino code
+  - Data can be saved with download button or directly copied
+  - Clear data table before performing another test, if data table fills up the application will crash
+- Press motor buttons to enable/disable motors, green is on
+- To set speed manually, press arm, move throttle slider, press send to set throttle
+  - If motors do not spin when armed, press disarm, then arm again
+
+- If any issues, restart app, restart arduino with button
+
+- Visual studio free trial ended before contant stats readout at top was implemented, this is not supposed to work
 
 ## Data Analysis
 
